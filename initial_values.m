@@ -33,6 +33,8 @@ b2 = 20.810;               % m
 
 V = [M_des
      h_des
+     c_kink
+     c_tip
      T1
      T2
      T3
@@ -47,7 +49,5 @@ V = [M_des
      B5
      B6
      B7
-     c_kink
-     c_tip
      Lambda_LE
      b2];
