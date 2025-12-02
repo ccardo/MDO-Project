@@ -23,6 +23,7 @@ while abs(MTOW-MTOWi)/MTOW > error
 end
 
 [L_design, D_design, Aircraft] = Aerodynamics(Aircraft, MTOW, v);
-R = Performane(Aircraft, L_design, D_design, MTOW, v);
+R = Performance(Aircraft, L_design, D_design, MTOW, v);
+
 
 end
