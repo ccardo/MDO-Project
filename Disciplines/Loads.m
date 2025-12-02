@@ -28,6 +28,7 @@ function [y, Lprime, Mprime, Aircraft] = Loads(Aircraft, v)
     Aircraft.Aero.V = V_MO;
     Aircraft.Aero.alt = h_des;
     Aircraft.Aero.M = Ma_MO;
+    Aircraft.Aero.MaxIterIndex = 200;
     
     Aircraft.Visc = 0;
 
@@ -61,4 +62,5 @@ function [y, Lprime, Mprime, Aircraft] = Loads(Aircraft, v)
     Mprime = q * Cm .* c.^2;
 
     
+
 end
