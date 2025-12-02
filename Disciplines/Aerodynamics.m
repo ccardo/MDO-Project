@@ -27,6 +27,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, v)
     Aircraft.Aero.V = V_des;
     Aircraft.Aero.alt = h_des;
     Aircraft.Aero.M = Ma_des;
+    Aircraft.Aero.MaxIterIndex = 200;
 
     Aircraft.Visc = 1;
 
@@ -36,5 +37,6 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, v)
 
     L_des = q * A * Res.CLwing;
     D_des = q * A * Res.CDwing;
+
 
 end
