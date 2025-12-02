@@ -3,6 +3,7 @@ Repository containing the files (mostly MATLAB plus other text files) necessary 
 
 
 # To Do:
+```
 - Create the initial Aircraft struct (which will change during optim):
   -> Wing: Geom, Airfoils, eta, inc
   -> Aero: CL, Re, M, alt, V, MaxIterIndex
@@ -23,3 +24,4 @@ Repository containing the files (mostly MATLAB plus other text files) necessary 
 - Code Optimizer
 
 - Write bounds 
+```
