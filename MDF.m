@@ -2,6 +2,8 @@ clc
 clear all
 close all
 
+run init_FixedValues.m
+
 % Initial values
 
 Ma_des = 0.82; % mach number 
@@ -52,4 +54,5 @@ toc;
 %[f,vararg] = Optim_MDFGauss(x);
 %NOTE: we define the objective function and the constraints as functions of
 %x. This is a variable that is defined inside fmincon as the design vector
+
 %and it is initially define as x = x0
