@@ -4,7 +4,7 @@ format short
 % Initial values from table
 
 % Design conditions
-M_des = 0.82;
+Ma_des = 0.82;
 h_des = 11800;
 
 % Top CST coefficients
@@ -31,7 +31,7 @@ c_tip = 2.312;             % m, chord at tip
 Lambda_LE = 32.00;         % degrees, leading edge sweep
 b2 = 20.810;               % m
 
-V = [M_des
+V = [Ma_des
      h_des
      c_kink
      c_tip
@@ -51,3 +51,4 @@ V = [M_des
      B7
      Lambda_LE
      b2];
+
