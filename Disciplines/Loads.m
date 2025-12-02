@@ -1,10 +1,9 @@
-function [y, Lprime, Mprime, Aircraft] = Loads(Aircraft, v)
+function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
 
     h_des = v(2);
     Ma_MO = v(1) + 0.04;
 
     nMax = 2.5;
-    MTOW = Aircraft.Weight.MTOW;
     load = nMax * MTOW * 9.81;
     
     a = airSoundSpeed(h_des);
@@ -29,7 +28,7 @@ function [y, Lprime, Mprime, Aircraft] = Loads(Aircraft, v)
     Aircraft.Aero.alt = h_des;
     Aircraft.Aero.M = Ma_MO;
     Aircraft.Aero.MaxIterIndex = 200;
-    
+
     Aircraft.Visc = 0;
 
     cd ..\Q3D\
@@ -57,10 +56,9 @@ function [y, Lprime, Mprime, Aircraft] = Loads(Aircraft, v)
         Cm = [Cm(1); Cm(:)];
     end
     
-    y = Yst;
-    Lprime = q * Cl .* c;
-    Mprime = q * Cm .* c.^2;
+    y_max = Yst;
+    L_max = q * Cl .* c;
+    M_max = q * Cm .* c.^2;
 
     
-
 end

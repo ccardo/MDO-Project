@@ -1,8 +1,7 @@
-function [R] = Performance(Aircraft, v, L_des, D_des)
+function [R] = Performance(Aircraft, L_des, D_des, MTOW, v)
 
     M_des = v(1);
     h_des = v(2);
-    MTOW = Aircraft.Weight.MTOW;
     W_f = Aircraft.Weight.Fuel;
 
     V_des = M_des * airSoundSpeed(h_des);

@@ -1,11 +1,10 @@
-function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, v)
+function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     h_des = v(2);
     Ma_des = v(1);
 
     % get design weight
     W_f = Aircraft.Weight.Fuel;
-    MTOW = Aircraft.Weight.MTOW;
     W_des = sqrt(MTOW * (MTOW-W_f));
     load = W_des * 9.81;
 
@@ -37,6 +36,5 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, v)
 
     L_des = q * A * Res.CLwing;
     D_des = q * A * Res.CDwing;
-
 
 end

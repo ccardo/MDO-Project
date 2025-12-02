@@ -1,5 +1,5 @@
-function [Aircraft] = Structures(Aircraft, V)
+function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
 
-% Structures discipline: create EMWET input files (a330.init a330.load), run EMWET and process a330.weight
+% sdf/lghsdlkg
 
 end
