@@ -9,16 +9,15 @@ Repository containing the files (mostly MATLAB plus other text files) necessary 
   -> Aero: CL, Re, M, alt, V, MaxIterIndex
   -> Weight: MTOW, Wing
   -> Visc
-  -> 
+  -> Var: M_des, 
 
 - Create a Parameter struct (which will stay fixed):
   -> Geometry: twist, fuelTankStart, fuelTankEnd, spars, b1, TE_sweep1, dihedral
   -> Weight: Fuel, A-W, deltaPayload
+  -> Performance: V_des_ref, h_des_ref, CT_ref
   -> nMax
 
-- Write *Aerodynamics* Discipline
 - Write *Structures* Discipline
-- Write *Performance* Discipline
 
 - Code MDA
 - Code Optimizer
