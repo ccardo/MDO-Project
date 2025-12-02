@@ -2,7 +2,10 @@ function [R] = Performance(Aircraft, L_des, D_des, MTOW, v)
 
     M_des = v(1);
     h_des = v(2);
-    W_f = Aircraft.Weight.Fuel;
+    W_f = FixedValues.Weight.W_f;
+    V_des_ref = FixedValues.Performance.V_des_ref;
+    h_des_ref = FixedValues.Performance.h_des_ref;
+    CT_ref = FixedValues.Performance.CT_ref;
 
     V_des = M_des * airSoundSpeed(h_des);
     
