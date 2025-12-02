@@ -29,8 +29,8 @@ b2 = 20.81; % outer span [m]
 
 %bounds
 
-lb = [0.9 * M_des, 0.9 * h_des, ];
-ub = [];
+lb = [0.9 * FixedValues.Performance.M_ref_des, 0.9 * FixedValues.Performance.h_red_des];
+ub = [1.1 * FixedValues.Performance.M_ref_des, 1.1 * FixedValues.Performance.h_ref_des];
 
 
 % design vector
@@ -56,3 +56,4 @@ toc;
 %x. This is a variable that is defined inside fmincon as the design vector
 
 %and it is initially define as x = x0
+
