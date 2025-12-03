@@ -51,6 +51,7 @@ plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 
+global MTOW;
 
 " ======================================================================= ";
 % ------------------------------- RUN MDA ------------------------------- %;

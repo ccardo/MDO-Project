@@ -91,7 +91,7 @@ x0 = [Ma_des
       B7 
       LE_sweep 
       b2];
-    
+
 % Options for the optimization
 options.Display         = 'iter-detailed';
 options.Algorithm       = 'sqp';
