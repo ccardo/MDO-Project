@@ -21,10 +21,11 @@ function [] = printAirfoil(T, B)
         cd ..\EMWET\
     end
 
-    fid = fopen("current_airfoil.txt", "w");
+    fid = fopen("current_airfoil.dat", "w");
     fprintf(fid, "%.4f %.4f\n", coords');
     fclose(fid);
 
     cd ..\
+
 
 end
