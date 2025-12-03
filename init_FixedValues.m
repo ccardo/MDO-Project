@@ -2,6 +2,7 @@ format short
 
 FixedValues = struct();
 
+FixedValues.Geometry.fuselageD = 5.64;          % [m]
 FixedValues.Geometry.b1 = 8.19;                 % [m]
 FixedValues.Geometry.TE_sweep = 2.5;            % [deg]
 FixedValues.Geometry.twist = [+5.2, +2.54, -2]; % [deg]

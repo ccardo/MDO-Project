@@ -1,7 +1,6 @@
 function [f, vararg] = Optimizer(v)
 
 % design variables
-
 b2 = v(20);
 h_des = v(2);
 Ma_des = v(1);
@@ -12,7 +11,6 @@ c_tip = v(4);
 % geometric fixed parameters
 dihedral = 5;
 b1 = 16.38; % first semispan
-fuselage_d = 5.64; % diameter fo the fuselage
 TE_sweep = 2.5;
 
 % geometric dervied variables
@@ -22,7 +20,7 @@ x3 = 0.5*(b1 + b2)*tand(LE_sweep);
 y1 = 0;
 y2 = b1/2;
 y3 = b1/2 + b2/2;
-z1 = -(fuselage_d/2)*tand(dihedral); % position on the z axis of the root leading edge. 
+z1 = -(FixedValues.Geometry.fuselageD/2)*tand(dihedral); % position on the z axis of the root leading edge. 
 % The minus is a result of how we defined the frame of reference
 z2 = 0.5*b1 * tand(dihedral);
 z3 = 0.5 * (b1+b2)* tand(dihedral);
@@ -37,7 +35,7 @@ Aircraft.Wing.Geom = [x1     y1      z1      c_root    +5.20;
 MAC = meanAeroChord(Aircraft.Wing.Geom);
 A = wingArea(Aircraft.Wing.Geom);
 Aircraft.Var = [MAC A];
-Aircraft.Wing.inc  = 0;  % incidence angle is already considered in the first twist angle
+Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
 
 % Airfoil coefficients input matrix (ATTENTION: MATRIX MULTIPLICATION!)
 Ti = v(5:11);
@@ -46,16 +44,16 @@ Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 
-% MDA
-
-[R, MTOW, L_design, D_design, L_max, M_max, counter] = MDA(Aircraft, MTOWi, v);
+% --------------------------------------------------------------------- %
+% ----------------------------- RUN MDA ------------------------------- %
+% --------------------------------------------------------------------- %
+[R, MTOW, L_design, D_design, L_max, M_max, counter] = ...
+                                                MDA(Aircraft, MTOWi, v);
 
 % Evaluate the output of the objective function
-
 f = -R;
 
 % output the final optimized values and the iteration counter of the MDA
-
 vararg = [MTOW, L_design, D_design, L_max, M_max, counter];
 
 end
