@@ -1,5 +1,7 @@
 function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
 
+    global FixedValues;
+
     h_des = v(2);
     Ma_MO = v(1) + 0.04;
 

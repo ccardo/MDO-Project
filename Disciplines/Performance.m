@@ -1,4 +1,6 @@
 function [R] = Performance(Aircraft, L_des, D_des, MTOW, v)
+    
+    global FixedValues;
 
     M_des = v(1);
     h_des = v(2);

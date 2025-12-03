@@ -1,5 +1,7 @@
 function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
+    global FixedValues;
+
     h_des = v(2);
     Ma_des = v(1);
     CD_A_W = FixedValues.Performance.CD_A_W;

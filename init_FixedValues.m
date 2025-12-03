@@ -1,7 +1,9 @@
 format short
 
+global FixedValues;
 FixedValues = struct();
 
+FixedValues.Geometry.dihedral = 5;              % [deg]
 FixedValues.Geometry.fuselageD = 5.64;          % [m]
 FixedValues.Geometry.b1 = 8.19;                 % [m]
 FixedValues.Geometry.TE_sweep = 2.5;            % [deg]
