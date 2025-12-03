@@ -70,9 +70,27 @@ ub = [1.1 * FixedValues.Performance.Ma_des_ref
       50
       25];
 
-
-% design vector
-x0 = [Ma_des h_des c_kink c_tip T1 T2 T3 T4 T5 T6 T7 B1 B2 B3 B4 B5 B6 B7 LE_sweep b2];
+% initial values for design vector
+x0 = [Ma_des
+      h_des
+      c_kink 
+      c_tip 
+      T1 
+      T2 
+      T3 
+      T4 
+      T5 
+      T6 
+      T7 
+      B1 
+      B2 
+      B3 
+      B4 
+      B5 
+      B6 
+      B7 
+      LE_sweep 
+      b2];
     
 % Options for the optimization
 options.Display         = 'iter-detailed';
@@ -83,15 +101,14 @@ options.DiffMaxChange   = 5e-2;         % Maximum change while gradient searchin
 options.TolCon          = 1e-6;         % Maximum difference between two subsequent constraint vectors [c and ceq]
 options.TolFun          = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX            = 1e-6;         % Maximum difference between two subsequent design vectors
-
 options.MaxIter         = 30;           % Maximum iterations
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optim_wing(x),x0,[],[],[],[],lb,ub,@(x) constraints(x),options);
 toc;
-%[f,vararg] = Optim_MDFGauss(x);
-%NOTE: we define the objective function and the constraints as functions of
-%x. This is a variable that is defined inside fmincon as the design vector
 
-%and it is initially define as x = x0
+% [f,vararg] = Optim_MDFGauss(x);
+% NOTE: we define the objective function and the constraints as functions
+% of x. This is a variable that is defined inside fmincon as the design
+% vector and it is initially definde as x = x0
 
