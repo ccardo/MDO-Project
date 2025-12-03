@@ -12,23 +12,29 @@ function [] = printAirfoil(T, B)
               x           yB];
     
     % check current directory and change to EMWET
-    directory = dir();
-    if contains(directory(1).folder, "Disciplines") || ...
-       contains(directory(1).folder, "Functions")   || ...
-       contains(directory(1).folder, "Q3D")
-        cd ..\EMWET\
-    elseif contains(directory(1).folder, "EMWET")
-        cd .\
-    else
-        cd .\EMWET\
-    end
-    
-    % print airfoil coords and return to parent directory
-    fid = fopen("current_airfoil.dat", "w");
-    fprintf(fid, "%.4f %.4f\n", coords');
-    fclose(fid);
+    % directory = dir();
+    % if contains(directory(1).folder, "Disciplines") || ...
+    %    contains(directory(1).folder, "Functions")   || ...
+    %    contains(directory(1).folder, "Q3D")
+    %     cd ..\EMWET\
+    % elseif contains(directory(1).folder, "EMWET")
+    %     cd .\
+    % else
+    %     cd .\EMWET\
+    % end
 
-    cd ..\
+    result = changeDirSafe("EMWET");
+    
+    if result
+        % print airfoil coords and return to parent directory
+        fid = fopen("current_airfoil.dat", "w");
+        fprintf(fid, "%.4f %.4f\n", coords');
+        fclose(fid);
+    
+        cd ..\
+    else
+        error("ERROR: could not change directory to EMWET from printAirfoil")
+    end
 
 
 end
