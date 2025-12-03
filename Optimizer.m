@@ -10,7 +10,7 @@ c_tip = v(4);
 
 % geometric fixed parameters
 twist = FixedValues.Geometry.twist;
-fuselage_radius = FixedValues.Geometry.fuselageD/2;
+fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
 dihedral = FixedValues.Geometry.dihedral;
 b1 = FixedValues.Geometry.b1;
 
@@ -46,6 +46,8 @@ Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twi
 Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
+
+plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 

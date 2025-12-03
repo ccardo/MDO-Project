@@ -33,9 +33,16 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
 
     Aircraft.Visc = 0;
 
-    cd ..\Q3D\
-    Res = Q3D_solver(Aircraft);
-    cd ..\Disciplines\
+    % check current directory and change to Q3D
+    result = changeDirSafe("Q3D");
+
+    % SOLVE and return back to parent directory
+    if result
+        Res = Q3D_solver(Aircraft);
+        cd ..\
+    else
+        error("ERROR: could not change directory to Q3D from Loads")
+    end
     
     Yst = Res.Wing.Yst;
     Cl = Res.Wing.cl;

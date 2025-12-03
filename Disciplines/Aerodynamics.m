@@ -33,9 +33,17 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     Aircraft.Visc = 1;
 
-    cd ..\Q3D\
-    Res = Q3D_solver(Aircraft);
-    cd ..\Disciplines\
+    % check current directory and change to Q3D
+    % check current directory and change to Q3D
+    result = changeDirSafe("Q3D");
+
+    % SOLVE and return back to parent directory
+    if result
+        Res = Q3D_solver(Aircraft);
+        cd ..\
+    else
+        error("ERROR: could not change directory to Q3D from Aerodynamics")
+    end
 
     L_des = q * A * Res.CLwing;
     D_des = q * A * (Res.CDwing + CD_A_W);
