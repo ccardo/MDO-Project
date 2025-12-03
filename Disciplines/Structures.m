@@ -1,6 +1,6 @@
 function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
 
-    global FixedValues;
+    global FixedValues
 
     % check current directory and change to Q3D
     result = changeDirSafe("EMWET");
