@@ -23,7 +23,7 @@ Ft_al       =    2.95E8;        %N/m2
 Fc_al       =    2.95E8;        %N/m2
 pitch_rib   =    0.5;          %[m]
 eff_factor  =    0.96;             
-Airfoil     =    'e553'; % need to change the file name for the formattted airfoil coordinates
+Airfoil     =    'current_airfoil';
 section_num =    3;
 airfoil_num =    2;
 A = wingArea(Aircraft.Wing.Geom);
@@ -40,7 +40,7 @@ x3 = Aircraft.Wing.Geom(3,1);
 y3 = Aircraft.Wing.Geom(3,2);
 z3 = Aircraft.Wing.Geom(3,3);
 
-fid = fopen( 'EMWET.init','wt');
+fid = fopen( 'a330.init','wt');
 fprintf(fid, '%g %g \n',MTOW,MZF);
 fprintf(fid, '%g \n',n_max);
 
