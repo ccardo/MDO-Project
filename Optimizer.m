@@ -38,7 +38,7 @@ Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
 MAC = meanAeroChord(Aircraft.Wing.Geom);
 A = wingArea(Aircraft.Wing.Geom);
 Aircraft.Var = [MAC A];
-% 
+
 
 Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
 

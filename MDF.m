@@ -104,7 +104,7 @@ options.TolX            = 1e-6;         % Maximum difference between two subsequ
 options.MaxIter         = 30;           % Maximum iterations
 
 tic;
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optim_wing(x),x0,[],[],[],[],lb,ub,@(x) constraints(x),options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(x) constraints(x),options);
 toc;
 
 % [f,vararg] = Optim_MDFGauss(x);

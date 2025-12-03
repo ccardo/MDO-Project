@@ -4,7 +4,7 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
 
     % check current directory and change to Q3D
     result = changeDirSafe("EMWET");
-    
+    printAirfoil(v(5:11), v(12:18))
     inputStructures(Aircraft, FixedValues, MTOW, v)
     inputStructuresLoads(y_max, L_max, M_max)
     
