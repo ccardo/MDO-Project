@@ -47,11 +47,13 @@ Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
-plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
+% plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 
-global MTOW;
+% initial target for coupling variable MTOW
+
+MTOWi = 230000;
 
 " ======================================================================= ";
 % ------------------------------- RUN MDA ------------------------------- %;

@@ -20,7 +20,7 @@ function [MTOW] = readEMWET(FixedValues)
         MTOW = wing_weight + FixedValues.Weight.A_W + FixedValues.Weight.W_f; % not sure about this formula
         fclose(fid);
         
-        cd ..\
+        % cd ..\
     else
         error("ERROR: could not change directory to EMWET from readValues")
     end

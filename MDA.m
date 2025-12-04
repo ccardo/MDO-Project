@@ -1,12 +1,14 @@
-function [R, MTOW, L_design, D_design, L_max, M_max, counter] = MDA(Aircraft, MTOWi, v, error)
+function [R, MTOW, L_design, D_design, L_max, M_max, counter] = MDA(Aircraft, MTOWi, v)
 
-    % define an error if not specified in the functions inputs
-    if nargin < 2
-        error = 1e-6;
-    end
+    % define the wanted tolerance
+    error = 10^-6;
     
     % start the iteration counter
     counter = 0;
+
+    % initialize MTOW
+
+    MTOW = 1;
     
     % run the loops for the disciplines that evaluate the MTOW
     

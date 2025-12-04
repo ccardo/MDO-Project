@@ -101,10 +101,10 @@ options.DiffMaxChange   = 5e-2;         % Maximum change while gradient searchin
 options.TolCon          = 1e-6;         % Maximum difference between two subsequent constraint vectors [c and ceq]
 options.TolFun          = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX            = 1e-6;         % Maximum difference between two subsequent design vectors
-options.MaxIter         = 30;           % Maximum iterations
+options.MaxIter         = 4;           % Maximum iterations
 
 tic;
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(x) constraints(x),options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
 toc;
 
 % [f,vararg] = Optim_MDFGauss(x);

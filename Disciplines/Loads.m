@@ -1,7 +1,5 @@
 function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
 
-    global FixedValues;
-
     h_des = v(2);
     Ma_MO = v(1) + 0.04;
 
@@ -53,14 +51,14 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     % tip value missing => fill with zeros + geometric chord
     % root value missing => fill with first element + geometric chord
     if Yst(end) ~= 1
-        Yst(end+1) = AC.Wing.Geom(end, 2);
-        c(end+1) = AC.Wing.Geom(end, 4);
+        Yst(end+1) = Aircraft.Wing.Geom(end, 2);
+        c(end+1) = Aircraft.Wing.Geom(end, 4);
         Cl(end+1) = 0;
         Cm(end+1) = 0;
     end
     if Yst(1) ~= 0
         Yst = [0; Yst(:)];
-        c = [AC.Wing.Geom(1, 4); c(:)];
+        c = [Aircraft.Wing.Geom(1, 4); c(:)];
         Cl = [Cl(1); Cl(:)];
         Cm = [Cm(1); Cm(:)];
     end

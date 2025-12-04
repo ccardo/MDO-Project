@@ -78,7 +78,7 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
         fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
         
         fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
-        fprintf(fid,'1 \n');
+        fprintf(fid,'0 \n');
         fclose(fid);
     
         cd ..\

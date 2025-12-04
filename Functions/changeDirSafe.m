@@ -10,16 +10,18 @@ function [result] = changeDirSafe(dirName)
 
     % check current dir and change it to either Q3D or EMWET
     directory = dir();
-    if contains(directory(1).folder, "Disciplines") || ...
-       contains(directory(1).folder, "Functions")   || ...
-       contains(directory(1).folder, check.(dirName))
-        cd("..\"+dirName+"\")
+    parentFolder = directory(1).folder;
+    if contains(parentFolder, "Disciplines") || ...
+       contains(parentFolder, "Functions")
+        cd .\
+        cd(parentFolder+"\"+dirName)
         result = 1;
-    elseif contains(directory(1).folder, dirName)
+    elseif contains(parentFolder, dirName)
         cd .\
         result = 1;
     else
-        cd(".\"+dirName+"\")
+        cd ..\
+        cd(parentFolder+"\"+check.(dirName)+"\"+dirName)
         result = 1;
     end
 end
