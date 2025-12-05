@@ -11,25 +11,18 @@ function [] = inputStructuresLoads(y_max, L_max, M_max)
     % else
     %     cd .\EMWET\
     % end
+    
+    % print the file in the current folder (should be \EMWET\)
+    fid = fopen( 'a330.load','wt');
 
-    result = changeDirSafe("EMWET");
-    
-    if result
-        fid = fopen( 'a330.load','wt');
-    
-        % format required is n rows (where n is the number of stations where
-        % the loads are defined) comprised of position along the span of the
-        % current section (y_max), lift acting on the section (L_max) and
-        % pitching moment acting on the section (M_max) 
-        for i = 1:length(y_max)
-        fprintf(fid, '%g %g %g\n',y_max(i), L_max(i), M_max(i));
-        end
-        
-        fclose(fid);
-    
-        cd ..\
-    else
-        error("ERROR: could not change directory to Q3D from inputStructureLoads")
+    % format required is n rows (where n is the number of stations where
+    % the loads are defined) comprised of position along the span of the
+    % current section (y_max), lift acting on the section (L_max) and
+    % pitching moment acting on the section (M_max) 
+    for i = 1:length(y_max)
+    fprintf(fid, '%g %g %g\n',y_max(i), L_max(i), M_max(i));
     end
+    
+    fclose(fid);
 
 end

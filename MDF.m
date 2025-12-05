@@ -1,8 +1,12 @@
-clc
-clear
+format short
 close all
+clear
+clc
 
 run init_FixedValues.m
+
+global projectDirectory;
+projectDirectory = cd;
 
 % Initial values
 
