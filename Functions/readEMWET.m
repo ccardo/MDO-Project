@@ -12,16 +12,18 @@ function [MTOW] = readEMWET(FixedValues)
     %     cd .\EMWET\
     % end
 
-    result = changeDirSafe("EMWET");
+    % read the EMWET output file a330.weight and extract the new W_w
+    fid = fopen( 'a330.weight','r');
     
-    if result
-        fid = fopen( 'a330.load','r');
-        wing_weight = fscanf(fid, 'Wing total weight(kg) %f');
-        MTOW = wing_weight + FixedValues.Weight.A_W + FixedValues.Weight.W_f; % not sure about this formula
-        fclose(fid);
+    % there's a problem with this mothafucka function
+    % wing_weight = fscanf(fid, 'Wing total weight(kg) %f');
+    % returns an empty array
+    
+    % fixed using fgetl (thanks matlab help center)
+    first_line = fgetl(fid);
+    wing_weight = sscanf(first_line, "Wing total weight(kg) %f");
+
+    MTOW = wing_weight + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
+    fclose(fid);
         
-        % cd ..\
-    else
-        error("ERROR: could not change directory to EMWET from readValues")
-    end
 end

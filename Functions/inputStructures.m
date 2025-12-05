@@ -28,7 +28,7 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
     airfoil_num =    2;
     A = wingArea(Aircraft.Wing.Geom);
     
-    % define the leading edge postions of the airfoils that generate teh
+    % define the leading edge postions of the airfoils that generate the
     % planform
     x1 = Aircraft.Wing.Geom(1,1);
     y1 = Aircraft.Wing.Geom(1,2);
@@ -52,38 +52,31 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
     %     cd .\EMWET\
     % end
 
-    result = changeDirSafe("EMWET");
-    if result
+    % print da file inside the current directory (should be \EMWET\)
+    fid = fopen( 'a330.init','wt');
+    fprintf(fid, '%g %g \n',MTOW,MZF);
+    fprintf(fid, '%g \n',n_max);
     
-        fid = fopen( 'a330.init','wt');
-        fprintf(fid, '%g %g \n',MTOW,MZF);
-        fprintf(fid, '%g \n',n_max);
-        
-        fprintf(fid, '%g %g %g %g \n',A,span,section_num,airfoil_num);
-        
-        fprintf(fid, '0 %s \n',Airfoil);
-        fprintf(fid, '1 %s \n',Airfoil);
-        fprintf(fid, '%g %g %g %g %g %g \n',c_root,x1,y1,z1,spar_front_1,spar_rear_1);
-        fprintf(fid, '%g %g %g %g %g %g \n',c_kink,x2,y2,z2,spar_front_2,spar_rear_2);
-        fprintf(fid, '%g %g %g %g %g %g \n',c_tip,x3,y3,z3,spar_front_3,spar_rear_3);
-        
-        fprintf(fid, '%g %g \n',ftank_start,ftank_end);
-        
-        fprintf(fid, '%g \n', eng_num);
-        fprintf(fid, '%g  %g \n', eng_ypos,eng_mass);
-        
-        fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
-        fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
-        fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
-        fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
-        
-        fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
-        fprintf(fid,'0 \n');
-        fclose(fid);
+    fprintf(fid, '%g %g %g %g \n',A,span,section_num,airfoil_num);
     
-        cd ..\
-    else
-        error("ERROR: could not change directory to Q3D from inputStructures")
-    end
+    fprintf(fid, '0 %s \n',Airfoil);
+    fprintf(fid, '1 %s \n',Airfoil);
+    fprintf(fid, '%g %g %g %g %g %g \n',c_root,x1,y1,z1,spar_front_1,spar_rear_1);
+    fprintf(fid, '%g %g %g %g %g %g \n',c_kink,x2,y2,z2,spar_front_2,spar_rear_2);
+    fprintf(fid, '%g %g %g %g %g %g \n',c_tip,x3,y3,z3,spar_front_3,spar_rear_3);
+    
+    fprintf(fid, '%g %g \n',ftank_start,ftank_end);
+    
+    fprintf(fid, '%g \n', eng_num);
+    fprintf(fid, '%g  %g \n', eng_ypos,eng_mass);
+    
+    fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
+    fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
+    fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
+    fprintf(fid, '%g %g %g %g \n',E_al,rho_al,Ft_al,Fc_al);
+    
+    fprintf(fid,'%g %g \n',eff_factor,pitch_rib);
+    fprintf(fid,'0 \n');
+    fclose(fid);
 
 end

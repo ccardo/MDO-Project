@@ -23,18 +23,9 @@ function [] = printAirfoil(T, B)
     %     cd .\EMWET\
     % end
 
-    result = changeDirSafe("EMWET");
-    
-    if result
-        % print airfoil coords and return to parent directory
-        fid = fopen("current_airfoil.dat", "w");
-        fprintf(fid, "%.4f %.4f\n", coords');
-        fclose(fid);
-    
-        cd ..\
-    else
-        error("ERROR: could not change directory to EMWET from printAirfoil")
-    end
-
+    % print airfoil coords and return to parent directory
+    fid = fopen("current_airfoil.dat", "w");
+    fprintf(fid, "%.4f %.4f\n", coords');
+    fclose(fid);
 
 end
