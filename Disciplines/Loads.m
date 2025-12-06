@@ -67,5 +67,4 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     L_max = q * Cl .* c;
     M_max = q * Cm .* c.^2;
 
-    
 end
