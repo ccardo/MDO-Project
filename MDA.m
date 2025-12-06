@@ -1,7 +1,7 @@
-function [R, MTOW, L_design, D_design, L_max, M_max, counter] = MDA(Aircraft, MTOWi, v)
+function [R, MTOW, L_design, D_design, counter] = MDA(Aircraft, MTOWi, v)
 
     % define the wanted tolerance
-    error = 10^-6;
+    error = 10^-3;
     
     % start the iteration counter
     counter = 0;
@@ -22,7 +22,7 @@ function [R, MTOW, L_design, D_design, L_max, M_max, counter] = MDA(Aircraft, MT
         counter = counter +1;    
     end
     
-    [L_design, D_design, Aircraft] = Aerodynamics(Aircraft, MTOW, v);
-    R = Performance(Aircraft, L_design, D_design, MTOW, v);
+    [L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
+    R = Performance(L_design, D_design, MTOW, v);
 
 end

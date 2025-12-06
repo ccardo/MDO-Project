@@ -1,4 +1,4 @@
-function [R] = Performance(Aircraft, L_des, D_des, MTOW, v)
+function [R] = Performance(L_des, D_des, MTOW, v)
     
     global FixedValues;
 

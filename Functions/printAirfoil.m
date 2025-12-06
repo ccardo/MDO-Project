@@ -10,18 +10,6 @@ function [] = printAirfoil(T, B)
 
     coords = [x(end:-1:2) yT(end:-1:2)
               x           yB];
-    
-    % check current directory and change to EMWET
-    % directory = dir();
-    % if contains(directory(1).folder, "Disciplines") || ...
-    %    contains(directory(1).folder, "Functions")   || ...
-    %    contains(directory(1).folder, "Q3D")
-    %     cd ..\EMWET\
-    % elseif contains(directory(1).folder, "EMWET")
-    %     cd .\
-    % else
-    %     cd .\EMWET\
-    % end
 
     % print airfoil coords and return to parent directory
     fid = fopen("current_airfoil.dat", "w");
