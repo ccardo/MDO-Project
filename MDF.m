@@ -34,47 +34,47 @@ LE_sweep = 32;          % leading edge sweep [deg]
 b2 = 20.81;             % outer span [m]
 
 % bounds
-lb = [0.9 * FixedValues.Performance.Ma_des_ref
-      0.9 * FixedValues.Performance.h_des_ref
-      1
-      0.5
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      -Inf
-      10
-      0];
+lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
+      0.9 * FixedValues.Performance.h_des_ref           % h_des
+      1                                                 % c_kink
+      0.5                                               % c_tip
+      -Inf                                              % T1
+      -Inf                                              % T2
+      -Inf                                              % T3
+      -Inf                                              % T4
+      -Inf                                              % T5
+      -Inf                                              % T6
+      -Inf                                              % T7
+      -Inf                                              % B1
+      -Inf                                              % B2
+      -Inf                                              % B3
+      -Inf                                              % B4
+      -Inf                                              % B5
+      -Inf                                              % B6
+      -Inf                                              % B6
+      10                                                % LE_sweep
+      0];                                               % b2
 
-ub = [1.1 * FixedValues.Performance.Ma_des_ref
-      1.1 * FixedValues.Performance.h_des_ref
-      15
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      Inf
-      50
-      25];
+ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
+      1.1 * FixedValues.Performance.h_des_ref           % h_des
+      15                                                % c_kink
+      Inf                                               % c_tip
+      Inf                                               % T1
+      Inf                                               % T2
+      Inf                                               % T3
+      Inf                                               % T4
+      Inf                                               % T5
+      Inf                                               % T6
+      Inf                                               % T7
+      Inf                                               % B1
+      Inf                                               % B2
+      Inf                                               % B3
+      Inf                                               % B4
+      Inf                                               % B5
+      Inf                                               % B6
+      Inf                                               % B7
+      50                                                % LE_sweep
+      25];                                              % b2
 
 % initial values for design vector
 x0 = [Ma_des
