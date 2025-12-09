@@ -21,11 +21,15 @@ function [R, MTOW, L_design, D_design, counter] = MDA(Aircraft, MTOWi, v)
         end
         [L_max, M_max, y_max] = Loads(Aircraft, MTOWi, v, counter); 
         MTOW = Structures(Aircraft, L_max, M_max, y_max, MTOWi, v, counter);
-
+        
         % if any resulting quantity is NaN or Inf, display a warning but continue
         if any(isnan([MTOW, norm(L_max), norm(M_max), norm(y_max)])) || ...
            any(isinf([MTOW, norm(L_max), norm(M_max), norm(y_max)]))
-            warning("WARNING: one of the MDA coupling variables is either Inf of NaN.")
+            warning on
+            warning("off", "backtrace")
+            warning("off", "verbose")
+            warning("One of the MDA coupling variables is either Inf of NaN.");
+            warning("on", "backtrace")
         end
 
         % add to counter
