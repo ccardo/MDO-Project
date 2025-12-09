@@ -2,6 +2,7 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v, counter)
 
     global FixedValues
     global globalIterationCounter
+    global Constraints
 
     % check current directory and change to Q3D
     result = changeDirSafe("EMWET");
@@ -28,7 +29,18 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v, counter)
     else
         error("ERROR: could not change directory to EMWET from Structures")
     end
-
     
+    Constraints.MTOW = MTOW;
+
+    % generate wing boxes and compute their volume
+    Boxes = loftWingBox(Aircraft);
+    volume = zeros(1, length(Boxes));
+    for i = 1:length(Boxes)
+         volume(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z);
+    end
+    V_tank = sum(volume);
+    
+    Constraints.VTank = V_tank;
+        
 
 end

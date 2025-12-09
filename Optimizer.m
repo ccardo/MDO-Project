@@ -2,6 +2,7 @@ function [f, vararg] = Optimizer(v)
 
 global globalIterationCounter;
 global FixedValues;
+global Constraints;
 globalIterationCounter = globalIterationCounter + 1;
 
 % design variables
@@ -40,6 +41,7 @@ Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
 MAC = meanAeroChord(Aircraft.Wing.Geom);
 A = wingArea(Aircraft.Wing.Geom);
 Aircraft.Var = [MAC A];
+Constraints.area = A;
 
 
 Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
@@ -54,7 +56,6 @@ Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 % disp(t_max)
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
-
 
 " ======================================================================= ";
 % ------------------------------- RUN MDA ------------------------------- %;

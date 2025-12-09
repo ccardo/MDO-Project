@@ -7,12 +7,14 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
         makePlot {mustBeNonempty} = 0       % boolean (0 or 1)
     end
     
+    global FixedValues;
+
     % extract relevant quantities
     geom = Aircraft.Wing.Geom;
     airfoil = Aircraft.Wing.Airfoils;
-    spars = Aircraft.Wing.Spars;
-    fuelTankStart = Aircraft.FuelTankStart;
-    fuelTankEnd = Aircraft.FuelTankEnd;
+    spars = FixedValues.Geometry.spars;
+    fuelTankStart = FixedValues.Geometry.tank(1);
+    fuelTankEnd = FixedValues.Geometry.tank(2);
 
     span = geom(end, 2);
     lastSectionSpan = span - geom(end-1,2);
@@ -36,10 +38,10 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
     for i = 1:size(geom, 1)-1
     
         % pull out the spar locations for current and next section.
-        frontSpar1 = spars(i).front;
-        rearSpar1 = spars(i).rear;
-        frontSpar2 = spars(i+1).front;
-        rearSpar2 = spars(i+1).rear;
+        frontSpar1 = spars(i,1);
+        rearSpar1 = spars(i,2);
+        frontSpar2 = spars(i+1,1);
+        rearSpar2 = spars(i+1,2);
         
         % difference in twist of the two surfaces
         twist1 = deg2rad(geom(i, 5));
