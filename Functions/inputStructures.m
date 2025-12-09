@@ -25,7 +25,7 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
     eff_factor  =    0.96;             
     Airfoil     =    'current_airfoil';
     section_num =    3;
-    airfoil_num =    2;
+    airfoil_num =    3;
     A = wingArea(Aircraft.Wing.Geom);
     
     % define the leading edge postions of the airfoils that generate the
@@ -39,20 +39,8 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
     x3 = Aircraft.Wing.Geom(3,1);
     y3 = Aircraft.Wing.Geom(3,2);
     z3 = Aircraft.Wing.Geom(3,3);
-    
-    % check current directory and change to EMWET
-    % directory = dir();
-    % if contains(directory(1).folder, "Disciplines") || ...
-    %    contains(directory(1).folder, "Functions")   || ...
-    %    contains(directory(1).folder, "Q3D")
-    %    cd ..\EMWET\
-    % elseif contains(directory(1).folder, "EMWET")
-    %    cd .\
-    % else
-    %     cd .\EMWET\
-    % end
 
-    % print da file inside the current directory (should be \EMWET\)
+    % print the file inside the current directory (should be \EMWET\)
     fid = fopen( 'a330.init','wt');
     fprintf(fid, '%g %g \n',MTOW,MZF);
     fprintf(fid, '%g \n',n_max);
@@ -60,6 +48,7 @@ function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
     fprintf(fid, '%g %g %g %g \n',A,span,section_num,airfoil_num);
     
     fprintf(fid, '0 %s \n',Airfoil);
+    fprintf(fid, '%g %s \n', FixedValues.Geometry.b1/(FixedValues.Geometry.b1+v(20)),Airfoil);
     fprintf(fid, '1 %s \n',Airfoil);
     fprintf(fid, '%g %g %g %g %g %g \n',c_root,x1,y1,z1,spar_front_1,spar_rear_1);
     fprintf(fid, '%g %g %g %g %g %g \n',c_kink,x2,y2,z2,spar_front_2,spar_rear_2);

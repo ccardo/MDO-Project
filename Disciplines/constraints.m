@@ -1,4 +1,4 @@
-function [c1, c2] = constraints(Aircraft, MTOW)
+function [c, ceq] = constraints(v)
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
 
@@ -24,6 +24,8 @@ function [c1, c2] = constraints(Aircraft, MTOW)
 
     % constraints on fuel weight and volume
     c2 = (f_fuel*W_f)/rho_fuel-V_tank; 
+    c = [c1,c2];
+    ceq = [];
        
 end
 

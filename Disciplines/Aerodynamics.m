@@ -38,7 +38,10 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     % SOLVE and return back to parent directory
     if result
-        Res = Q3D_solver(Aircraft);    
+        disp('Running Q3D visc')
+        tic
+        Res = Q3D_solver(Aircraft);
+        toc
         %cd ..\
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")

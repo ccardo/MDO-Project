@@ -47,7 +47,7 @@ Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
-% plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
+%plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
 % t_max = checkThickness(Ti,Bi);
 % disp(t_max)
 
