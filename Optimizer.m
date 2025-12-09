@@ -1,6 +1,8 @@
 function [f, vararg] = Optimizer(v)
 
+global globalIterationCounter;
 global FixedValues;
+globalIterationCounter = globalIterationCounter + 1;
 
 % design variables
 b2 = v(20);
@@ -53,13 +55,13 @@ Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 
-% initial target for coupling variable MTOW
-
-MTOWi = 230000;
 
 " ======================================================================= ";
 % ------------------------------- RUN MDA ------------------------------- %;
 " ======================================================================= ";
+
+% initial target for coupling variable MTOW
+MTOWi = 230000;
 [R, MTOW, L_des, D_des, counter] = MDA(Aircraft, MTOWi, v);
 
 % Evaluate the output of the objective function
