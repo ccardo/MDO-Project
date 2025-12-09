@@ -113,8 +113,4 @@ tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
 toc;
 
-% [f,vararg] = Optim_MDFGauss(x);
-% NOTE: we define the objective function and the constraints as functions
-% of x. This is a variable that is defined inside fmincon as the design
-% vector and it is initially definde as x = x0
 

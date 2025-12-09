@@ -1,13 +1,12 @@
 function [R, MTOW, L_design, D_design, counter] = MDA(Aircraft, MTOWi, v)
 
     % define the wanted tolerance
-    error = 10^-3;
+    error = 10^-6;
     
     % start the iteration counter
     counter = 1;
 
     % initialize MTOW
-
     MTOW = 1;
     
     % run the loops for the disciplines that evaluate the MTOW

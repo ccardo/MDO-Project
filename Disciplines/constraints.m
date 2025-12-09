@@ -1,10 +1,10 @@
 function [c, ceq] = constraints(v)
-    % constraint #1 limits the wing loading of the optimized wing to the
-    % wing loading of the reference aircraft.
 
     global FixedValues
     global Constraints
-    
+
+    % constraint #1 limits the wing loading of the optimized wing to the
+    % wing loading of the reference aircraft.
     MTOW = Constraints.MTOW;
     A = Constraints.area;
     A_ref = FixedValues.Geometry.area; 
