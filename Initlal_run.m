@@ -56,4 +56,5 @@ x0 = [Ma_des
       b2];
 
 [f, vararg] = Optimizer(x0);
+disp(f)
 

@@ -21,7 +21,7 @@ FixedValues.Weight.A_W = 111710;                % [kg]
 FixedValues.Weight.deltaPayload = 12365;        % [kg]
 
 FixedValues.Performance.nMax = 2.5;             % [-]
-FixedValues.Performance.CT_ref = 1.8639e-4;     % [-]
+FixedValues.Performance.CT_ref = 9.21e-5;       % [-]
 FixedValues.Performance.V_des_ref = 242;        % [m/s]
 FixedValues.Performance.h_des_ref = 11800;      % [m]
 FixedValues.Performance.CD_A_W = 0.015387;      % [-]

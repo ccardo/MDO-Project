@@ -30,7 +30,7 @@ B4 = -0.038631;         % } bottom CST coefficients
 B5 = -0.26127;          % |
 B6 = 0.075531;          % |
 B7 = 0.077234;          % /
-LE_sweep = 32;          % leading edge sweep [deg]
+LE_sweep = 31;          % leading edge sweep [deg]
 b2 = 20.81;             % outer span [m]
 
 % bounds
@@ -113,4 +113,4 @@ tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
 toc;
 
-
+plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
