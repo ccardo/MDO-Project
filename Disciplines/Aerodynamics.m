@@ -1,7 +1,6 @@
 function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     global FixedValues
-    global globalIterationCounter
 
     h_des = v(2);
     Ma_des = v(1);
@@ -39,12 +38,11 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     if result
         % run Q3D and display its ITera
-        iter = "["+globalIterationCounter+"]";
-        disp(iter+" Running Q3D [AER]...")
+        disp(" Running Q3D [AER]...")
         tic
         Res = Q3D_solver(Aircraft);
         toc
-        disp(iter+" Done running Q3D [AER].")
+        disp(" Done running Q3D [AER].")
         cd ..\
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")

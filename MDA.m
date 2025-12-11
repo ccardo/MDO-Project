@@ -1,4 +1,4 @@
-function [R, MTOW, L_design, D_design, counter] = MDA(Aircraft, MTOWi, v)
+function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
 
     % define the wanted tolerance
     error = 10^-6;
@@ -13,13 +13,14 @@ function [R, MTOW, L_design, D_design, counter] = MDA(Aircraft, MTOWi, v)
     % also pass "counter" as an argument in order to display current
     % iteration (easier to debug)
     
+    disp(' Running MDA loop [LOAD & STRUCT]...')
     while abs(MTOW-MTOWi)/MTOW > error
         % loop counter
         if (counter > 0)
             MTOWi = MTOW; 
         end
-        [L_max, M_max, y_max] = Loads(Aircraft, MTOWi, v, counter); 
-        MTOW = Structures(Aircraft, L_max, M_max, y_max, MTOWi, v, counter);
+        [L_max, M_max, y_max] = Loads(Aircraft, MTOWi, v); 
+        MTOW = Structures(Aircraft, L_max, M_max, y_max, MTOWi, v);
         
         % if any resulting quantity is NaN or Inf, display a warning but continue
         if any(isnan([MTOW, norm(L_max), norm(M_max), norm(y_max)])) || ...
