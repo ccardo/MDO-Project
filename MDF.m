@@ -46,13 +46,13 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       -7                                                % T5
       -7                                                % T6
       -7                                                % T7
-      -7                                                % B1
-      -7                                                % B2
-      -7                                                % B3
-      -7                                                % B4
-      -7                                                % B5
+       7                                                % B1
+       7                                                % B2
+       7                                                % B3
+       7                                                % B4
+       7                                                % B5
       -7                                                % B6
-      -7                                                % B6
+      -7                                                % B7
       10                                                % LE_sweep
       2];                                               % b2 (need better approx)
 
@@ -67,11 +67,11 @@ ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
       7                                                 % T5
       7                                                 % T6
       7                                                 % T7
-      7                                                 % B1
-      7                                                 % B2
-      7                                                 % B3
-      7                                                 % B4
-      7                                                 % B5
+     -7                                                 % B1
+     -7                                                 % B2
+     -7                                                 % B3
+     -7                                                 % B4
+     -7                                                 % B5
       7                                                 % B6
       7                                                 % B7
       50                                                % LE_sweep
@@ -99,9 +99,10 @@ x0 = [Ma_des
       LE_sweep 
       b2];
 
+ub = ub./x0;
+lb = lb./x0;
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
-[ub, FixedValues.Key.upperBound] = normalize(ub, 'norm');
-[lb, FixedValues.Key.lowerBound] = normalize(lb, 'norm');
+
 
 % Options for the optimization
 options.Display         = 'iter-detailed';

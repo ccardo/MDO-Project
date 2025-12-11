@@ -39,6 +39,9 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     % if all proceeds swimmingly you should be able to evaluate this...
     % unless that son of a bitch viscous Q3D decides to diverge
     [L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
+    if isnan(D_design) % added in case Q3D visc diverges due to transonic conditions
+        D_design = inf;
+    end
     R = Performance(L_design, D_design, MTOW, v);
 
 end
