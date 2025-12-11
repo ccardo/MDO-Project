@@ -41,7 +41,9 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
         % run Q3D and display its ITera
         iter = "["+globalIterationCounter+"]";
         disp(iter+" Running Q3D [AER]...")
+        tic
         Res = Q3D_solver(Aircraft);
+        toc
         disp(iter+" Done running Q3D [AER].")
         cd ..\
     else
