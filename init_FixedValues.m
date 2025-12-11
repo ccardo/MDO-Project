@@ -4,7 +4,7 @@ global FixedValues;
 FixedValues = struct();
 
 FixedValues.Geometry.f_tank = 0.93;             % [-]
-FixedValues.Geometry.area = 363.1;              %[m^2]
+FixedValues.Geometry.area = 363.1;              % [m^2]
 FixedValues.Geometry.dihedral = 5;              % [deg]
 FixedValues.Geometry.fuselageDiameter = 5.64;   % [m]
 FixedValues.Geometry.b1 = 8.19;                 % [m]
