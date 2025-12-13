@@ -2,6 +2,9 @@ function [f, vararg] = Optimizer(v)
 
 global FixedValues;
 global Constraints;
+global globalCounter;
+
+globalCounter = 1;
 
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 

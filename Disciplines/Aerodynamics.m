@@ -50,5 +50,8 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     L_des = q * A * Res.CLwing;
     D_des = q * A * (Res.CDwing + CD_A_W);
+    if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
+       D_des = inf;
+    end
 
 end

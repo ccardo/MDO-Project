@@ -119,4 +119,4 @@ tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
 toc;
 
-plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
+
