@@ -24,5 +24,3 @@ function [c, ceq] = constraints(v)
     ceq = [];
        
 end
-
-
