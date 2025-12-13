@@ -3,10 +3,16 @@ function [f, vararg] = Optimizer(v)
 global FixedValues;
 global Constraints;
 global globalCounter;
+global currentDesignVector;
 
 globalCounter = 1;
 
-v
+% if v is different than the current design vector (i.e. fmincon has
+% changed it) then display the changes.
+if v ~= currentDesignVector
+    v
+end
+
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
 % design variables

@@ -5,8 +5,9 @@ clc
 
 run init_FixedValues.m
 
-global projectDirectory;
-global FixedValues;
+global projectDirectory
+global FixedValues
+global currentDesignVector
 projectDirectory = cd;
 
 % Initial values
@@ -102,7 +103,7 @@ x0 = [Ma_des
 ub = ub./x0;
 lb = lb./x0;
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
-
+currentDesignVector = x0;
 
 % Options for the optimization
 options.Display         = 'iter-detailed';
@@ -110,10 +111,12 @@ options.Algorithm       = 'sqp';
 options.FunValCheck     = 'off';
 options.DiffMinChange   = 1e-6;         % Minimum change while gradient searching
 options.DiffMaxChange   = 5e-3;         % Maximum change while gradient searching
-options.TolCon          = 1e-6;         % Maximum difference between two subsequent constraint vectors [c and ceq]
+options.TolCon          = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
 options.TolFun          = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX            = 1e-6;         % Maximum difference between two subsequent design vectors
 options.MaxIter         = 20;           % Maximum iterations
+options.ScaleProblem    = false;        % Normalization of the design vector
+options.MaxStepSize     = 0.01;         % Maximum change in design vector values during optimization
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
