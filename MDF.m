@@ -5,9 +5,8 @@ clc
 
 run init_FixedValues.m
 
-global globalIterationCounter;
 global projectDirectory;
-globalIterationCounter = 0;
+global FixedValues;
 projectDirectory = cd;
 
 % Initial values
@@ -34,45 +33,47 @@ LE_sweep = 31;          % leading edge sweep [deg]
 b2 = 20.81;             % outer span [m]
 
 % bounds
+% boundaries for the CST coefficients are temporary, better values needed
+
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       0.9 * FixedValues.Performance.h_des_ref           % h_des
       1                                                 % c_kink
       0.5                                               % c_tip
-      -Inf                                              % T1
-      -Inf                                              % T2
-      -Inf                                              % T3
-      -Inf                                              % T4
-      -Inf                                              % T5
-      -Inf                                              % T6
-      -Inf                                              % T7
-      -Inf                                              % B1
-      -Inf                                              % B2
-      -Inf                                              % B3
-      -Inf                                              % B4
-      -Inf                                              % B5
-      -Inf                                              % B6
-      -Inf                                              % B6
+      -7                                                % T1
+      -7                                                % T2
+      -7                                                % T3
+      -7                                                % T4
+      -7                                                % T5
+      -7                                                % T6
+      -7                                                % T7
+       7                                                % B1
+       7                                                % B2
+       7                                                % B3
+       7                                                % B4
+       7                                                % B5
+      -7                                                % B6
+      -7                                                % B7
       10                                                % LE_sweep
-      0];                                               % b2
+      2];                                               % b2 (need better approx)
 
 ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
-      Inf                                               % c_tip
-      Inf                                               % T1
-      Inf                                               % T2
-      Inf                                               % T3
-      Inf                                               % T4
-      Inf                                               % T5
-      Inf                                               % T6
-      Inf                                               % T7
-      Inf                                               % B1
-      Inf                                               % B2
-      Inf                                               % B3
-      Inf                                               % B4
-      Inf                                               % B5
-      Inf                                               % B6
-      Inf                                               % B7
+      5                                                 % c_tip
+      7                                                 % T1
+      7                                                 % T2
+      7                                                 % T3
+      7                                                 % T4
+      7                                                 % T5
+      7                                                 % T6
+      7                                                 % T7
+     -7                                                 % B1
+     -7                                                 % B2
+     -7                                                 % B3
+     -7                                                 % B4
+     -7                                                 % B5
+      7                                                 % B6
+      7                                                 % B7
       50                                                % LE_sweep
       25];                                              % b2
 
@@ -97,6 +98,11 @@ x0 = [Ma_des
       B7 
       LE_sweep 
       b2];
+
+ub = ub./x0;
+lb = lb./x0;
+[x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
+
 
 % Options for the optimization
 options.Display         = 'iter-detailed';

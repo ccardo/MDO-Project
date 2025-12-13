@@ -1,7 +1,6 @@
-function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v, counter)
+function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
 
     global FixedValues
-    global globalIterationCounter
     global Constraints
 
     % check current directory and change to Q3D
@@ -17,14 +16,10 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v, counter)
         inputStructuresLoads(y_max, L_max, M_max)
         
         % run EMWET and display [global.MDA] iteration count.
-        iter = "["+globalIterationCounter+"."+counter+"]";
-        disp(iter+" Running EMWET [STR]...")
         EMWET a330
-        disp(iter+" Done running EMWET [STR].")
         
         % read a330.weight
         MTOW = readEMWET(FixedValues);
-        
         cd ..\
     else
         error("ERROR: could not change directory to EMWET from Structures")

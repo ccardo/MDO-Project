@@ -2,7 +2,8 @@ function [c, ceq] = constraints(v)
 
     global FixedValues
     global Constraints
-
+    v = normalize(v, 'denorm', FixedValues.Key.designVector);
+    
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
     MTOW = Constraints.MTOW;

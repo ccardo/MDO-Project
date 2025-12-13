@@ -1,9 +1,9 @@
 function [f, vararg] = Optimizer(v)
 
-global globalIterationCounter;
 global FixedValues;
 global Constraints;
-globalIterationCounter = globalIterationCounter + 1;
+
+v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
 % design variables
 b2 = v(20);
@@ -51,10 +51,6 @@ Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
-%plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils, "r")
-% t_max = checkThickness(Ti,Bi);
-% disp(t_max)
-
 Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sections
 
 " ======================================================================= ";
@@ -63,12 +59,12 @@ Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sect
 
 % initial target for coupling variable MTOW
 MTOWi = 230000;
-[R, MTOW, L_des, D_des, counter] = MDA(Aircraft, MTOWi, v);
+[R, MTOW, L_des, D_des] = MDA(Aircraft, MTOWi, v);
 
 % Evaluate the output of the objective function
 f = -R;
 
 % output the final optimized values and the iteration counter of the MDA
-vararg = [MTOW, L_des, D_des, counter];
+vararg = [MTOW, L_des, D_des];
 
 end

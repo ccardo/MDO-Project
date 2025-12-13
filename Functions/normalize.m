@@ -8,7 +8,7 @@ function [v_norm, key] = normalize(v, setting, key)
 
 
     % normalize (divide)
-    if setting == "norm" && all(key == 1)
+    if setting == "norm" && all(key == 1) % to normalize I don't input any key
         key = v;
         v_norm = v ./ v;
     

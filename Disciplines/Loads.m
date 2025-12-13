@@ -1,7 +1,5 @@
 function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v, counter)
     
-    global globalIterationCounter
-    
     h_des = v(2);
     Ma_MO = v(1) + 0.04;
 
@@ -38,10 +36,7 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v, counter)
 
     % SOLVE and return back to parent directory
     if result
-        iter = "["+globalIterationCounter+"."+counter+"]";
-        disp(iter+" Running Q3D [LDS]...")
         Res = Q3D_solver(Aircraft);
-        disp(iter+" Done running Q3D [LDS].")
         cd ..\
     else
         error("ERROR: could not change directory to Q3D from Loads")
