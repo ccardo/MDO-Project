@@ -40,11 +40,7 @@ Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
                       x2     y2     z2     c_kink    twist(2);
                       x3     y3     z3     c_tip     twist(3)];
 
-% Attenzio! could remove the Aircraft.Var substruct and put MAC and A
-% inside Aircraft.Wing (it doesn't break Q3D if we do this)
-MAC = meanAeroChord(Aircraft.Wing.Geom);
 A = wingArea(Aircraft.Wing.Geom);
-Aircraft.Var = [MAC A];
 Constraints.area = A;
 
 
