@@ -15,7 +15,7 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     % also pass "counter" as an argument in order to display current
     % iteration (easier to debug)
     
-    disp('[' + globalCounter + '] Running MDA loop [LOAD & STRUCT]...')
+    disp("Running MDA loop [LOAD & STRUCT]...")
     while abs(MTOW-MTOWi)/MTOW > error
         % loop counter
         if (counter > 0)

@@ -38,7 +38,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     if result
         % run Q3D and display its ITera
-        disp(" Running Q3D [AER]...")
+        disp("Running Q3D [AERO]...")
         tic
         Res = Q3D_solver(Aircraft);
         toc
@@ -51,7 +51,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
     L_des = q * A * Res.CLwing;
     D_des = q * A * (Res.CDwing + CD_A_W);
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
-       D_des = inf;
+       D_des = Inf;
     end
 
 end

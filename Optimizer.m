@@ -6,6 +6,7 @@ global globalCounter;
 
 globalCounter = 1;
 
+v
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
 % design variables
@@ -70,6 +71,6 @@ f = -R;
 % output the final optimized values and the iteration counter of the MDA
 vararg = [MTOW, L_des, D_des];
 
-
+R
 
 end
