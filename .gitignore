@@ -56,3 +56,9 @@
 /Q3D/Storage/VGKconR.dat
 
 *.load
+
+/EMWET/a330.init
+
+/EMWET/a330.weight
+
+/EMWET/current_airfoil.dat
