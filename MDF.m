@@ -106,8 +106,9 @@ lb = lb./abs(x0);
 currentDesignVector = x0;
 
 % Options for the optimization
+options = optimset();
 options.Display                     = 'iter-detailed';
-% options.Algorithm                 = 'sqp';
+options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
 options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
 options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
@@ -116,11 +117,10 @@ options.TolFun                      = 1e-6;         % Maximum difference between
 options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 options.MaxIter                     = 1;            % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
-options.MaxStepSize                 = 0.001;        % Maximum change in design vector values during optimization
-% options.FiniteDifferenceStepSize    = 0.001;
+
 
 tic;
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
 toc;
 
 
