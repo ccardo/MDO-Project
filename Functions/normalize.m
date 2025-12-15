@@ -6,6 +6,12 @@ function [v_norm, key] = normalize(v, setting, key)
         key = ones(numel(v), 1);
     end
 
+    % %
+    % % do nothing (bugfix)
+    % v_norm = v;
+    % return
+    % %
+    % %
 
     % normalize (divide)
     if setting == "norm" && all(key == 1) % to normalize I don't input any key
