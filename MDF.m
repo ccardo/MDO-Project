@@ -106,10 +106,11 @@ currentDesignVector = x0;
 
 % Options for the optimization
 options.Display                     = 'iter-detailed';
-%options.Algorithm                   = 'sqp';
-options.FunValCheck                 = 'on';
+%options.Algorithm                  = 'sqp';       % this is a bad algorithm when there are no gradients provided 
+%options.Algorithm                  = 'interior-point';   
+options.FunValCheck                 = 'on';            
 options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
-options.DiffMaxChange               = 1e-2;         % Maximum change while gradient searching
+options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
 options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
 options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
