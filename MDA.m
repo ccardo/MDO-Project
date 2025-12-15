@@ -14,6 +14,7 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     % iteration (easier to debug)
     
     disp("Running MDA loop [LOAD & STRUCT]...")
+    tic
     while abs(MTOW-MTOWi)/MTOW > error
         % loop counter
         if (counter > 0)
@@ -36,6 +37,9 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
         counter = counter +1;
     end
     
+    finish = toc;
+    disp("Done running MDA. Time elapsed: " + finish + ", iterations: " + counter)
+
     % if all proceeds swimmingly you should be able to evaluate this...
     % unless that son of a bitch viscous Q3D decides to diverge
     [L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
