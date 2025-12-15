@@ -41,8 +41,8 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
         disp("Running Q3D [AERO]...")
         tic
         Res = Q3D_solver(Aircraft);
-        toc
-        disp(" Done running Q3D [AER].")
+        finish = toc;
+        disp(" Done running Q3D. Time elapsed: " + finish)
         cd ..\
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")
