@@ -11,7 +11,6 @@ global currentDesignVector
 projectDirectory = cd;
 
 % Initial values
-
 Ma_des = 0.82;          % mach number 
 h_des = 11800;          % altitude [m]
 c_kink = 7.514;         % chord at the kink [m]
@@ -108,19 +107,28 @@ currentDesignVector = x0;
 % Options for the optimization
 options = optimset();
 options.Display                     = 'iter-detailed';
+<<<<<<< HEAD
 options.Algorithm                   = 'sqp';
+=======
+%options.Algorithm                   = 'sqp';
+>>>>>>> 95e4ca677fbe6b70cd8ace2ed28ecbd4e60852d1
 options.FunValCheck                 = 'on';
 options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
-options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
+options.DiffMaxChange               = 1e-2;         % Maximum change while gradient searching
 options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
 options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
-options.MaxIter                     = 1;            % Maximum iterations
+options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
+<<<<<<< HEAD
 
+=======
+options.PlotFcns                    = {@optimplotfval, @optimplotx, @optimplotfirstorderopt};  % should plot the residuals 
+>>>>>>> 95e4ca677fbe6b70cd8ace2ed28ecbd4e60852d1
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
 toc;
 
 
+    
