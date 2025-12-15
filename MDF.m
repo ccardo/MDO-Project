@@ -5,8 +5,9 @@ clc
 
 run init_FixedValues.m
 
-global projectDirectory;
-global FixedValues;
+global projectDirectory
+global FixedValues
+global currentDesignVector
 projectDirectory = cd;
 
 % Initial values
@@ -45,11 +46,11 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       -7                                                % T5
       -7                                                % T6
       -7                                                % T7
-       7                                                % B1
-       7                                                % B2
-       7                                                % B3
-       7                                                % B4
-       7                                                % B5
+      -7                                                % B1
+      -7                                                % B2
+      -7                                                % B3
+      -7                                                % B4
+      -7                                                % B5
       -7                                                % B6
       -7                                                % B7
       10                                                % LE_sweep
@@ -66,11 +67,11 @@ ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
       7                                                 % T5
       7                                                 % T6
       7                                                 % T7
-     -7                                                 % B1
-     -7                                                 % B2
-     -7                                                 % B3
-     -7                                                 % B4
-     -7                                                 % B5
+      7                                                 % B1
+      7                                                 % B2
+      7                                                 % B3
+      7                                                 % B4
+      7                                                 % B5
       7                                                 % B6
       7                                                 % B7
       50                                                % LE_sweep
@@ -98,21 +99,24 @@ x0 = [Ma_des
       LE_sweep 
       b2];
 
-ub = ub./x0;
-lb = lb./x0;
+ub = ub./abs(x0);
+lb = lb./abs(x0);
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
-
+currentDesignVector = x0;
 
 % Options for the optimization
-options.Display         = 'iter-detailed';
-options.Algorithm       = 'sqp';
-options.FunValCheck     = 'off';
-options.DiffMinChange   = 1e-6;         % Minimum change while gradient searching
-options.DiffMaxChange   = 5e-3;         % Maximum change while gradient searching
-options.TolCon          = 1e-6;         % Maximum difference between two subsequent constraint vectors [c and ceq]
-options.TolFun          = 1e-6;         % Maximum difference between two subsequent objective value
-options.TolX            = 1e-6;         % Maximum difference between two subsequent design vectors
-options.MaxIter         = 20;           % Maximum iterations
+options.Display                     = 'iter-detailed';
+% options.Algorithm                 = 'sqp';
+options.FunValCheck                 = 'on';
+options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
+options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
+options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
+options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
+options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
+options.MaxIter                     = 1;            % Maximum iterations
+options.ScaleProblem                = true;         % Normalization of the design vector
+options.MaxStepSize                 = 0.001;        % Maximum change in design vector values during optimization
+% options.FiniteDifferenceStepSize    = 0.001;
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x),x0,[],[],[],[],lb,ub,@(y) constraints(y),options);
