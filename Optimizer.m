@@ -2,16 +2,16 @@ function [f, vararg] = Optimizer(v)
 
 global FixedValues;
 global Constraints;
-global globalCounter;
 global currentDesignVector;
 
-globalCounter = 1;
 
 % if v is different than the current design vector (i.e. fmincon has
 % changed it) then display the changes.
 if v ~= currentDesignVector
-    v
+    disp(v)
 end
+
+currentDesignVector = v;
 
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
@@ -73,6 +73,6 @@ f = -R;
 % output the final optimized values and the iteration counter of the MDA
 vararg = [MTOW, L_des, D_des];
 
-R
+disp(R)
 
 end

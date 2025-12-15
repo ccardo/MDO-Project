@@ -1,6 +1,4 @@
 function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
-    
-    global globalCounter
 
     % define the wanted tolerance
     error = 10^-6;
@@ -43,6 +41,4 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     [L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
     R = Performance(L_design, D_design, MTOW, v);
    
-    globalCounter  = globalCounter + 1;
-
 end
