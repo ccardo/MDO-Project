@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 format short
 close all
 clear
@@ -41,20 +40,20 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       0.9 * FixedValues.Performance.h_des_ref           % h_des
       1                                                 % c_kink
       0.5                                               % c_tip
-      -7                                                % T1
-      -7                                                % T2
-      -7                                                % T3
-      -7                                                % T4
-      -7                                                % T5
-      -7                                                % T6
-      -7                                                % T7
-      -7                                                % B1
-      -7                                                % B2
-      -7                                                % B3
-      -7                                                % B4
-      -7                                                % B5
-      -7                                                % B6
-      -7                                                % B7
+    0.0500                                              % T1
+    0.0100                                              % T2
+    0.0100                                              % T3
+    0.0100                                              % T4
+    0.0100                                              % T5
+    0.1500                                              % T6
+    0.1500                                              % T7
+   -0.3000                                              % B1
+   -0.3000                                              % B2
+   -0.3000                                              % B3
+   -0.3000                                              % B4
+   -0.3000                                              % B5
+   -0.3000                                              % B6
+   -0.3000                                              % B7
       10                                                % LE_sweep
       2];                                               % b2 (need better approx)
 
@@ -62,20 +61,20 @@ ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
       5                                                 % c_tip
-      7                                                 % T1
-      7                                                 % T2
-      7                                                 % T3
-      7                                                 % T4
-      7                                                 % T5
-      7                                                 % T6
-      7                                                 % T7
-      7                                                 % B1
-      7                                                 % B2
-      7                                                 % B3
-      7                                                 % B4
-      7                                                 % B5
-      7                                                 % B6
-      7                                                 % B7
+    0.3000                                              % T1
+    0.3000                                              % T2
+    0.3000                                              % T3
+    0.3000                                              % T4
+    0.3000                                              % T5
+    0.3000                                              % T6
+    0.3000                                              % T7
+   -0.0500                                              % B1
+    0.0100                                              % B2
+    0.0100                                              % B3
+    0.0100                                              % B4
+    0.0100                                              % B5
+    0.1500                                              % B6
+    0.1500                                              % B7
       50                                                % LE_sweep
       25];                                              % b2
 
