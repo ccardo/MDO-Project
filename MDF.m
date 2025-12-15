@@ -10,7 +10,6 @@ global FixedValues;
 projectDirectory = cd;
 
 % Initial values
-
 Ma_des = 0.82;          % mach number 
 h_des = 11800;          % altitude [m]
 c_kink = 7.514;         % chord at the kink [m]
