@@ -100,7 +100,7 @@ x0 = [Ma_des
       LE_sweep 
       b2];
 
-ub = ub./abs(x0);
+ub = ub./(x0);
 lb = lb./abs(x0);
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
 currentDesignVector = x0;

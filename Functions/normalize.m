@@ -13,10 +13,11 @@ function [v_norm, key] = normalize(v, setting, key)
     % %
     % %
 
-    % normalize (divide)
+    % normalize (divide) // note: if the element in V is <0, the division
+    % will keep its sign to ensure consistency with upper and lower bounds.
     if setting == "norm" && all(key == 1) % to normalize I don't input any key
-        key = v;
-        v_norm = v ./ v;
+        key = abs(v);
+        v_norm = v ./ key;
     
     % denormalize (multiply by key)
     elseif setting == "denorm" && any(key ~= 1)
