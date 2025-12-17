@@ -4,7 +4,7 @@ function [MTOW] = MDA(Aircraft, MTOWi, v)
     error = 10^-6;
     
     % start the iteration counter
-    counter = 1;
+    counter = 0;
 
     % initialize MTOW
     MTOW = 1;
