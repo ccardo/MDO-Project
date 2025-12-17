@@ -9,13 +9,13 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     load = nMax * MTOW * 9.81;
     
     a = airSoundSpeed(h_des);
-    Ma_MO = V_MO/a;
     rho = airDensity(h_des);
     T = airTemperature(h_des);
     mu = sutherland(T);
 
-    % V_MO = a * Ma_MO;
-    q = 1/2 * rho * V_MO^2;
+    V_MO_alt = V_MO * sqrt(1.225 / rho);
+    Ma_VMO = V_MO_alt / a;
+    q = 1/2 * rho * V_MO_alt^2;
     A = wingArea(Aircraft.Wing.Geom);
     MAC = meanAeroChord(Aircraft.Wing.Geom);
     
@@ -26,11 +26,11 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     % Moreover, the Aircraft struct can be not retrieved as an output, so
     % the actual struct is not modified in the optimization process.
     Aircraft.Aero.CL = CL;
-    Aircraft.Aero.Re = rho * V_MO * MAC / mu;
-    Aircraft.Aero.V = V_MO;
+    Aircraft.Aero.Re = rho * V_MO_alt * MAC / mu;
+    Aircraft.Aero.V = V_MO_alt;
     Aircraft.Aero.alt = h_des;
-    Aircraft.Aero.M = Ma_MO;
-    Aircraft.Aero.MaxIterIndex = 200;
+    Aircraft.Aero.M = Ma_VMO;
+    Aircraft.Aero.MaxIterIndex = 300;
 
     Aircraft.Visc = 0;
 
