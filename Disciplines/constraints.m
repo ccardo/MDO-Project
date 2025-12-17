@@ -1,8 +1,7 @@
-function [c, ceq] = constraints(v)
+function [c, ceq] = constraints(~)
 
     global FixedValues
     global Constraints
-    v = normalize(v, 'denorm', FixedValues.Key.designVector);
     
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
@@ -19,8 +18,9 @@ function [c, ceq] = constraints(v)
 
     % constraints on fuel weight and volume
     V_tank = Constraints.VTank;
-    c2 = (f_fuel*W_f)/rho_fuel-V_tank; 
-    c = [c1,c2];
+    c2 = (f_fuel*W_f)/rho_fuel - V_tank;
+
+    c = [c1; c2];
     ceq = [];
        
 end

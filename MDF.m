@@ -15,6 +15,7 @@ projectDirectory = cd;
 Ma_des = 0.82;          % mach number 
 h_des = 11800;          % altitude [m]
 c_kink = 7.514;         % chord at the kink [m]
+taper_outboard = 2.312 / 7.514;
 c_tip = 2.312;          % chord at the tip [m]
 T1 = 0.14863;           % \
 T2 = 0.069323;          % |
@@ -37,7 +38,7 @@ b2 = 20.81;             % outer span [m]
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       0.9 * FixedValues.Performance.h_des_ref           % h_des
       1                                                 % c_kink
-      0.5                                               % c_tip
+      0.1                                               % taper_outboard
     0.0500                                              % T1
     0.0100                                              % T2
     0.0100                                              % T3
@@ -58,7 +59,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
 ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
-      5                                                 % c_tip
+      1                                                 % taper_outboard
     0.3000                                              % T1
     0.3000                                              % T2
     0.3000                                              % T3
@@ -106,7 +107,7 @@ currentDesignVector = x0;
 % Options for the optimization
 options = optimset();
 options.Display                     = 'iter-detailed';
-options.Algorithm                   = 'sqp';
+options.Algorithm                   = 'sqp-legacy';
 options.FunValCheck                 = 'on';
 options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
 options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
