@@ -26,4 +26,4 @@ FixedValues.Performance.V_des_ref = 242;        % [m/s]
 FixedValues.Performance.h_des_ref = 11800;      % [m]
 FixedValues.Performance.CD_A_W = 0.015387;      % [-]
 FixedValues.Performance.Ma_des_ref = 0.82;      % [-]
-
+FixedValues.Performance.Ma_MO = 0.86;           % [-]
