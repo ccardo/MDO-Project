@@ -1,4 +1,4 @@
-function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
+function [MTOW] = MDA(Aircraft, MTOWi, v)
 
     % define the wanted tolerance
     error = 10^-6;
@@ -36,10 +36,4 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     
     finish = toc;
     disp("Done running MDA. Time elapsed: " + finish + ", iterations: " + counter)
-
-    % if all proceeds swimmingly you should be able to evaluate this...
-    % unless that son of a bitch viscous Q3D decides to diverge
-    [L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
-    R = Performance(L_design, D_design, MTOW, v);
-   
 end

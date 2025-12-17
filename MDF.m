@@ -12,27 +12,27 @@ projectDirectory = cd;
 
 % Initial values
 
-Ma_des = 0.82;          % mach number 
-h_des = 11800;          % altitude [m]
-c_kink = 7.514;         % chord at the kink [m]
-taper_outboard = 2.312 / 7.514;
-c_tip = 2.312;          % chord at the tip [m]
-T1 = 0.14863;           % \
-T2 = 0.069323;          % |
-T3 = 0.22575;           % |
-T4 = 0.040425;          % } top CST coefficients
-T5 = 0.27305;           % |
-T6 = 0.17076;           % |
-T7 = 0.27171;           % /
-B1 = -0.15853;          % \
-B2 = -0.082473;         % |
-B3 = -0.16792;          % |
-B4 = -0.038631;         % } bottom CST coefficients
-B5 = -0.26127;          % |
-B6 = 0.075531;          % |
-B7 = 0.077234;          % /
-LE_sweep = 31;          % leading edge sweep [deg]
-b2 = 20.81;             % outer span [m]
+Ma_des = 0.82;              % mach number 
+h_des = 11800;              % altitude [m]
+c_kink = 7.514;             % chord at the kink [m]
+taper_outboard = 0.3077;    % taper ratio outboard
+c_tip = 2.312;              % chord at the tip [m]
+T1 = 0.14863;               % \
+T2 = 0.069323;              % |
+T3 = 0.22575;               % |
+T4 = 0.040425;              % } top CST coefficients
+T5 = 0.27305;               % |
+T6 = 0.17076;               % |
+T7 = 0.27171;               % /
+B1 = -0.15853;              % \
+B2 = -0.082473;             % |
+B3 = -0.16792;              % |
+B4 = -0.038631;             % } bottom CST coefficients
+B5 = -0.26127;              % |
+B6 = 0.075531;              % |
+B7 = 0.077234;              % /
+LE_sweep = 31;              % leading edge sweep [deg]
+b2 = 20.81;                 % outer span [m]
 
 % bounds
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
@@ -56,7 +56,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10                                                % LE_sweep
       2];                                               % b2 (need better approx)
 
-ub = [1.1 * FixedValues.Performance.Ma_des_ref          % Ma_des
+ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
       1                                                 % taper_outboard
