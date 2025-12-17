@@ -19,7 +19,8 @@ v = normalize(v, 'denorm', FixedValues.Key.designVector);
 b2 = v(20);
 LE_sweep = v(19);
 c_kink = v(3);
-c_tip = v(4);
+taper_outboard = v(4);
+
 
 % geometric fixed parameters
 twist = FixedValues.Geometry.twist;
@@ -28,6 +29,7 @@ dihedral = FixedValues.Geometry.dihedral;
 b1 = FixedValues.Geometry.b1;
 
 % geometric derived variables
+c_tip = taper_outboard * c_kink;
 x1 = 0;
 x2 = (b1)*tand(LE_sweep);
 x3 = (b1 + b2)*tand(LE_sweep);

@@ -12,7 +12,7 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
         % create EMWET input files:  
         % current_airfoil.dat, a330.init, a330.load
         printAirfoil(v(5:11), v(12:18))
-        inputStructures(Aircraft, FixedValues, MTOW, v)
+        inputStructures(Aircraft, MTOW, v)
         inputStructuresLoads(y_max, L_max, M_max)
         
         % run EMWET and display [global.MDA] iteration count.

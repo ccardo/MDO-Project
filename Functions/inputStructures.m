@@ -1,4 +1,6 @@
-function [] = inputStructures(Aircraft, FixedValues, MTOW, v)
+function [] = inputStructures(Aircraft, MTOW, v)
+
+    global FixedValues
 
     MZF         =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
     n_max      =   FixedValues.Performance.nMax;  
