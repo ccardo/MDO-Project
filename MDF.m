@@ -56,7 +56,10 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10                                                % LE_sweep
       2];                                               % b2 (need better approx)
 
-ub = [FixedValues.Performance.Ma_MO                     % Ma_des
+V_MO_des = FixedValues.Performance.V_MO * sqrt(1.225/airDensity(h_des));
+Ma_ub = min(1.1 * FixedValues.Performance.Ma_des_ref, V_MO_des/airSoundSpeed(1.1 * h_des));
+
+ub = [Ma_ub                                             % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
       1                                                 % taper_outboard
@@ -81,7 +84,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
 x0 = [Ma_des
       h_des
       c_kink 
-      c_tip 
+      taper_outboard
       T1 
       T2 
       T3 

@@ -3,13 +3,13 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     global FixedValues
 
     h_des = v(2);
-    % Ma_MO = FixedValues.Performance.Ma_MO;  % since this is a fixed value for the aircraft as mr La Rocca said (?)
     V_MO = FixedValues.Performance.V_MO;
 
     nMax = 2.5;
     load = nMax * MTOW * 9.81;
     
-    % a = airSoundSpeed(h_des);
+    a = airSoundSpeed(h_des);
+    Ma_MO = V_MO/a;
     rho = airDensity(h_des);
     T = airTemperature(h_des);
     mu = sutherland(T);
