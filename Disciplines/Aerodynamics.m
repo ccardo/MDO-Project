@@ -4,7 +4,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     h_des = v(2);
     Ma_des = v(1);
-    CD_A_W = FixedValues.Performance.CD_A_W;
+    D_A_W_q = FixedValues.Performance.D_A_W_q;
 
     % get design weight
     W_f = FixedValues.Weight.W_f;
@@ -49,7 +49,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
     end
 
     L_des = q * A * Res.CLwing;
-    D_des = q * A * (Res.CDwing + CD_A_W);
+    D_des = q * (A * Res.CDwing + D_A_W_q);
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
     end
