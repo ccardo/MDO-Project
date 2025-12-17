@@ -10,9 +10,6 @@ function [R, MTOW, L_design, D_design] = MDA(Aircraft, MTOWi, v)
     MTOW = 1;
     
     % run the loops for the disciplines that evaluate the MTOW
-    % also pass "counter" as an argument in order to display current
-    % iteration (easier to debug)
-    
     disp("Running MDA loop [LOAD & STRUCT]...")
     tic
     while abs(MTOW-MTOWi)/MTOW > error

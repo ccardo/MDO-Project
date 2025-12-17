@@ -5,9 +5,7 @@ clc
 
 run init_FixedValues.m
 
-global globalIterationCounter;
 global projectDirectory;
-globalIterationCounter = 0;
 projectDirectory = cd;
 
 % Initial values

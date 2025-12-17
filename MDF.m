@@ -34,8 +34,6 @@ LE_sweep = 31;          % leading edge sweep [deg]
 b2 = 20.81;             % outer span [m]
 
 % bounds
-% boundaries for the CST coefficients are temporary, better values needed
-
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       0.9 * FixedValues.Performance.h_des_ref           % h_des
       1                                                 % c_kink
@@ -115,7 +113,7 @@ options.DiffMaxChange               = 5e-2;         % Maximum change while gradi
 options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
 options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
-options.MaxIter                     = 1;            % Maximum iterations
+options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 
 
