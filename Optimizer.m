@@ -68,8 +68,8 @@ Aircraft.Wing.eta = [0; b1/(b1+b2); 1];  % Spanwise location of the airfoil sect
 % initial target for coupling variable MTOW
 MTOWi = 230000;
 MTOW = MDA(Aircraft, MTOWi, v);
-[L_design, D_design] = Aerodynamics(Aircraft, MTOW, v);
-R = Performance(L_design, D_design, MTOW, v);
+[L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
+R = Performance(L_des, D_des, MTOW, v);
    
 
 % Evaluate the output of the objective function
