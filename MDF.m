@@ -102,6 +102,18 @@ x0 = [Ma_des
       LE_sweep 
       b2];
 
+% get reference data
+a = airSoundSpeed(h_des);
+rho = airDensity(h_des);
+V_des = a * Ma_des;
+q = 1/2 * rho * V_des^2;
+A = 364.9344;
+
+% compute the (constant) D_A_W / q_ref
+CD_A_W = 0.015387;
+D_A_W_q = A * CD_A_W;
+FixedValues.Performance.D_A_W_q = D_A_W_q;
+
 ub = ub./(x0);
 lb = lb./abs(x0);
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
