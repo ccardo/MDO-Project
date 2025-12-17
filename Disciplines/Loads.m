@@ -1,7 +1,9 @@
-function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v, counter)
+function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     
+    global FixedValues
+
     h_des = v(2);
-    Ma_MO = v(1) + 0.04;
+    Ma_MO = FixedValues.Performance.Ma_MO;  % since this is a fixed value for the aircraft as mr La Rocca said (?)
 
     nMax = 2.5;
     load = nMax * MTOW * 9.81;
