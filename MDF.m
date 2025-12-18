@@ -32,12 +32,12 @@ B5 = -0.26127;              % |
 B6 = 0.075531;              % |
 B7 = 0.077234;              % /
 LE_sweep = 31;              % leading edge sweep [deg]
-b2 = 20.81;                 % outer span [m]
+A2 = 20.81;                 % outer span [m]
 
 % bounds
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
-      0.9 * FixedValues.Performance.h_des_ref           % h_des
-      1                                                 % c_kink
+      11700           % h_des
+      3                                                 % c_kink
       0.1                                               % taper_outboard
     0.0500                                              % T1
     0.0100                                              % T2
@@ -54,7 +54,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
    -0.3000                                              % B6
    -0.3000                                              % B7
       10                                                % LE_sweep
-      2];                                               % b2 (need better approx)
+      12];                                               % b2 
 
 ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
@@ -97,18 +97,18 @@ x0 = [Ma_des
       B6 
       B7 
       LE_sweep 
-      b2];
+      A2];
 
 % get reference data
 a = airSoundSpeed(h_des);
 rho = airDensity(h_des);
 V_des = a * Ma_des;
 q = 1/2 * rho * V_des^2;
-A = 364.9344;
+S = 364.9344;
 
 % compute the (constant) D_A_W / q_ref
 CD_A_W = 0.015387;
-D_A_W_q = A * CD_A_W;
+D_A_W_q = S * CD_A_W;
 FixedValues.Performance.D_A_W_q = D_A_W_q;
 
 ub = ub./(x0);

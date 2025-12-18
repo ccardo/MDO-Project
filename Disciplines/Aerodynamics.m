@@ -18,10 +18,10 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     V_des = a * Ma_des;
     q = 1/2 * rho * V_des^2;
-    A = wingArea(Aircraft.Wing.Geom);
+    S = wingArea(Aircraft.Wing.Geom);
     MAC = meanAeroChord(Aircraft.Wing.Geom);
     
-    CL = load / (q * A);
+    CL = load / (q * S);
 
     % Wing geometry defined inside Aircraft.Wing
     Aircraft.Aero.CL = CL;
@@ -48,8 +48,8 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
         error("ERROR: could not change directory to Q3D from Aerodynamics")
     end
 
-    L_des = q * A * Res.CLwing;
-    D_des = q * (A * Res.CDwing + D_A_W_q);
+    L_des = q * S * Res.CLwing;
+    D_des = q * (S * Res.CDwing + D_A_W_q);
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
     end
