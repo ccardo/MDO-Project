@@ -64,7 +64,7 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];  % Spanwise location of the airfoil sect
 
 % ------------------------------- RUN MDA ------------------------------- %;
 
-try 
+try
     % initial target for coupling variable MTOW
     MTOWi = 230000;
     MTOW = MDA(Aircraft, MTOWi, v);
@@ -72,20 +72,21 @@ try
     % Outside of the MDA, run additional disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
     R = Performance(L_des, D_des, MTOW, v);
-           
-catch
     
+    % output the final optimized values and the iteration counter of the MDA
+    vararg = [MTOW, L_des, D_des];
+
+catch
     warning("Iteration Failed: Setting the Range to 0.")
     R = 0;
 
 end
 
+
 % Evaluate the output of the objective function
-    f = -R;
+f = -R;
 
-% output the final optimized values and the iteration counter of the MDA
-vararg = [MTOW, L_des, D_des];
-
-disp(R)
+fprintf("R = %d\n km", round(R/1000));
+disp(newline);
 
 end
