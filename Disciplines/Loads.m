@@ -8,14 +8,10 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
 % determine which is the limiting factor either the V_MO or the Ma_MO
 % above the reference altitude the Ma_MO is limiting, while below it the
 % V_MO is limiting
-    if h_des > FixedValues.Perfromance.h_MO
-        Ma_MO = FixedValues.Performance.Ma_MO;
-        V_MO = Ma_MO * a;
-    else
-        V_MO = FixedValues.Performance.V_MO;
-        Ma_MO = V_MO/a;
-    end
 
+    Ma_MO = FixedValues.Performance.Ma_MO;
+    V_MO = Ma_MO * a;
+    
     nMax = 2.5;
     load = nMax * MTOW * 9.81;
 
@@ -24,10 +20,10 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     mu = sutherland(T);
 
     q = 1/2 * rho * V_MO^2;
-    A = wingArea(Aircraft.Wing.Geom);
+    S = wingArea(Aircraft.Wing.Geom);
     MAC = meanAeroChord(Aircraft.Wing.Geom);
     
-    CL = load / (q * A);
+    CL = load / (q * S);
     
     % At this point, the wing geometry should be already said and done.
     % So the only thing that we shall change is the Aero part.
