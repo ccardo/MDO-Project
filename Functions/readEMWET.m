@@ -1,4 +1,6 @@
-function [MTOW] = readEMWET(FixedValues)
+function [MTOW] = readEMWET()
+    
+    global FixedValues
 
     % check current directory and change to EMWET
     % directory = dir();

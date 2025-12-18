@@ -17,14 +17,14 @@ FixedValues.Geometry.spars = [0.1     0.7
 
 FixedValues.Weight.rho_f = 0.81;                % [-]
 FixedValues.Weight.W_f = 81651.25;              % [kg]
-FixedValues.Weight.A_W = 111710;                % [kg]
+FixedValues.Weight.A_W = 87478;                % [kg]
 FixedValues.Weight.deltaPayload = 12365;        % [kg]
 
 FixedValues.Performance.nMax = 2.5;             % [-]
 FixedValues.Performance.CT_ref = 9.21e-5;       % [-]
 FixedValues.Performance.V_des_ref = 242;        % [m/s]
 FixedValues.Performance.h_des_ref = 11800;      % [m]
-FixedValues.Performance.D_A_W_q = 5.6152;       % [-]
+FixedValues.Performance.D_A_W_q = 5.4375;       % [-]
 FixedValues.Performance.Ma_des_ref = 0.82;      % [-]
 FixedValues.Performance.Ma_MO = 0.86;           % [-]
 FixedValues.Performance.V_MO = 168.3;           % [m/s]

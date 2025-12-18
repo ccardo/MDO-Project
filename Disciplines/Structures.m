@@ -1,6 +1,5 @@
 function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
 
-    global FixedValues
     global Constraints
 
     % check current directory and change to Q3D
@@ -19,7 +18,7 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
         EMWET a330
         
         % read a330.weight
-        MTOW = readEMWET(FixedValues);
+        MTOW = readEMWET();
         cd ..\
     else
         error("ERROR: could not change directory to EMWET from Structures")

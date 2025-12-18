@@ -135,24 +135,21 @@ totalFuelVolume = 2*V;
 
 % ------------------------------- RUN MDA ------------------------------- %;
 
-% try
-    % initial target for coupling variable MTOW
-    MTOWi = 230000;
-    MTOW = MDA(Aircraft, MTOWi, v);
-    
-    % Outside of the MDA, run additional disciplines
-    [L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
-    R = Performance(L_des, D_des, MTOW, v);
-    
-    % output the final optimized values and the iteration counter of the MDA
-    vararg = [MTOW, L_des, D_des];
 
-% catch
-%     warning("Iteration Failed: Setting the Range to 0.")
-%     R = 0;
-% 
-% end
+% initial target for coupling variable MTOW
+MTOWi = 230000;
+[L_max, M_max, y_max] = Loads(Aircraft, MTOWi, v); 
+MTOW = Structures(Aircraft, L_max, M_max, y_max, MTOWi, v);
+W_w = MTOW - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
 
+W_A_W_new = 230000 - W_w - FixedValues.Weight.W_f
+
+% Outside of the MDA, run additional disciplines
+[L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
+R = Performance(L_des, D_des, MTOW, v);
+
+% output the final optimized values and the iteration counter of the MDA
+vararg = [MTOW, L_des, D_des];
 
 % Evaluate the output of the objective function
 f = -R;
