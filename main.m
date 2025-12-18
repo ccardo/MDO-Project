@@ -42,7 +42,7 @@ A2 = 20.81;                 % outer span [m]
 
 % bounds
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
-      11700           % h_des
+      11700                                             % h_des
       3                                                 % c_kink
       0.1                                               % taper_outboard
     0.0500                                              % T1
@@ -123,28 +123,22 @@ lb = lb./abs(x0);
 currentDesignVector = x0;
 
 % Options for the optimization
-options = optimset();
+options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
-options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
-options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
-options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
-options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
-options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
+options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt};
+options.FiniteDifferenceType        = 'forward';
+options.FiniteDifferenceStepSize    = 5e-3;
 
-options = optimoptions('fmincon', ...
-    'Algorithm', "sqp", ...
-    'Display', "iter-detailed", ...
-    'PlotFcn', {@optimplotfval,@optimplotx,@optimplotfirstorderopt}, ... 'OutputFcn', @myFminconOutput,
-    'MaxIterations', 200, ...
-    'MaxFunctionEvaluations',20000, ...
-    'ScaleProblem', true, ...
-    'FiniteDifferenceType', 'forward', ...
-    'FiniteDifferenceStepSize', 1e-2);
+% options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
+% options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
+% options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
+% options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
+% options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
