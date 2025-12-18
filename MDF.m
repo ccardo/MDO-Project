@@ -56,10 +56,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10                                                % LE_sweep
       2];                                               % b2 (need better approx)
 
-V_MO_des = FixedValues.Performance.V_MO * sqrt(1.225/airDensity(h_des));
-Ma_ub = min(1.1 * FixedValues.Performance.Ma_des_ref, V_MO_des/airSoundSpeed(1.1 * h_des));
-
-ub = [Ma_ub                                             % Ma_des
+ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
       1                                                 % taper_outboard
@@ -124,14 +121,14 @@ options = optimset();
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp-legacy';
 options.FunValCheck                 = 'on';
-options.DiffMinChange               = 1e-6;         % Minimum change while gradient searching
-options.DiffMaxChange               = 5e-2;         % Maximum change while gradient searching
+options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
+options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
 options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
 options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
 options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
-options.UseParallel                 = true;
+options.UseParallel                 = false;
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);

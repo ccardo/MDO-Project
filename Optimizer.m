@@ -7,11 +7,11 @@ global currentDesignVector;
 
 % if v is different than the current design vector (i.e. fmincon has
 % changed it) then display the changes.
-if v ~= currentDesignVector
-    disp(v)
-end
-
-currentDesignVector = v;
+% if v ~= currentDesignVector
+%     disp(v)
+% end
+% 
+% currentDesignVector = v;
 
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
