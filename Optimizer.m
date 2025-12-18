@@ -86,7 +86,7 @@ end
 % Evaluate the output of the objective function
 f = -R;
 
-fprintf("R = %d\n km", round(R/1000));
+fprintf("R = %d km", round(R/1000));
 disp(newline);
 
 end
