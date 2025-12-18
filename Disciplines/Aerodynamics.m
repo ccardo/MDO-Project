@@ -37,12 +37,12 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
     result = changeDirSafe("Q3D");
 
     if result
-        % run Q3D and display its ITera
-        disp("Running Q3D [AERO]...")
+        % run Q3D and display
+        disp("[AER] Running Q3D...")
         tic
         Res = Q3D_solver(Aircraft);
         finish = toc;
-        disp("Done running Q3D. Time elapsed: " + finish)
+        disp("[AER] Time elapsed: " + finish)
         cd ..\
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")

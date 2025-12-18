@@ -4,7 +4,7 @@ function [] = inputStructures(Aircraft, MTOW, v)
 
     MZF         =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
     n_max      =   FixedValues.Performance.nMax;  
-    span        =   FixedValues.Geometry.b1 + v(20);            %[m]
+    span        =   FixedValues.Geometry.A1 + v(20);            %[m]
     c_root =    Aircraft.Wing.Geom(1,4); 
     c_kink =    Aircraft.Wing.Geom(2,4);
     c_tip  =    Aircraft.Wing.Geom(3,4);          
@@ -50,7 +50,7 @@ function [] = inputStructures(Aircraft, MTOW, v)
     fprintf(fid, '%g %g %g %g \n',A,span,section_num,airfoil_num);
     
     fprintf(fid, '0 %s \n',Airfoil);
-    fprintf(fid, '%g %s \n', FixedValues.Geometry.b1/(FixedValues.Geometry.b1+v(20)),Airfoil);
+    fprintf(fid, '%g %s \n', FixedValues.Geometry.A1/(FixedValues.Geometry.A1+v(20)),Airfoil);
     fprintf(fid, '1 %s \n',Airfoil);
     fprintf(fid, '%g %g %g %g %g %g \n',c_root,x1,y1,z1,spar_front_1,spar_rear_1);
     fprintf(fid, '%g %g %g %g %g %g \n',c_kink,x2,y2,z2,spar_front_2,spar_rear_2);

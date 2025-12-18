@@ -10,7 +10,7 @@ function [MTOW] = MDA(Aircraft, MTOWi, v)
     MTOW = 1;
     
     % run the loops for the disciplines that evaluate the MTOW
-    disp("Running MDA loop [LOAD & STRUCT]...")
+    disp("[MDA] Running Q3D & EMWET...")
     tic
     while abs(MTOW-MTOWi)/MTOW > error
         % loop counter
@@ -35,5 +35,5 @@ function [MTOW] = MDA(Aircraft, MTOWi, v)
     end
     
     finish = toc;
-    disp("Done running MDA. Time elapsed: " + finish + ", iterations: " + counter)
+    disp("[MDA] Time elapsed: " + finish + ", iterations: " + counter)
 end

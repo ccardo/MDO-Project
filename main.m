@@ -3,6 +3,12 @@ close all
 clear
 clc
 
+% add paths
+addpath("Disciplines\")
+addpath("Functions\")
+addpath(genpath("EMWET\"))
+addpath(genpath("Q3D\"))
+
 run init_FixedValues.m
 
 global projectDirectory
@@ -129,6 +135,16 @@ options.TolX                        = 1e-6;         % Maximum difference between
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
+
+options = optimoptions('fmincon', ...
+    'Algorithm', "sqp", ...
+    'Display', "iter-detailed", ...
+    'PlotFcn', {@optimplotfval,@optimplotx,@optimplotfirstorderopt}, ... 'OutputFcn', @myFminconOutput,
+    'MaxIterations', 200, ...
+    'MaxFunctionEvaluations',20000, ...
+    'ScaleProblem', true, ...
+    'FiniteDifferenceType', 'forward', ...
+    'FiniteDifferenceStepSize', 1e-2);
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);

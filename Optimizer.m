@@ -54,30 +54,39 @@ Constraints.area = S;
 
 Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
 
-% Airfoil coefficients input matrix (ATTENTION: MATRIX MULTIPLICATION!)
+% Airfoil coefficients input matrix
 Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
 Aircraft.Wing.eta = [0; A1/(A1+A2); 1];  % Spanwise location of the airfoil sections
 
-" ======================================================================= ";
-% ------------------------------- RUN MDA ------------------------------- %;
-" ======================================================================= ";
 
-% initial target for coupling variable MTOW
-MTOWi = 230000;
-MTOW = MDA(Aircraft, MTOWi, v);
-[L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
-R = Performance(L_des, D_des, MTOW, v);
-   
+% ------------------------------- RUN MDA ------------------------------- %;
+
+try
+    % initial target for coupling variable MTOW
+    MTOWi = 230000;
+    MTOW = MDA(Aircraft, MTOWi, v);
+    
+    % Outside of the MDA, run additional disciplines
+    [L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);
+    R = Performance(L_des, D_des, MTOW, v);
+    
+    % output the final optimized values and the iteration counter of the MDA
+    vararg = [MTOW, L_des, D_des];
+
+catch
+    warning("Iteration Failed: Setting the Range to 0.")
+    R = 0;
+
+end
+
 
 % Evaluate the output of the objective function
 f = -R;
 
-% output the final optimized values and the iteration counter of the MDA
-vararg = [MTOW, L_des, D_des];
-
-disp(R)
+fprintf("R = %d\n km", round(R/1000));
+disp(newline);
 
 end
