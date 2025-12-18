@@ -119,7 +119,7 @@ currentDesignVector = x0;
 % Options for the optimization
 options = optimset();
 options.Display                     = 'iter-detailed';
-options.Algorithm                   = 'sqp-legacy';
+options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
 options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
 options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
