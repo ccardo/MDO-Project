@@ -13,7 +13,7 @@ FixedValues.Geometry.twist = [+5.2, +2.54, -2]; % [deg]
 FixedValues.Geometry.tank = [0, 0.85];          % [-]
 FixedValues.Geometry.spars = [0.1     0.7
                               0.1     0.7
-                              0.1     0.7];   % [-]
+                              0.1     0.6];   % [-]
 
 FixedValues.Weight.rho_f = 0.81;                % [-]
 FixedValues.Weight.W_f = 81651.25;              % [kg]

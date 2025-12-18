@@ -25,7 +25,7 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, MTOW, v)
 
     % Wing geometry defined inside Aircraft.Wing
     Aircraft.Aero.CL = CL;
-    Aircraft.Aero.Re = rho * V_des^2 * MAC / mu;
+    Aircraft.Aero.Re = rho * V_des * MAC / mu;
     Aircraft.Aero.V = V_des;
     Aircraft.Aero.alt = h_des;
     Aircraft.Aero.M = Ma_des;
