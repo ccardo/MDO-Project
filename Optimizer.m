@@ -74,21 +74,25 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 % plot the current geometry if the thing is different
 if different
 
-    figure("Current Wing Geometry")
+    figure(10);
+    set(gcf, 'Name', 'Wing Geometry', 'NumberTitle', 'off')
     
     % plot wing 3D geometry
-    subfigure(2, 1, 1)
-    title("Current Wing Geometry", FontSize=20)
+    subplot(2, 1, 1)
     plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
+    view(-90, 90)
+    axis([-3, c_root+3, -y3-5, y3+5])
+    title("Current Wing Geometry", FontSize=20)
     hold on
     
     % plot fuel tank in the same subfigure
-    Boxes = LoftWingBox(Aircraft, 20, 20, 0);
+    Boxes = loftWingBox(Aircraft, 20, 20, 0);
     for i = 1:length(Boxes)
 
         surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
              'FaceColor', [0.8 0.8 1], ...
              'EdgeColor', "k", ...
+             "EdgeAlpha", 0.5, ...
              'FaceAlpha', 0.7, ...
              "FaceLighting", "flat");
     
@@ -97,20 +101,25 @@ if different
     hold off
     
     % plot airfoil in a separate subfigure
-    subfigure(2, 1, 2)
-    title("Current Airfoil", FontSize=20)
+    subplot(2, 1, 2)
     
     Ti_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 1:7);
     Bi_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 8:end);
     [~, yt_ref] = CSTcurve(chord, Ti_ref);
     [~, yb_ref] = CSTcurve(chord, Bi_ref);
 
-    plot(chord, yt_ref, chord, yb_ref, "r")
+    plot(chord, yt_ref, "r", chord, yb_ref, "r")
     hold on
-    plot(chord, yt, chord, yb, "k")
-    text(0.5, 0, sprintf("Thickness = %.1f \n Camber = %.1f", thickness, camber))
-    legend("Reference", "Current")
+    plot(chord, yt, "k", chord, yb, "k")
+    plot(chord, (yt+yb)/2, "k:")
+    text(0.85, -0.05, sprintf("Thickness = %.1f%% \n Camber = %.1f%%", ...
+                          thickness*100, camber*100))
+    title("Current Airfoil", FontSize=20)
+    legend("Reference", "", "Current")
+    axis equal
     hold off
+
+    drawnow
 
 end
 %

@@ -3,18 +3,19 @@ close all
 clear
 clc
 
-% add paths
-addpath("Disciplines\")
-addpath("Functions\")
-addpath(genpath("EMWET\"))
-addpath(genpath("Q3D\"))
-
 run init_FixedValues.m
 
 global projectDirectory
 global FixedValues
 global currentDesignVector
 projectDirectory = cd;
+
+% add paths
+addpath(projectDirectory)
+addpath("Disciplines\")
+addpath("Functions\")
+addpath(genpath("EMWET\"))
+addpath(genpath("Q3D\"))
 
 % Initial values
 

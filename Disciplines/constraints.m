@@ -2,6 +2,7 @@ function [c, ceq] = constraints(~)
 
     global FixedValues
     global Constraints
+    global projectDirectory
     
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
@@ -35,5 +36,6 @@ function [c, ceq] = constraints(~)
 
     % display available fuel tank volume with constant W_f
     fprintf("Available Fuel Tank volume = %.1f%%\n", -c2*100)
-       
+    
+    cd(projectDirectory);
 end
