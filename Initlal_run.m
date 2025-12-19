@@ -107,7 +107,14 @@ Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
-Aircraft.Wing.eta = [0; A1/(A1+A2); 1];  % Spanwise location of the airfoil sections
+% Spanwise location of the airfoil sections
+Aircraft.Wing.eta = [0; A1/(A1+A2); 1];  
+
+
+% SET REFERENCE AIRCRAFT IN FIXED VALUES
+FixedValues.Reference_Aircraft = Aircraft;
+% SET REFERENCE AIRCRAFT IN FIXED VALUES
+
 
 Boxes = loftWingBox(Aircraft, 20, 20, 1);
 volumes = zeros(size(Boxes, 1), 1);

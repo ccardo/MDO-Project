@@ -73,10 +73,13 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 
 % plot the current geometry if the thing is different
 if different
+
     figure("Current Wing Geometry")
+    title("Current Wing Geometry", FontSize=20)
     plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
     hold on
-
+    
+    % plot fuel tank
     Boxes = LoftWingBox(Aircraft, 20, 20, 0);
     for i = 1:length(Boxes)
 
@@ -90,6 +93,10 @@ if different
         hold on
     end
     hold off
+
+    figure("Current Airfoil")
+    title("Current Airfoil", FontSize=20)
+
 end
 %
 
@@ -116,7 +123,6 @@ end
 
 % Evaluate the output of the objective function
 f = -R;
-
 
 fprintf("MTOW = %d kg", MTOW);
 fprintf("Range = %d km", round(R/1000));
