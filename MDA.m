@@ -1,7 +1,7 @@
 function [MTOW] = MDA(Aircraft, MTOWi, v)
 
     % define the wanted tolerance
-    error = 10^-6;
+    error = 10^-4;
     
     % start the iteration counter
     counter = 0;
