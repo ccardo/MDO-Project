@@ -3,8 +3,6 @@ close all
 clear
 clc
 
-run init_FixedValues.m
-
 global projectDirectory
 global FixedValues
 global currentDesignVector
@@ -116,26 +114,26 @@ FixedValues.Reference_Aircraft = Aircraft;
 % SET REFERENCE AIRCRAFT IN FIXED VALUES
 
 
-Boxes = loftWingBox(Aircraft, 20, 20, 1);
+Boxes = loftWingBox(Aircraft, 20, 20);
 volumes = zeros(size(Boxes, 1), 1);
-makePlot = 1;
+makePlot = 0;
 for i = 1:length(Boxes)
     
     volumes(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z); % [m^3]
 
-    if makePlot
-        surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
-             'FaceColor', [0.8 0.8 1], ...
-             'EdgeColor', "k", ...
-             'FaceAlpha', 0.7, ...
-             "FaceLighting", "flat");
-    
-        axis equal
-        hold on
-    end
+    % if makePlot
+    %     surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
+    %          'FaceColor', [0.8 0.8 1], ...
+    %          'EdgeColor', "k", ...
+    %          'FaceAlpha', 0.7, ...
+    %          "FaceLighting", "flat");
+    % 
+    %     axis equal
+    %     hold on
+    % end
 end
 
-plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
+% plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
 
 V = sum(volumes) * 1000; % [dm^3 = Liters]
 totalFuelVolume = 2*V;
@@ -149,7 +147,7 @@ MTOWi = 230000;
 MTOW = Structures(Aircraft, L_max, M_max, y_max, MTOWi, v);
 W_w = MTOW - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
 
-W_A_W_new = 230000 - W_w - FixedValues.Weight.W_f
+W_A_W_new = 230000 - W_w - FixedValues.Weight.W_f;
 
 % Outside of the MDA, run additional disciplines
 [L_des, D_des] = Aerodynamics(Aircraft, MTOW, v);

@@ -3,7 +3,7 @@ function [f, vararg] = Optimizer(v)
 global FixedValues;
 global Constraints;
 global currentDesignVector;
-
+fprintf("\n")
 
 % if v is different than the current design vector (i.e. fmincon has
 % changed it) then display the changes.
@@ -75,11 +75,14 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 if different
 
     figure("Current Wing Geometry")
+    
+    % plot wing 3D geometry
+    subfigure(2, 1, 1)
     title("Current Wing Geometry", FontSize=20)
     plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
     hold on
     
-    % plot fuel tank
+    % plot fuel tank in the same subfigure
     Boxes = LoftWingBox(Aircraft, 20, 20, 0);
     for i = 1:length(Boxes)
 
@@ -90,12 +93,24 @@ if different
              "FaceLighting", "flat");
     
         axis equal
-        hold on
     end
     hold off
-
-    figure("Current Airfoil")
+    
+    % plot airfoil in a separate subfigure
+    subfigure(2, 1, 2)
     title("Current Airfoil", FontSize=20)
+    
+    Ti_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 1:7);
+    Bi_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 8:end);
+    [~, yt_ref] = CSTcurve(chord, Ti_ref);
+    [~, yb_ref] = CSTcurve(chord, Bi_ref);
+
+    plot(chord, yt_ref, chord, yb_ref, "r")
+    hold on
+    plot(chord, yt, chord, yb, "k")
+    text(0.5, 0, sprintf("Thickness = %.1f \n Camber = %.1f", thickness, camber))
+    legend("Reference", "Current")
+    hold off
 
 end
 %
@@ -124,8 +139,7 @@ end
 % Evaluate the output of the objective function
 f = -R;
 
-fprintf("MTOW = %d kg", MTOW);
-fprintf("Range = %d km", round(R/1000));
-disp(newline);
+fprintf("MTOW = %.1f kg\n", MTOW);
+fprintf("Range = %d km\n", round(R/1000));
 
 end

@@ -1,4 +1,3 @@
-format short
 
 global FixedValues;
 FixedValues = struct();
@@ -29,3 +28,8 @@ FixedValues.Performance.Ma_des_ref = 0.82;      % [-]
 FixedValues.Performance.Ma_MO = 0.86;           % [-]
 FixedValues.Performance.V_MO = 168.3;           % [m/s]
 FixedValues.Perfromance.h_MO = 10700;           % [m]
+
+% to get the reference aircraft geometry
+run Initlal_run.m
+clc
+fprintf("Reference aircraft configured.\n")

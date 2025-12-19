@@ -5,10 +5,11 @@ function [c, ceq] = constraints(~)
     
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
+    MTOW_ref = 230000;
     MTOW = Constraints.MTOW;
     A = Constraints.area;
     A_ref = FixedValues.Geometry.area; 
-    c1 = (MTOW/A)-(MTOW/A_ref);
+    c1 = ((MTOW/A) - (MTOW_ref/A_ref)) / (MTOW_ref/A_ref);
         
     % constrain #2 limits the volume of the fuel tank so that the amount of
     % fuel (which is kept constant) can always be carried by the wing
@@ -18,9 +19,12 @@ function [c, ceq] = constraints(~)
 
     % constraints on fuel weight and volume
     V_tank = Constraints.VTank;
-    c2 = W_f / (rho_fuel * 1000) - f_fuel * V_tank;
-
-    c = [c1; c2];
+    c2 = (W_f/(rho_fuel * 1000) - f_fuel * V_tank) / (f_fuel * V_tank);
+    
+    % set a tolerance for the possible small deviations 
+    % due to inconsistent solver behavior
+    tolerance = 1e-3;
+    c = [c1; c2] - tolerance;
     ceq = [];
     
     % in case MTOW = NaN, or some other weird shit, violate constraints
@@ -28,5 +32,8 @@ function [c, ceq] = constraints(~)
         warning("constraints returned NaN or Inf. Setting c = 1e9;")
         c = [1e9; 1e9];
     end
+
+    % display available fuel tank volume with constant W_f
+    fprintf("Available Fuel Tank volume = %.1f%%\n", -c2*100)
        
 end
