@@ -126,7 +126,7 @@ currentDesignVector = x0;
 % Options for the optimization
 options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
-options.Algorithm                   = 'sqp-legacy';
+options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
