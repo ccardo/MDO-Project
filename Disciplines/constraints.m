@@ -18,9 +18,15 @@ function [c, ceq] = constraints(~)
 
     % constraints on fuel weight and volume
     V_tank = Constraints.VTank;
-    c2 = (f_fuel*W_f)/rho_fuel - V_tank;
+    c2 = W_f / (rho_fuel * 1000) - f_fuel * V_tank;
 
     c = [c1; c2];
     ceq = [];
+    
+    % in case MTOW = NaN, or some other weird shit, violate constraints
+    if any(isnan(c)) || any(isinf(c)) || isempty(c)
+        warning("constraints returned NaN or Inf. Setting c = 1e9;")
+        c = [1e9; 1e9];
+    end
        
 end
