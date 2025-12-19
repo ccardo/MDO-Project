@@ -3,8 +3,6 @@ close all
 clear
 clc
 
-run init_FixedValues.m
-
 global projectDirectory
 global FixedValues
 global currentDesignVector
@@ -16,6 +14,8 @@ addpath("Disciplines\")
 addpath("Functions\")
 addpath(genpath("EMWET\"))
 addpath(genpath("Q3D\"))
+
+run init_FixedValues.m
 
 % Initial values
 
@@ -126,13 +126,13 @@ currentDesignVector = x0;
 % Options for the optimization
 options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
-options.Algorithm                   = 'sqp';
+options.Algorithm                   = 'sqp-legacy';
 options.FunValCheck                 = 'on';
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
-options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt};
-options.FiniteDifferenceType        = 'forward';
+options.PlotFcn                     = {-@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
+options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 5e-3;
 
 % options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching

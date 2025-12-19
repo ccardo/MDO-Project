@@ -80,23 +80,30 @@ if different
     % plot wing 3D geometry
     subplot(2, 1, 1)
     plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
-    view(-90, 90)
-    axis([-3, c_root+3, -y3-5, y3+5])
-    title("Current Wing Geometry", FontSize=20)
     hold on
+    plotWingGeometry(FixedValues.Reference_Aircraft.Wing.Geom, FixedValues.Reference_Aircraft.Wing.Airfoils, "r")
+    view(90, 90)
+    xlim([0 25])
+    axis equal
+    title("Current Wing Geometry", FontSize=20)
     
     % plot fuel tank in the same subfigure
+    Boxes = loftWingBox(FixedValues.Reference_Aircraft, 20, 20, 0);
+    for i = 1:length(Boxes)
+
+        surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
+             'FaceColor', [1 0.8 0.8], ...
+             'FaceAlpha', 0.7, ...
+             "FaceLighting", "flat");
+    end
+    
     Boxes = loftWingBox(Aircraft, 20, 20, 0);
     for i = 1:length(Boxes)
 
         surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
-             'FaceColor', [0.8 0.8 1], ...
-             'EdgeColor', "k", ...
-             "EdgeAlpha", 0.5, ...
+             'FaceColor', [0.5 0.5 0.5], ...
              'FaceAlpha', 0.7, ...
              "FaceLighting", "flat");
-    
-        axis equal
     end
     hold off
     
@@ -111,7 +118,6 @@ if different
     plot(chord, yt_ref, "r", chord, yb_ref, "r")
     hold on
     plot(chord, yt, "k", chord, yb, "k")
-    plot(chord, (yt+yb)/2, "k:")
     text(0.85, -0.05, sprintf("Thickness = %.1f%% \n Camber = %.1f%%", ...
                           thickness*100, camber*100))
     title("Current Airfoil", FontSize=20)
