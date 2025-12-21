@@ -30,6 +30,7 @@ FixedValues.Performance.V_MO = 168.3;           % [m/s]
 FixedValues.Perfromance.h_MO = 10700;           % [m]
 
 % to get the reference aircraft geometry
-run Initlal_run.m
-clc
-fprintf("Reference aircraft configured.\n")
+% fprintf("Defining initial configuration.\n")
+% run Initial_run.m
+% clc
+% fprintf("Reference aircraft configured.\n")

@@ -1,10 +1,11 @@
-function [R] = Performance(L_des, D_des, MTOW, v)
+function [R] = Performance(L_des, D_des, W_wing, v)
     
     global FixedValues;
 
     M_des = v(1);
     h_des = v(2);
     W_f = FixedValues.Weight.W_f;
+    MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
     V_des_ref = FixedValues.Performance.V_des_ref;
     h_des_ref = FixedValues.Performance.h_des_ref;
     CT_ref = FixedValues.Performance.CT_ref;

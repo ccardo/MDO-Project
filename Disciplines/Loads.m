@@ -1,4 +1,4 @@
-function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
+function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v)
     
     global FixedValues
 
@@ -13,6 +13,7 @@ function [L_max, M_max, y_max] = Loads(Aircraft, MTOW, v)
     V_MO = Ma_MO * a;
     
     nMax = 2.5;
+    MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
     load = nMax * MTOW * 9.81;
 
     rho = airDensity(h_des);

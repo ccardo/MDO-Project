@@ -1,10 +1,12 @@
-function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
+function [W_wing] = Structures(Aircraft, L_max, M_max, y_max, W_wing, v)
     
     global FixedValues
     global Constraints
 
     % check current directory and change to Q3D
     result = changeDirSafe("EMWET");
+    
+    MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
 
     % SOLVE and return back to parent directory
     if result
@@ -19,24 +21,12 @@ function [MTOW] = Structures(Aircraft, L_max, M_max, y_max, MTOW, v)
         EMWET a330
         
         % read a330.weight
-        wing_weight = readEMWET();
-        MTOW = wing_weight + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
+        W_wing = readEMWET();
         cd ..\
     else
         error("ERROR: could not change directory to EMWET from Structures")
     end
     
-    Constraints.MTOW = MTOW;
-
-    % generate wing boxes and compute their volume
-    Boxes = loftWingBox(Aircraft);
-    volume = zeros(1, length(Boxes));
-    for i = 1:length(Boxes)
-         volume(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z);
-    end
-    V_tank = sum(volume) * 2;
-    
-    Constraints.VTank = V_tank;
-        
+    Constraints.W_wing = W_wing;
 
 end

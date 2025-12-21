@@ -1,17 +1,5 @@
 function [] = inputStructuresLoads(y_max, L_max, M_max)
 
-    % check current directory and change to EMWET
-    % directory = dir();
-    % if contains(directory(1).folder, "Disciplines") || ...
-    %    contains(directory(1).folder, "Functions")   || ...
-    %    contains(directory(1).folder, "Q3D")
-    %     cd ..\EMWET\
-    % elseif contains(directory(1).folder, "EMWET")
-    %     cd .\
-    % else
-    %     cd .\EMWET\
-    % end
-    
     % print the file in the current folder (should be \EMWET\)
     fid = fopen( 'a330.load','wt');
 

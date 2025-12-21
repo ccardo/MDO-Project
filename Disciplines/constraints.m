@@ -7,7 +7,7 @@ function [c, ceq] = constraints(~)
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft.
     MTOW_ref = 230000;
-    MTOW = Constraints.MTOW;
+    MTOW = Constraints.W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
     A = Constraints.area;
     A_ref = FixedValues.Geometry.area; 
     c1 = ((MTOW/A) - (MTOW_ref/A_ref)) / (MTOW_ref/A_ref);
@@ -20,7 +20,7 @@ function [c, ceq] = constraints(~)
 
     % constraints on fuel weight and volume
     V_tank = Constraints.VTank;
-    c2 = (W_f/(rho_fuel * 1000) - f_fuel * V_tank) / (f_fuel * V_tank);
+    c2 = (W_f/(rho_fuel) - f_fuel * V_tank) / (f_fuel * V_tank);
     
     % set a tolerance for the possible small deviations 
     % due to inconsistent solver behavior

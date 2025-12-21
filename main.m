@@ -131,8 +131,8 @@ options.FunValCheck                 = 'on';
 options.MaxIter                     = 30;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
-options.PlotFcn                     = {-@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
-options.FiniteDifferenceType        = 'central';
+options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
+options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
 
 % options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
