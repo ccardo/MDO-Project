@@ -128,10 +128,10 @@ options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
-options.MaxIter                     = 30;           % Maximum iterations
+options.MaxIter                     = 15;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
-options.PlotFcn                     = {-@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
+options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
 options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 5e-3;
 
