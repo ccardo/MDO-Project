@@ -118,7 +118,8 @@ CD_A_W = 0.015387;
 D_A_W_q = S * CD_A_W;
 FixedValues.Performance.D_A_W_q = D_A_W_q;
 
-ub = ub./(x0);
+% Normalize the bounds
+ub = ub./x0;
 lb = lb./abs(x0);
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
 currentDesignVector = x0;
@@ -128,12 +129,14 @@ options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
-options.MaxIter                     = 30;           % Maximum iterations
+options.MaxIter                     = 100;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
-options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotresnorm};
+options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-3;
+options.FiniteDifferenceStepSize    = 5e-2;
+options.StepTolerance               = 1e-5; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-5; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
 
 % options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
 % options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
