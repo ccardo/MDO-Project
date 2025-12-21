@@ -1,7 +1,3 @@
-format short
-close all
-clear
-clc
 
 global projectDirectory
 global FixedValues
@@ -54,6 +50,7 @@ v = [Ma_des
       LE_sweep 
       A2];
 
+
 % geometric fixed parameters
 twist = FixedValues.Geometry.twist;
 fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
@@ -68,22 +65,23 @@ x3 = (A1 + A2)*tand(LE_sweep);
 y1 = 0;
 y2 = A1;
 y3 = A1 + A2;
-z1 = -(fuselage_radius)*tand(dihedral); % --------> position on the z axis of the root leading edge. 
-                                                  % The minus is a result of how we defined the frame of reference
+z1 = -(fuselage_radius)*tand(dihedral);
 z2 = (A1 - fuselage_radius) * tand(dihedral);
 z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
+
 
 % Wing planform geometry 
 %                     x      y      z      chord     twist
 Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
                       x2     y2     z2     c_kink    twist(2);
                       x3     y3     z3     c_tip     twist(3)];
-
 S = wingArea(Aircraft.Wing.Geom);
 Constraints.area = S;
+FixedValues.Geometry.area = S;
 
-Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
+% incidence angle is already considered in the first twist angle
+Aircraft.Wing.inc = 0;
 
 
 % Airfoil coefficients input matrix
@@ -98,33 +96,18 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 FixedValues.Reference_Aircraft = Aircraft;
 % SET REFERENCE AIRCRAFT IN FIXED VALUES
 
+
+% compute fuel tank volume
 Boxes = loftWingBox(Aircraft, 20, 20);
 volumes = zeros(size(Boxes, 1), 1);
 makePlot = 0;
 for i = 1:length(Boxes)
-    
     volumes(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z); % [m^3]
-
-    % if makePlot
-    %     surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
-    %          'FaceColor', [0.8 0.8 1], ...
-    %          'EdgeColor', "k", ...
-    %          'FaceAlpha', 0.7, ...
-    %          "FaceLighting", "flat");
-    % 
-    %     axis equal
-    %     hold on
-    % end
 end
-
-% plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
 
 V = sum(volumes) * 1000; % [dm^3 = Liters]
 totalFuelVolume = 2*V;
-
 Constraints.VTank = totalFuelVolume;
-
-% ------------------------------- RUN MDA ------------------------------- %;
 
 
 % initial target for coupling variable W_wing
@@ -134,23 +117,32 @@ W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
 [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v); 
 W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v);
 
+% update A-W weight
 W_A_W_new = 230000 - W_wing - FixedValues.Weight.W_f;
+FixedValues.Weight.A_W = W_A_W_new;
 
-% Outside of the MDA, run additional disciplines
-[L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
+
+% run aero ONCE to get the right D_A_W_q
+[~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, v);
+
+% compute A-W drag / q_inf at reference design conditions
+rho = airDensity(h_des);
+V_des_ref = FixedValues.Performance.V_des_ref;
+q_des_ref = 1/2 * rho * V_des_ref^2;
+D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
+FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
+
+% run aero once again to find the actual D_res and L_re
+[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
+
+% find range
 R = Performance(L_des, D_des, W_wing, v);
+fprintf("initial R = %d km\n", round(R/1000));
 
-% output the final optimized values and the iteration counter of the MDA
-vararg = [W_wing, L_des, D_des];
 
-% Evaluate the output of the objective function
-f = -R;
 
-fprintf("R = %d km", round(R/1000));
-disp(newline);
 
-% Evaluate the constraints
-
+% Evaluate the initial constraints
 [c, eq] = constraints();
 if c(1) < 0
     fprintf("Wing loading constraint respected with c1 = %.2f \n", c(1))
@@ -163,3 +155,6 @@ if c(2) < 0
 else
     fprintf("Fuel tank volume constraint violated with c2 = %.2f \n", c(2));
 end
+
+% pause for a sec to be able to visualize it
+pause(1)

@@ -21,16 +21,16 @@ FixedValues.Weight.deltaPayload = 12365;        % [kg]
 
 FixedValues.Performance.nMax = 2.5;             % [-]
 FixedValues.Performance.CT_ref = 9.21e-5;       % [-]
+FixedValues.Performance.CD_ref = 3.27e-2;       % [-]
 FixedValues.Performance.V_des_ref = 242;        % [m/s]
 FixedValues.Performance.h_des_ref = 11800;      % [m]
 FixedValues.Performance.D_A_W_q = 5.4375;       % [-]
 FixedValues.Performance.Ma_des_ref = 0.82;      % [-]
 FixedValues.Performance.Ma_MO = 0.86;           % [-]
-FixedValues.Performance.V_MO = 168.3;           % [m/s]
-FixedValues.Perfromance.h_MO = 10700;           % [m]
+FixedValues.Performance.V_MO = 168.3;           % [m/s] EAS
+FixedValues.Performance.h_MO = 10700;           % [m]
 
 % to get the reference aircraft geometry
-% fprintf("Defining initial configuration.\n")
-% run Initial_run.m
-% clc
-% fprintf("Reference aircraft configured.\n")
+fprintf("Defining initial configuration.\n")
+run Initial_run.m
+fprintf("Reference aircraft configured.\n")
