@@ -134,7 +134,7 @@ options.ScaleProblem                = true;         % Normalization of the desig
 options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-2;
+options.FiniteDifferenceStepSize    = 1e-2;
 options.StepTolerance               = 1e-5; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-5; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
 

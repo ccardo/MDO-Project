@@ -73,6 +73,6 @@ function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v)
     
     y_max = Yst;
     L_max = q * Cl .* c;
-    M_max = q * Cm .* c.^2;
+    M_max = q * Cm .* c * MAC;
 
 end
