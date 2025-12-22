@@ -6,6 +6,7 @@ clc
 global projectDirectory
 global FixedValues
 global Constraints
+global last_W_wing
 
 projectDirectory = cd;
 
@@ -124,6 +125,7 @@ W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
 
 [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, design); 
 W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, design);
+last_W_wing = W_wing;
 
 A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
 FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
@@ -146,9 +148,6 @@ fprintf("initial R = %d km\n", round(R/1000));
 
 % output the final optimized values and the iteration counter of the MDA
 vararg = [W_wing, L_des, D_des];
-
-% Evaluate the output of the objective function
-f = -R;
 
 
 % Evaluate the initial constraints

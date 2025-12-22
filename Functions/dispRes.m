@@ -113,13 +113,13 @@ h_des_ref = FixedValues.Performance.h_des_ref;
 CT_ref = FixedValues.Performance.CT_ref;
 eta = exp( -(V_des - V_des_ref)^2/(2*70^2) + ...
                -(x(2) - h_des_ref)^2/(2*2500^2) );
-fprintf('Propulsion efficiency factor \eta in the design condition for the optimized design: %f \n', eta)
+fprintf('Propulsion efficiency factor η in the design condition for the optimized design: %f \n', eta)
 CT = CT_ref / eta;
 fprintf('Specific fuel consumption in the design condition for the optimized design: %f [N/Ns] \n', CT)
 
 % CL (aircraft lift coefficient) and α (aircraft angle of attack) @design point 
 [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, x);
-fprintf('Angle of attack in the design condition for the optimized design: %f [deg] \n', alpha)
+fprintf('Angle of attack in the design condition for the optimized design: %.4f [deg] \n', alpha)
 CL_des = L_des/(q*S);
 fprintf('Aircraft lift coefficient in the design condition for the optimized design: %f \n', CL_des)
 
@@ -135,30 +135,30 @@ fprintf('Aircraft aerodynamic efficiency in the design condition for the optimiz
 
 % D A-W (aircraft-less-wing drag force) @design point 
 D_A_W = FixedValues.Performance.D_A_W_q * q;
-fprintf('Aircraft-less-wing drag force  in the design condition for the optimized design: %.2f [N] \n', D_A_W)
+fprintf('Aircraft-less-wing drag force in the design condition for the optimized design: %.2f [N] \n', D_A_W)
 
 % CD,A-W (aircraft-less-wing drag force coefficient) @design point 
 CD_A_W = D_A_W/ (q*S);
 fprintf('Aircraft-less-wing drag force coefficient in the design condition for the optimized design: %f \n', CD_A_W)
 
 % WA-W (aircraft-less-wing-and-fuel weight) 
-fprintf('Aircraft-less-wing-and-fuel weight for the optimized design: %f [kg] \n', FixedValues.Weight.A_W)
+fprintf('Aircraft-less-wing-and-fuel weight for the optimized design: %.2f [kg] \n', FixedValues.Weight.A_W)
 
 % S (wing area), MAC (Mean Aerodynamic Chord), WTO_max/S (wing loading), 
 % AR (aspect ratio) for the whole wing, and LE sweep angle, chords and 
 % span for each wing trapezoidal element. 
 
-fprintf('Wing area for the optimized design: %f [m^2] \n', S)
-fprintf('Mean Aerodynamic Chord for the optimized design: %f [m] \n', MAC)
-fprintf('Wing loading for the optimized design: %f [Pa] \n', MTOW_opt/S)
+fprintf('Wing area for the optimized design: %.2f [m^2] \n', S)
+fprintf('Mean Aerodynamic Chord for the optimized design: %.3f [m] \n', MAC)
+fprintf('Wing loading for the optimized design: %.3f [Pa] \n', MTOW_opt/S)
 AR = ((2 * (A1 + A2))^2)/S;
-fprintf('Aspect ratio for the optimized design: %f \n', AR)
+fprintf('Aspect ratio for the optimized design: %.3f \n', AR)
 
 TE_sweep_2 = atand((c_tip + A2 * tand(LE_sweep)-c_kink)/A2);
-fprintf('Trailing edge of the inboard trapezoid for the optimized design: %f [deg] \n', FixedValues.Geometry.TE_sweep)
-fprintf('Trailing edge of the outboard trapezoid for the optimized design: %f [deg] \n', TE_sweep_2)
-fprintf('Root chord for the optimized design: %f [m] \n', c_root)
-fprintf('Kink chord for the optimized design: %f [m] \n', c_kink)
-fprintf('Tip chord for the optimized design: %f [m] \n', c_tip)
-fprintf('Inboard semi-span for the optimized design: %f [m] \n', A1)
-fprintf('Inboautboard semi-span for the optimized design: %f [m] \n', A2)
+fprintf('Trailing edge of the inboard trapezoid for the optimized design: %.3f [deg] \n', FixedValues.Geometry.TE_sweep)
+fprintf('Trailing edge of the outboard trapezoid for the optimized design: %.3f [deg] \n', TE_sweep_2)
+fprintf('Root chord for the optimized design: %.3f [m] \n', c_root)
+fprintf('Kink chord for the optimized design: %.3f [m] \n', c_kink)
+fprintf('Tip chord for the optimized design: %.3f [m] \n', c_tip)
+fprintf('Inboard semi-span for the optimized design: %.3f [m] \n', A1)
+fprintf('Inboautboard semi-span for the optimized design: %.3f [m] \n', A2)
