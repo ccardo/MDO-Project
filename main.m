@@ -123,15 +123,9 @@ options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
-options.StepTolerance               = 1e-5; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-5; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
+options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
 
-
-% options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
-% options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
-% options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
-% options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
-% options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
