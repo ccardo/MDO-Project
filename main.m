@@ -2,6 +2,7 @@ format short
 close all
 clear
 clc
+warning("on", "backtrace")
 
 global projectDirectory
 global FixedValues

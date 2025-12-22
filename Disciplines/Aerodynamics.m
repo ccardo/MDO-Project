@@ -38,11 +38,22 @@ function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
     result = changeDirSafe("Q3D");
 
     if result
+
+        lastwarn("");
+
         % run Q3D and display
         disp("[AER] Running Q3D...")
         tic
         Res = Q3D_solver(Aircraft);
         finish = toc;
+        
+        % catch ALL warnings by q3d, catch error from outer block
+        [msg, ~] = lastwarn();
+        if ~isempty(msg)
+            disp(msg)
+            error("Q3D produced a warning.")
+        end
+
         disp("[AER] Time elapsed: " + finish)
         cd ..\
     else

@@ -6,6 +6,7 @@ clc
 global projectDirectory
 global FixedValues
 global Constraints
+global last_W_wing
 
 projectDirectory = cd;
 
@@ -109,7 +110,6 @@ end
 
 V = sum(volumes) * 1000; % [dm^3 = Liters]
 totalFuelVolume = 2*V;
-
 Constraints.VTank = totalFuelVolume;
 
 
@@ -121,12 +121,13 @@ W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
 % however in loads MTOW is evaluated again using the same guess, so only
 % the actual reference value MTOW is used to evaluate W_wing_i. The same
 % thing applies for Structures as well.
-
 [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, design); 
 W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, design);
+last_W_wing = W_wing;
 
 A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
 FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
+
 
 % Outside of the MDA, run additional disciplines
 [~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, design);
@@ -141,15 +142,13 @@ FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 % run aero once again to find the actual D_res and L_re
 [L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, design);
 
+
 % find range
 R = Performance(L_des, D_des, W_wing, design);
 fprintf("initial R = %d km\n", round(R/1000));
 
 % output the final optimized values and the iteration counter of the MDA
 vararg = [W_wing, L_des, D_des];
-
-% Evaluate the output of the objective function
-f = -R;
 
 
 % Evaluate the initial constraints

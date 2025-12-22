@@ -1,5 +1,6 @@
 function [f, vararg] = Optimizer(v)
 
+global last_W_wing % Add global variable so that mr. emwet can converge better (initial guess = last wing weight)
 global FixedValues
 global Constraints
 global currentDesignVector
@@ -118,6 +119,7 @@ if different
              'EdgeColor', 'none', ...
              "FaceLighting", "flat");
     end
+    legend("Current", "", "", "", "", "", "", "", "Reference")
     hold off
 
     % plot airfoil in a separate subfigure
@@ -146,9 +148,11 @@ end
 % ------------------------------- RUN MDA ------------------------------- %;
 
 try
+
     % initial target for coupling variable W_wing
-    W_wing_i = 60871.0;
+    W_wing_i = last_W_wing;
     W_wing = MDA(Aircraft, W_wing_i, v);
+    last_W_wing = W_wing;
    
     % Outside of the MDA, run additional disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
