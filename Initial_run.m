@@ -132,14 +132,13 @@ q_des_ref = 1/2 * rho * V_des_ref^2;
 D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
 FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 
+
 % run aero once again to find the actual D_res and L_re
 [L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
 
 % find range
 R = Performance(L_des, D_des, W_wing, v);
 fprintf("initial R = %d km\n", round(R/1000));
-
-
 
 
 % Evaluate the initial constraints
