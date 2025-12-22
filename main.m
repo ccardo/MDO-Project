@@ -140,7 +140,7 @@ fprintf('Function Value at Optimal Design: %.3f', FVAL)
 % Plot of the convergence history of the objective function 
 figure(11)
 set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
-plot(f_hist, "Color", 'r', "LineWidth", 2)
+plot(f_hist, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
 title("Convergence history of the objective function")
 xlabel("Iteration")
 ylabel("Objective function")
@@ -150,9 +150,9 @@ figure(12)
 set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
 c1 = c_hist(:,1);
 c2 = c_hist(:,2);
-plot(c1, "Color", 'b', "LineWidth", 2)
+plot(c1, "Color", 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
 hold on
-plot(c2, "Color", 'b', "LineWidth", 2)
+plot(c2, "Color", 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
 title("Convergence history of the constraints")
 xlabel("Iteration")
 ylabel("Constraint value")
