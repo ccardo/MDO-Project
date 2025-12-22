@@ -7,7 +7,6 @@ warning("on", "backtrace")
 global projectDirectory
 global FixedValues
 global currentDesignVector
-global Constraints
 projectDirectory = cd;
 
 run init_FixedValues.m
@@ -56,7 +55,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
    -0.3000                                              % B6
    -0.3000                                              % B7
       10                                                % LE_sweep
-      12];                                               % b2 
+      12];                                              % b2 
 
 ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
