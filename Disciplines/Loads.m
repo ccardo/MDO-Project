@@ -1,13 +1,13 @@
-function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v)
+function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v)
     
     global FixedValues
 
     h_des = v(2);
     a = airSoundSpeed(h_des);
 
-% determine which is the limiting factor either the V_MO or the Ma_MO
-% above the reference altitude the Ma_MO is limiting, while below it the
-% V_MO is limiting
+    % determine which is the limiting factor either the V_MO or the Ma_MO
+    % above the reference altitude the Ma_MO is limiting, while below it the
+    % V_MO is limiting
 
     Ma_MO = FixedValues.Performance.Ma_MO;
     V_MO = Ma_MO * a;
@@ -54,6 +54,7 @@ function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v)
     Cl = Res.Wing.cl;
     Cm = Res.Wing.cm_c4;
     c = Res.Wing.chord;
+    CDi = Res.CDiwing;
     
     % reconstruct the loads and y-station in for EMWET
     % tip value missing => fill with zeros + geometric chord

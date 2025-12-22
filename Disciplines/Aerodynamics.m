@@ -1,4 +1,4 @@
-function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
+function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
 
     global FixedValues
 
@@ -52,6 +52,7 @@ function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
     L_des = q * S * Res.CLwing;
     D_des_wing = q * S * Res.CDwing;
     D_des = D_des_wing + q * D_A_W_q;
+    alpha = Res.Alpha;
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
     end

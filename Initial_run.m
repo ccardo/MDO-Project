@@ -128,7 +128,6 @@ W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, design);
 A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
 FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
 
-% Outside of the MDA, run additional disciplines
 [~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, design);
 
 % compute A-W drag / q_inf at reference design conditions
