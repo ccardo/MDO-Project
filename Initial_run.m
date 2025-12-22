@@ -129,7 +129,7 @@ A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
 FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
 
 % Outside of the MDA, run additional disciplines
-[L_des, D_des] = Aerodynamics(Aircraft, W_wing, design);
+[~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, design);
 
 % compute A-W drag / q_inf at reference design conditions
 rho = airDensity(h_des);
