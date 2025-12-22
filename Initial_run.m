@@ -137,11 +137,6 @@ V_des_ref = FixedValues.Performance.V_des_ref;
 q_des_ref = 1/2 * rho * V_des_ref^2;
 D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
 FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
-% output the final optimized values and the iteration counter of the MDA
-vararg = [W_wing, L_des, D_des];
-
-% Evaluate the output of the objective function
-f = -R;
 
 % run aero once again to find the actual D_res and L_re
 [L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, design);
@@ -149,6 +144,12 @@ f = -R;
 % find range
 R = Performance(L_des, D_des, W_wing, design);
 fprintf("initial R = %d km\n", round(R/1000));
+
+% output the final optimized values and the iteration counter of the MDA
+vararg = [W_wing, L_des, D_des];
+
+% Evaluate the output of the objective function
+f = -R;
 
 
 % Evaluate the initial constraints
