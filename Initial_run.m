@@ -33,7 +33,7 @@ LE_sweep = 31;              % leading edge sweep [deg]
 A2 = 20.81;                 % outer span [m]
 
 % initial values for design vector
-v = [Ma_des
+design = [Ma_des
       h_des
       c_kink 
       taper_outboard
@@ -87,8 +87,8 @@ Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twi
 
 
 % Airfoil coefficients input matrix
-Ti = v(5:11);
-Bi = v(12:18);
+Ti = design(5:11);
+Bi = design(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
 % Spanwise location of the airfoil sections
@@ -102,43 +102,34 @@ Boxes = loftWingBox(Aircraft, 20, 20);
 volumes = zeros(size(Boxes, 1), 1);
 makePlot = 0;
 for i = 1:length(Boxes)
-    
     volumes(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z); % [m^3]
-
-    % if makePlot
-    %     surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
-    %          'FaceColor', [0.8 0.8 1], ...
-    %          'EdgeColor', "k", ...
-    %          'FaceAlpha', 0.7, ...
-    %          "FaceLighting", "flat");
-    % 
-    %     axis equal
-    %     hold on
-    % end
 end
-
-% plotWingGeometry(Aircraft.Wing.Geom, Aircraft.Wing.Airfoils)
 
 V = sum(volumes) * 1000; % [dm^3 = Liters]
 totalFuelVolume = 2*V;
 
 Constraints.VTank = totalFuelVolume;
 
-% ------------------------------- RUN MDA ------------------------------- %;
-
+% ------------------------------- RUN MDA ------------------------------- %
 
 % initial target for coupling variable W_wing
 disp("[MDA] Running Q3D & EMWET...")
 MTOWi = 230000;
-W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
-[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v); 
-W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v);
+W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;   
+% We use an initial guess for A_W just so the function Loads can be reused,
+% however in loads MTOW is evaluated again using the same guess, so only
+% the actual reference value MTOW is used to evaluate W_wing_i. The same
+% thing applies for Structures as well.
 
-W_A_W_new = 230000 - W_wing - FixedValues.Weight.W_f;
+[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, design); 
+W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, design);
+
+A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
+FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
 
 % Outside of the MDA, run additional disciplines
-[L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
-R = Performance(L_des, D_des, W_wing, v);
+[L_des, D_des] = Aerodynamics(Aircraft, W_wing, design);
+R = Performance(L_des, D_des, W_wing, design);
 
 % output the final optimized values and the iteration counter of the MDA
 vararg = [W_wing, L_des, D_des];

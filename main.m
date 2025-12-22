@@ -106,18 +106,6 @@ x0 = [Ma_des
       LE_sweep 
       A2];
 
-% get reference data
-a = airSoundSpeed(h_des);
-rho = airDensity(h_des);
-V_des = a * Ma_des;
-q = 1/2 * rho * V_des^2;
-S = 364.9344;
-
-% compute the (constant) D_A_W / q_ref
-CD_A_W = 0.015387;
-D_A_W_q = S * CD_A_W;
-FixedValues.Performance.D_A_W_q = D_A_W_q;
-
 % Normalize the bounds
 ub = ub./x0;
 lb = lb./abs(x0);
@@ -134,7 +122,7 @@ options.ScaleProblem                = true;         % Normalization of the desig
 options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-2;
+options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-5; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-5; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
 
