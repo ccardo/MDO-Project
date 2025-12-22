@@ -144,10 +144,10 @@ vararg = [W_wing, L_des, D_des];
 f = -R;
 
 % run aero once again to find the actual D_res and L_re
-[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
+[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, design);
 
 % find range
-R = Performance(L_des, D_des, W_wing, v);
+R = Performance(L_des, D_des, W_wing, design);
 fprintf("initial R = %d km\n", round(R/1000));
 
 
