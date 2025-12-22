@@ -83,7 +83,8 @@ Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
 S = wingArea(Aircraft.Wing.Geom);
 Constraints.area = S;
 
-Aircraft.Wing.inc = 0;  % incidence angle is already considered in the first twist angle
+% incidence angle is already considered in the first twist angle
+Aircraft.Wing.inc = 0;
 
 
 % Airfoil coefficients input matrix
@@ -98,6 +99,7 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 FixedValues.Reference_Aircraft = Aircraft;
 % SET REFERENCE AIRCRAFT IN FIXED VALUES
 
+% compute fuel tank volume
 Boxes = loftWingBox(Aircraft, 20, 20);
 volumes = zeros(size(Boxes, 1), 1);
 makePlot = 0;
@@ -110,7 +112,6 @@ totalFuelVolume = 2*V;
 
 Constraints.VTank = totalFuelVolume;
 
-% ------------------------------- RUN MDA ------------------------------- %
 
 % initial target for coupling variable W_wing
 disp("[MDA] Running Q3D & EMWET...")
@@ -129,19 +130,28 @@ FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
 
 % Outside of the MDA, run additional disciplines
 [L_des, D_des] = Aerodynamics(Aircraft, W_wing, design);
-R = Performance(L_des, D_des, W_wing, design);
 
+% compute A-W drag / q_inf at reference design conditions
+rho = airDensity(h_des);
+V_des_ref = FixedValues.Performance.V_des_ref;
+q_des_ref = 1/2 * rho * V_des_ref^2;
+D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
+FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 % output the final optimized values and the iteration counter of the MDA
 vararg = [W_wing, L_des, D_des];
 
 % Evaluate the output of the objective function
 f = -R;
 
-fprintf("R = %d km", round(R/1000));
-disp(newline);
+% run aero once again to find the actual D_res and L_re
+[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
 
-% Evaluate the constraints
+% find range
+R = Performance(L_des, D_des, W_wing, v);
+fprintf("initial R = %d km\n", round(R/1000));
 
+
+% Evaluate the initial constraints
 [c, eq] = constraints();
 if c(1) < 0
     fprintf("Wing loading constraint respected with c1 = %.2f \n", c(1))
@@ -154,3 +164,6 @@ if c(2) < 0
 else
     fprintf("Fuel tank volume constraint violated with c2 = %.2f \n", c(2));
 end
+
+% pause for a sec to be able to visualize it
+pause(1)

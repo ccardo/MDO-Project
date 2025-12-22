@@ -22,9 +22,10 @@ FixedValues.Weight.A_W                  = 80000;                % [kg] Initializ
 
 FixedValues.Performance.nMax            = 2.5;                  % [-]
 FixedValues.Performance.CT_ref          = 9.21e-5;              % [-]
+FixedValues.Performance.CD_ref = 3.27e-2;       % [-]
 FixedValues.Performance.V_des_ref       = 242;                  % [m/s]
 FixedValues.Performance.h_des_ref       = 11800;                % [m]
-FixedValues.Performance.D_A_W_q         = 6.5;                  % [-]
+FixedValues.Performance.D_A_W_q = 5.4375;       % [-]
 FixedValues.Performance.Ma_des_ref      = 0.82;                 % [-]
 FixedValues.Performance.Ma_MO           = 0.86;                 % [-]
 FixedValues.Performance.V_MO            = 168.3;                % [m/s]

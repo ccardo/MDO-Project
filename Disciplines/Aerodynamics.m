@@ -1,4 +1,4 @@
-function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, W_wing, v)
+function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
 
     global FixedValues
 
@@ -48,9 +48,10 @@ function [L_des, D_des, Aircraft] = Aerodynamics(Aircraft, W_wing, v)
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")
     end
-
+    
     L_des = q * S * Res.CLwing;
-    D_des = q * (S * Res.CDwing + D_A_W_q);
+    D_des_wing = q * S * Res.CDwing;
+    D_des = D_des_wing + q * D_A_W_q;
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
     end
