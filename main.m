@@ -118,7 +118,7 @@ options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'on';
-options.MaxIter                     = 100;           % Maximum iterations
+options.MaxIter                     = 2;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
@@ -126,8 +126,36 @@ options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
-
+options.OutputFcn                   = {@outConst, @outFun}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+% where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
 toc;
+
+% Display the optimization results
+
+disp('Optimization Results:')
+fprintf('Function Value at Optimal Design: %.3f', FVAL)
+
+% Plot of the convergence history of the objective function 
+figure(11)
+set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
+plot(f_hist, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+title("Convergence history of the objective function")
+xlabel("Iteration")
+ylabel("Objective function")
+
+% Plots of the convergence history of each single constraint function
+figure(12)
+set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
+c1 = c_hist(:,1);
+c2 = c_hist(:,2);
+plot(c1, "Color", 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+hold on
+plot(c2, "Color", 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
+title("Convergence history of the constraints")
+xlabel("Iteration")
+ylabel("Constraint value")
+legend("Constraint on wing loading", "Constraint on fuel tank volume")
+hold off

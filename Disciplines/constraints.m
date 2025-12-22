@@ -11,7 +11,7 @@ function [c, ceq] = constraints(~)
     A = Constraints.area;
     A_ref = FixedValues.Geometry.area; 
     c1 = ((MTOW/A) - (MTOW_ref/A_ref)) / (MTOW_ref/A_ref);
-        
+
     % constrain #2 limits the volume of the fuel tank so that the amount of
     % fuel (which is kept constant) can always be carried by the wing
     f_fuel = FixedValues.Geometry.f_tank;
@@ -21,14 +21,14 @@ function [c, ceq] = constraints(~)
     % constraints on fuel weight and volume
     V_tank = Constraints.VTank;
     c2 = (W_f/(rho_fuel) - f_fuel * V_tank) / (f_fuel * V_tank);
-    
+
     % set a tolerance for the possible small deviations 
     % due to inconsistent solver behavior
     tolerance = 1e-3;
     c = [c1; c2] - tolerance;
     ceq = [];
     
-    % in case MTOW = NaN, or some other weird shit, violate constraints
+    % in case MTOW = NaN, violate constraints
     if any(isnan(c)) || any(isinf(c)) || isempty(c)
         warning("constraints returned NaN or Inf. Setting c = 1e9;")
         c = [1e9; 1e9];
