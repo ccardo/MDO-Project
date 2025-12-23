@@ -40,6 +40,7 @@ function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
     if result
 
         lastwarn("");
+        warning("on", "backtrace")
 
         % run Q3D and display
         disp("[AER] Running Q3D...")
