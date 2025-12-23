@@ -9,23 +9,23 @@ FixedValues.Geometry.fuselageDiameter   = 5.64;                 % [m]
 FixedValues.Geometry.A1                 = 8.19;                 % [m]
 FixedValues.Geometry.TE_sweep           = 2.5;                  % [deg]
 FixedValues.Geometry.twist              = [+5.2, +2.54, -2];    % [deg]
-FixedValues.Geometry.tank               = [0, 0.85];            % [-]
+FixedValues.Geometry.tank               = [0, 0.85];            % [%]
 FixedValues.Geometry.spars              = [0.1     0.7
                                            0.1     0.7
-                                           0.1     0.6];        % [-]
+                                           0.1     0.6];        % [%]
 
-FixedValues.Weight.rho_f                = 0.81;                 % [-]
+FixedValues.Weight.rho_f                = 0.81;                 % [kg/l]
 FixedValues.Weight.W_f                  = 81500;                % [kg]
 FixedValues.Weight.deltaPayload         = 12365;                % [kg]
-FixedValues.Weight.A_W                  = 80000;                % [kg] Initialize the weight A-W to get a better approximation in Initial_run.m
+FixedValues.Weight.A_W                  = 87506;                % [kg] Initialize the weight A-W to get a better approximation in Initial_run.m
 
 
 FixedValues.Performance.nMax            = 2.5;                  % [-]
 FixedValues.Performance.CT_ref          = 9.21e-5;              % [-]
-FixedValues.Performance.CD_ref = 3.27e-2;       % [-]
+FixedValues.Performance.CD_ref          = 3.27e-2;              % [-]
 FixedValues.Performance.V_des_ref       = 242;                  % [m/s]
 FixedValues.Performance.h_des_ref       = 11800;                % [m]
-FixedValues.Performance.D_A_W_q = 5.4375;       % [-]
+FixedValues.Performance.D_A_W_q         = 6.51;                 % [-]
 FixedValues.Performance.Ma_des_ref      = 0.82;                 % [-]
 FixedValues.Performance.Ma_MO           = 0.86;                 % [-]
 FixedValues.Performance.V_MO            = 168.3;                % [m/s]

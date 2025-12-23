@@ -9,9 +9,11 @@ fprintf("\n")
 % if v is different than the current design vector (i.e. fmincon has
 % changed it) then display the changes.
 different = false;
-if v ~= currentDesignVector
-    disp(v)
-    different = true;
+if ~isempty(currentDesignVector)
+    if v ~= currentDesignVector
+        disp(v)
+        different = true;
+    end
 end
 currentDesignVector = v;
 
@@ -157,16 +159,20 @@ try
     % Outside of the MDA, run additional disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
     R = Performance(L_des, D_des, W_wing, v);
+
+    if isnan(R)
+        error("R is NaN.")
+    end
     
     % output the final optimized values and the iteration counter of the MDA
     vararg = [W_wing, L_des, D_des];
 
 catch
     warning("Iteration Failed: Setting the Range to 0.")
+    last_W_wing = 60850;
     R = 0;
 
 end
-
 
 % Evaluate the output of the objective function
 f = -R;
