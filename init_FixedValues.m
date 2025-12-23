@@ -10,9 +10,9 @@ FixedValues.Geometry.A1 = 8.19;                 % [m]
 FixedValues.Geometry.TE_sweep = 2.5;            % [deg]
 FixedValues.Geometry.twist = [+5.2, +2.54, -2]; % [deg]
 FixedValues.Geometry.tank = [0, 0.85];          % [-]
-FixedValues.Geometry.spars = [0.1     0.7
-                              0.1     0.7
-                              0.1     0.6];   % [-]
+FixedValues.Geometry.spars = [0.1      0.65
+                              0.12     0.65
+                              0.15     0.6];   % [-]
 
 FixedValues.Weight.rho_f = 0.81;                % [-]
 FixedValues.Weight.W_f = 85765;                 % [kg]
