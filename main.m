@@ -9,13 +9,6 @@ global FixedValues
 global currentDesignVector
 projectDirectory = cd;
 
-% add paths
-addpath(projectDirectory)
-addpath("Disciplines\")
-addpath("Functions\")
-addpath(genpath("EMWET\"))
-addpath(genpath("Q3D\"))
-
 run init_FixedValues.m
 
 % Initial values
@@ -62,7 +55,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
    -0.3000                                              % B6
    -0.3000                                              % B7
       10                                                % LE_sweep
-      12];                                               % b2 
+      12];                                              % b2 
 
 ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
@@ -126,17 +119,12 @@ options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
-options.OutputFcn                   = {@outConst, @outFun}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
 tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
 toc;
-
-% Display the optimization results
-
-disp('Optimization Results:')
-fprintf('Function Value at Optimal Design: %.3f', FVAL)
 
 % Plot of the convergence history of the objective function 
 figure(11)
@@ -151,11 +139,18 @@ figure(12)
 set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
 c1 = c_hist(:,1);
 c2 = c_hist(:,2);
-plot(c1, "Color", 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+plot(c1, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
 hold on
-plot(c2, "Color", 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
+plot(c2, 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
 title("Convergence history of the constraints")
 xlabel("Iteration")
 ylabel("Constraint value")
 legend("Constraint on wing loading", "Constraint on fuel tank volume")
 hold off
+
+% display all of the optimization results
+dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
+
+
+
+
