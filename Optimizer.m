@@ -149,6 +149,10 @@ try
     % initial target for coupling variable W_wing
     W_wing_i = 60871.0;
     W_wing = MDA(Aircraft, W_wing_i, v);
+
+    if isnan(W_wing) || isempty(W_wing)
+        error("Unfeasible design.")
+    end
    
     % Outside of the MDA, run additional disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
@@ -156,6 +160,8 @@ try
     
     % output the final optimized values and the iteration counter of the MDA
     vararg = [W_wing, L_des, D_des];
+    fprintf("W_wing = %.1f kg\n", W_wing);
+    
 
 catch
     warning("Iteration Failed: Setting the Range to 0.")
@@ -167,7 +173,7 @@ end
 % Evaluate the output of the objective function
 f = -R;
 
-fprintf("W_wing = %.1f kg\n", W_wing);
+
 fprintf("Range = %d km\n", round(R/1000));
 
 end
