@@ -1,5 +1,8 @@
 function [W_wing] = MDA(Aircraft, W_wing_i, v)
 
+global FixedValues
+global Constraints
+
     % define the wanted tolerance
     error = 10^-3;
     
@@ -28,10 +31,10 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
             pool = parpool(1);
         end
         
-        % this creates the actual parallel thing (1 is the number of
+        % this creates the actual parallel thing (4 is the number of
         % expected outputs)
-        f = parfeval(pool, @LoadStructEval, 1, ...
-            Aircraft, W_wing_i, v);
+        f = parfeval(pool, @LoadStructEval, 4, ...
+            Aircraft, W_wing_i, v, FixedValues);
 
         startingTime = tic;
         while toc(startingTime) < 30
@@ -48,11 +51,11 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
             warning("off", "verbose")
             warning("Either Loads or Structures has been running for more than 30 seconds.");
             warning("on", "backtrace")
-            error("to be caught by outer try/catch")
+            error("Either Loads or Structures has been running for more than 30 seconds.")
         end
 
         % get actual output from function
-        W_wing = f.OutputArguments{1};
+        [W_wing, L_max, M_max, y_max] = f.OutputArguments{:};
 
         % if any resulting quantity is NaN or Inf, warning + error
         if any(isnan([W_wing, norm(L_max), norm(M_max), norm(y_max)])) || ...
@@ -62,11 +65,12 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
             warning("off", "verbose")
             warning("One of the MDA coupling variables is either Inf of NaN.");
             warning("on", "backtrace")
-            error("to be caught by outer try/catch")
+            error("One of the MDA coupling variables is either Inf of NaN.")
         end
 
-        % add to counter
+        % add to counter & update constraints
         counter = counter +1;
+        Constraints.W_wing = W_wing;
     end
     
     finish = toc;
@@ -74,11 +78,10 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
 end
 
 
-function W_wing = LoadStructEval(Aircraft, W_wing_i, v)
-    
-    % function wrapper necessary for parallel evaluation.
+function [W_wing, L_max, M_max, y_max] = LoadStructEval(Aircraft, W_wing_i, v, FixedValues)
 
-    [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v); 
-    W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v);
+    % function wrapper necessary for parallel evaluation.
+    [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v, FixedValues); 
+    W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v, FixedValues);
 
 end

@@ -114,8 +114,9 @@ Constraints.VTank = totalFuelVolume;
 disp("[MDA] Running Q3D & EMWET...")
 MTOWi = 230000;
 W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
-[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v); 
-W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v);
+[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v, FixedValues); 
+W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v, FixedValues);
+Constraints.W_wing = W_wing;
 
 % update A-W weight
 W_A_W_new = 230000 - W_wing - FixedValues.Weight.W_f;

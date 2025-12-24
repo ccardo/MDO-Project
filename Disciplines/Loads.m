@@ -1,6 +1,6 @@
-function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v)
+function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v, FixedValues)
     
-    global FixedValues
+    % global FixedValues
 
     h_des = v(2);
     a = airSoundSpeed(h_des);

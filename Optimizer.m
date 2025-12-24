@@ -167,10 +167,12 @@ try
     fprintf("W_wing = %.1f kg\n", W_wing);
     
 
-catch
+catch ME
+    warning("off", "backtrace")
     warning("Iteration Failed: Setting the Range to 0.")
+    warning("on", "backtrace")
     R = 0;
-
+    warning(ME.message)
 end
 
 
