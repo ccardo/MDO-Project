@@ -145,7 +145,7 @@ options.FunctionTolerance           = 1e-6; % Convergence criteria: if the chang
 % options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
 % options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
 
-tic;
+startOptim = tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
-toc;
+finishOptim = toc(startOptim);
 
