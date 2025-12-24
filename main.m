@@ -74,9 +74,9 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.3000                                              % T5
     0.3000                                              % T6
     0.3000                                              % T7
-   -0.1000                                              % B1
-   -0.1000                                              % B2
-   -0.0500                                              % B3
+   -0.0500                                              % B1
+   -0.0500                                              % B2
+    0.0100                                              % B3
     0.0100                                              % B4
     0.0100                                              % B5
     0.1500                                              % B6
@@ -119,7 +119,7 @@ D_A_W_q = S * CD_A_W;
 % FixedValues.Performance.D_A_W_q = D_A_W_q;
 
 % Normalize the bounds
-ub = ub./x0;
+ub = ub./abs(x0);
 lb = lb./abs(x0);
 [x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
 currentDesignVector = x0;
