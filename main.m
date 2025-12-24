@@ -17,6 +17,13 @@ addpath(genpath("Q3D\"))
 
 run init_FixedValues.m
 
+% Requires: Parallel Processing Toolbox
+% create a new background pool (if there is none)
+pool = gcp('nocreate');
+if isempty(pool)
+    pool = parpool(1);
+end
+
 % Initial values
 
 Ma_des = 0.82;              % mach number 
