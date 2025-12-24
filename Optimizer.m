@@ -148,6 +148,9 @@ end
 try
     % initial target for coupling variable W_wing, from previous iteration
     W_wing_i = Constraints.W_wing;
+    if isnan(W_wing_i)
+        W_wing_i = 60000;
+    end
 
     W_wing = MDA(Aircraft, W_wing_i, v);
 
