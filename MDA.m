@@ -1,7 +1,7 @@
 function [W_wing] = MDA(Aircraft, W_wing_i, v)
 
     % define the wanted tolerance
-    error = 10^-4;
+    error = 10^-3;
     
     % start the iteration counter
     counter = 0;
