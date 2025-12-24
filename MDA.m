@@ -54,6 +54,15 @@ global Constraints
             error("Either Loads or Structures has been running for more than 30 seconds.")
         end
 
+        if counter >= 20
+            warning on
+            warning("off", "backtrace")
+            warning("off", "verbose")
+            warning("Convergence took too mant iterations in MDA.");
+            warning("on", "backtrace")
+            error("Convergence took too mant iterations in MDA.")
+        end
+
         % get actual output from function
         [W_wing, L_max, M_max, y_max] = f.OutputArguments{:};
 
