@@ -146,8 +146,9 @@ end
 % ------------------------------- RUN MDA ------------------------------- %;
 
 try
-    % initial target for coupling variable W_wing
-    W_wing_i = 60871.0;
+    % initial target for coupling variable W_wing, from previous iteration
+    W_wing_i = Constraints.W_wing;
+
     W_wing = MDA(Aircraft, W_wing_i, v);
 
     if isnan(W_wing) || isempty(W_wing)

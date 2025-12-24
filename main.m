@@ -135,8 +135,8 @@ options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
-options.StepTolerance               = 1e-5; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-5; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
+options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
 
 
 % options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
