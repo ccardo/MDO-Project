@@ -33,19 +33,19 @@ global Constraints
         
         % this creates the actual parallel thing (4 is the number of
         % expected outputs)
-        f = parfeval(pool, @LoadStructEval, 4, ...
+        LoadsStruct = parfeval(pool, @LoadStructEval, 4, ...
             Aircraft, W_wing_i, v, FixedValues);
 
         startingTime = tic;
         while toc(startingTime) < 30
             % if finishes early, continue without a problem
-            if f.State == "finished"
+            if LoadsStruct.State == "finished"
                 break
             end
         end
         
         % if function is still running after 30 seconds, warning + error
-        if f.State == "running"
+        if LoadsStruct.State == "running"
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
@@ -64,7 +64,7 @@ global Constraints
         end
 
         % get actual output from function
-        [W_wing, L_max, M_max, y_max] = f.OutputArguments{:};
+        [W_wing, L_max, M_max, y_max] = LoadsStruct.OutputArguments{:};
 
         % if any resulting quantity is NaN or Inf, warning + error
         if any(isnan([W_wing, norm(L_max), norm(M_max), norm(y_max)])) || ...

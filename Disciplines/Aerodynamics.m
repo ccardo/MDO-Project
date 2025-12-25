@@ -42,17 +42,40 @@ function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
         lastwarn("")
         warning("off", "backtrace")
 
-        % run Q3D and display
+        % set a 30-second timer for Aero to complete, else mark it as an 
+        % error. Do this using a parallel worker so it can kill the process
+        %  if the solver times out. Same as for the MDA.
+        
+        % create a new background pool (if there is none)
+        pool = gcp('nocreate');
+        if isempty(pool)
+            pool = parpool(1);
+        end
+        
         disp("[AER] Running Q3D...")
         tic
-        Res = Q3D_solver(Aircraft);
-        finish = toc;
+
+        % run Q3D in parallel (1 expected output)
+        Aero = parfeval(pool, @AeroEval, 1, ...
+            Aircraft);
+
+        startingTime = tic;
+        while toc(startingTime) < 30
+            % if finishes early, continue without a problem
+            if Aero.State == "finished"
+                finish = toc;
+                break
+            end
+        end
 
         % catch ALL warnings by q3d, catch error by outer block
         [msg, ~] = lastwarn();
         if contains(msg, "airfoil transonic analysis diverged")
-            error("Q3D produced a warning.")
+            error("Q3D did not converge.")
         end
+
+        % get results from Q3D
+        Res = Aero.OutputArguments{1};
 
         disp("[AER] Time elapsed: " + finish)
         cd ..\
@@ -66,5 +89,13 @@ function [L_des, D_des, D_des_wing] = Aerodynamics(Aircraft, W_wing, v)
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
     end
+
+end
+
+
+function [Res] = AeroEval(Aircraft)
+    % Q3D wrapper for ParfEval
+
+    Res = Q3D_solver(Aircraft);
 
 end
