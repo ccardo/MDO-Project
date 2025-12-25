@@ -81,8 +81,8 @@ xF1 = x1 + spars(1,1)*c_root;
 xR1 = x1 + spars(1,2)*c_root;
 mF = (xF3-xF2)/(y3-y2);
 mR = (xR3-xR2)/(y3-y2);
-xF1 = (xF2 - mF*y2)/c_root;
-FixedValues.Geometry.spars(1,1) = xF1;
+xR1 = (xR2 - mR*y2)/c_root;
+FixedValues.Geometry.spars(1,2) = xR1;
 
 
 % Wing planform geometry 
