@@ -177,7 +177,7 @@ end
 
 
 % Evaluate the output of the objective function
-f = -R;
+f = -R / FixedValues.Performance.R_ref;
 
 
 fprintf("Range = %d km\n", round(R/1000));

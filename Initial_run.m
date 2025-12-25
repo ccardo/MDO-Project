@@ -139,6 +139,7 @@ FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 
 % find range
 R = Performance(L_des, D_des, W_wing, v);
+FixedValues.Performance.R_ref = R;
 fprintf("initial R = %d km\n", round(R/1000));
 
 

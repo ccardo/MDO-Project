@@ -144,15 +144,36 @@ options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
+options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+% where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
-
-% options.DiffMinChange               = 5e-6;         % Minimum change while gradient searching
-% options.DiffMaxChange               = 3e-2;         % Maximum change while gradient searching
-% options.TolCon                      = 1e-6;         % Maximum difference between two subsequent constraint vectors [c, ceq]
-% options.TolFun                      = 1e-6;         % Maximum difference between two subsequent objective value
-% options.TolX                        = 1e-6;         % Maximum difference between two subsequent design vectors
-
-startOptim = tic;
+tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
-finishOptim = toc(startOptim);
+toc;
+
+% Plot of the convergence history of the objective function 
+figure(11)
+set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
+plot(f_hist, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+title("Convergence history of the objective function")
+xlabel("Iteration")
+ylabel("Objective function")
+
+% Plots of the convergence history of each single constraint function
+figure(12)
+set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
+c1 = c_hist(:,1);
+c2 = c_hist(:,2);
+plot(c1, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+hold on
+plot(c2, 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
+title("Convergence history of the constraints")
+xlabel("Iteration")
+ylabel("Constraint value")
+legend("Constraint on wing loading", "Constraint on fuel tank volume")
+hold off
+
+% display all of the optimization results
+dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
+
 
