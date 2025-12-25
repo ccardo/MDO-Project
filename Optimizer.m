@@ -42,6 +42,14 @@ z2 = (A1 - fuselage_radius) * tand(dihedral);
 z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
 
+% update spar positions (root front spar, so front spar is a straight line)
+spars = FixedValues.Geometry.spars;
+xF3 = x3 + spars(3,1)*c_tip;
+xF2 = x2 + spars(2,1)*c_kink;
+mF = (xF3-xF2)/(y3-y2);
+xF1 = (xF2 - mF*y2)/c_root;
+FixedValues.Geometry.spars(1,1) = xF1;
+
 % Wing planform geometry 
 %                     x      y      z      chord     twist
 Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
