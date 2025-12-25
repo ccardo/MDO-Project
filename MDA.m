@@ -58,9 +58,9 @@ global Constraints
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
-            warning("Convergence took too mant iterations in MDA.");
+            warning("Convergence took too many iterations in MDA.");
             warning("on", "backtrace")
-            error("Convergence took too mant iterations in MDA.")
+            error("Convergence took too many iterations in MDA.")
         end
 
         % get actual output from function
