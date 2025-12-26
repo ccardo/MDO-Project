@@ -1,12 +1,7 @@
-format short
-close all
-clear
-clc
 
 global projectDirectory
 global FixedValues
 global Constraints
-global last_W_wing
 
 projectDirectory = cd;
 
@@ -34,7 +29,7 @@ LE_sweep = 31;              % leading edge sweep [deg]
 A2 = 20.81;                 % outer span [m]
 
 % initial values for design vector
-design = [Ma_des
+v = [Ma_des
       h_des
       c_kink 
       taper_outboard
@@ -55,6 +50,7 @@ design = [Ma_des
       LE_sweep 
       A2];
 
+
 % geometric fixed parameters
 twist = FixedValues.Geometry.twist;
 fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
@@ -69,28 +65,28 @@ x3 = (A1 + A2)*tand(LE_sweep);
 y1 = 0;
 y2 = A1;
 y3 = A1 + A2;
-z1 = -(fuselage_radius)*tand(dihedral); % --------> position on the z axis of the root leading edge. 
-                                                  % The minus is a result of how we defined the frame of reference
+z1 = -(fuselage_radius)*tand(dihedral);
 z2 = (A1 - fuselage_radius) * tand(dihedral);
 z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
+
 
 % Wing planform geometry 
 %                     x      y      z      chord     twist
 Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
                       x2     y2     z2     c_kink    twist(2);
                       x3     y3     z3     c_tip     twist(3)];
-
 S = wingArea(Aircraft.Wing.Geom);
 Constraints.area = S;
+FixedValues.Geometry.area = S;
 
 % incidence angle is already considered in the first twist angle
 Aircraft.Wing.inc = 0;
 
 
 % Airfoil coefficients input matrix
-Ti = design(5:11);
-Bi = design(12:18);
+Ti = v(5:11);
+Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 
 % Spanwise location of the airfoil sections
@@ -99,6 +95,7 @@ Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 % SET REFERENCE AIRCRAFT IN FIXED VALUES
 FixedValues.Reference_Aircraft = Aircraft;
 % SET REFERENCE AIRCRAFT IN FIXED VALUES
+
 
 % compute fuel tank volume
 Boxes = loftWingBox(Aircraft, 20, 20);
@@ -110,27 +107,24 @@ end
 
 V = sum(volumes) * 1000; % [dm^3 = Liters]
 totalFuelVolume = 2*V;
-
 Constraints.VTank = totalFuelVolume;
 
 
 % initial target for coupling variable W_wing
 disp("[MDA] Running Q3D & EMWET...")
 MTOWi = 230000;
-W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;   
-% We use an initial guess for A_W just so the function Loads can be reused,
-% however in loads MTOW is evaluated again using the same guess, so only
-% the actual reference value MTOW is used to evaluate W_wing_i. The same
-% thing applies for Structures as well.
+W_wing_i = MTOWi - FixedValues.Weight.A_W - FixedValues.Weight.W_f;
+[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v, FixedValues); 
+W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v, FixedValues);
+Constraints.W_wing = W_wing;
 
-[L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, design); 
-W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, design);
-last_W_wing = W_wing;
+% update A-W weight
+W_A_W_new = 230000 - W_wing - FixedValues.Weight.W_f;
+FixedValues.Weight.A_W = W_A_W_new;
 
-A_W = MTOWi - W_wing - FixedValues.Weight.W_f;
-FixedValues.Weight.A_W = A_W;   % Update the value to have a constitent design
 
-[~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, design);
+% run aero ONCE to get the right D_A_W_q
+[~, ~, D_ref_wing] = Aerodynamics(Aircraft, W_wing, v);
 
 % compute A-W drag / q_inf at reference design conditions
 rho = airDensity(h_des);
@@ -139,15 +133,14 @@ q_des_ref = 1/2 * rho * V_des_ref^2;
 D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
 FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 
+
 % run aero once again to find the actual D_res and L_re
-[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, design);
+[L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
 
 % find range
-R = Performance(L_des, D_des, W_wing, design);
+R = Performance(L_des, D_des, W_wing, v);
+FixedValues.Performance.R_ref = R;
 fprintf("initial R = %d km\n", round(R/1000));
-
-% output the final optimized values and the iteration counter of the MDA
-vararg = [W_wing, L_des, D_des];
 
 
 % Evaluate the initial constraints

@@ -1,6 +1,5 @@
 function [f, vararg] = Optimizer(v)
 
-global last_W_wing % Add global variable so that mr. emwet can converge better (initial guess = last wing weight)
 global FixedValues
 global Constraints
 global currentDesignVector
@@ -121,7 +120,6 @@ if different
              'EdgeColor', 'none', ...
              "FaceLighting", "flat");
     end
-    legend("Current", "", "", "", "", "", "", "", "Reference")
     hold off
 
     % plot airfoil in a separate subfigure
@@ -150,11 +148,17 @@ end
 % ------------------------------- RUN MDA ------------------------------- %;
 
 try
+    % initial target for coupling variable W_wing, from previous iteration
+    W_wing_i = Constraints.W_wing;
+    if isnan(W_wing_i)
+        W_wing_i = 60000;
+    end
 
-    % initial target for coupling variable W_wing
-    W_wing_i = last_W_wing;
     W_wing = MDA(Aircraft, W_wing_i, v);
-    last_W_wing = W_wing;
+
+    if isnan(W_wing) || isempty(W_wing)
+        error("Unfeasible design.")
+    end
    
     % Outside of the MDA, run additional disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
@@ -166,18 +170,22 @@ try
     
     % output the final optimized values and the iteration counter of the MDA
     vararg = [W_wing, L_des, D_des];
+    fprintf("W_wing = %.1f kg\n", W_wing);
+    
 
-catch
+catch ME
+    warning("off", "backtrace")
     warning("Iteration Failed: Setting the Range to 0.")
-    last_W_wing = 60850;
+    warning("on", "backtrace")
     R = 0;
-
+    warning(ME.message)
 end
 
-% Evaluate the output of the objective function
-f = -R;
 
-fprintf("W_wing = %.1f kg\n", W_wing);
+% Evaluate the output of the objective function (normalized by 10 000 km)
+f = -R / 1e7;
+
+
 fprintf("Range = %d km\n", round(R/1000));
 
 end

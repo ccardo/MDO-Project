@@ -38,22 +38,21 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     result = changeDirSafe("Q3D");
 
     if result
-
-        lastwarn("");
-        warning("on", "backtrace")
-
-        % run Q3D and display
-        disp("[AER] Running Q3D...")
-        tic
-        Res = Q3D_solver(Aircraft);
-        finish = toc;
         
-        % catch ALL warnings by q3d, catch error from outer block
+        lastwarn("")
+        warning("off", "backtrace")
+
+        disp("[AER] Running Q3D...")
+
+        % catch ALL warnings by q3d, catch error by outer block
         [msg, ~] = lastwarn();
-        if ~isempty(msg)
-            disp(msg)
-            error("Q3D produced a warning.")
+        if contains(msg, "airfoil transonic analysis diverged")
+            error("Q3D did not converge.")
         end
+
+        % get results from Q3D
+        Res = Aero.OutputArguments{1};
+        finish = Aero.OutputArguments{2};
 
         disp("[AER] Time elapsed: " + finish)
         cd ..\
@@ -61,12 +60,23 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         error("ERROR: could not change directory to Q3D from Aerodynamics")
     end
     
+    alpha = Res.Alpha;
     L_des = q * S * Res.CLwing;
     D_des_wing = q * S * Res.CDwing;
     D_des = D_des_wing + q * D_A_W_q;
-    alpha = Res.Alpha;
     if isnan(D_des) % added in case Q3D visc diverges due to transonic conditions
        D_des = Inf;
+    end
+
+    function [Res, finish] = AeroEval(Aircraft)
+        % Q3D wrapper for ParfEval
+
+        changeDirSafe("Q3D")
+
+        tic;
+        Res = Q3D_solver(Aircraft);
+        finish = toc;
+    
     end
 
 end

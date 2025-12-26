@@ -1,7 +1,7 @@
 function [result] = changeDirSafe(dirName)
     
-    global projectDirectory;
-
+    projectDirectory = "MDO-Project";
+    
     if nargin == 0
         result = -1;
         return
@@ -9,7 +9,6 @@ function [result] = changeDirSafe(dirName)
     
     % The project directory has to be changed to MDO-Project (as is the
     % name of the GitHub repository) for this to work!
-
     check.EMWET = "Q3D";
     check.Q3D = "EMWET";
 
@@ -32,6 +31,7 @@ function [result] = changeDirSafe(dirName)
 
     % else, if the current working directory is projectDirectory then stay 
     % in the same folder and change to dirName
+
     elseif contains(parentFolder, projectDirectory)
         cd(dirName)
         result = 1;

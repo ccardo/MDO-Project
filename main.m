@@ -2,14 +2,27 @@ format short
 close all
 clear
 clc
-warning("on", "backtrace")
 
 global projectDirectory
 global FixedValues
 global currentDesignVector
 projectDirectory = cd;
 
+% add paths
+addpath(projectDirectory)
+addpath("Disciplines\")
+addpath("Functions\")
+addpath(genpath("EMWET\"))
+addpath(genpath("Q3D\"))
+
 run init_FixedValues.m
+
+% Requires: Parallel Processing Toolbox
+% create a new background pool (if there is none)
+pool = gcp('nocreate');
+if isempty(pool)
+    pool = parpool(1);
+end
 
 % Initial values
 
@@ -69,7 +82,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.3000                                              % T6
     0.3000                                              % T7
    -0.0500                                              % B1
-    0.0100                                              % B2
+   -0.0500                                              % B2
     0.0100                                              % B3
     0.0100                                              % B4
     0.0100                                              % B5
@@ -101,10 +114,10 @@ x0 = [Ma_des
       A2];
 
 % Normalize the bounds
-ub = ub./x0;
+ub = ub./abs(x0);
 lb = lb./abs(x0);
-[x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
-currentDesignVector = x0;
+[v0, FixedValues.Key.designVector] = normalize(x0, 'norm');
+currentDesignVector = v0;
 
 % Options for the optimization
 options = optimoptions('fmincon');
@@ -117,40 +130,62 @@ options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
-options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in teh objective function in one iteration is lower than the tolerance than the optimization stops
-options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
+options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @stopRelChange}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
 tic;
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@Optimizer, v0, [], [], [], [], lb, ub, @constraints, options);
 toc;
 
 % Plot of the convergence history of the objective function 
 figure(11)
+iterCount = size(c1, 1)-1;
 set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
-plot(f_hist, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+plot(0:iterCount, f_hist, 'k.-', "MarkerSize", 25, "LineWidth",2)
+axis tight
+ylim([1.1*min(f_hist), 0.9*max(f_hist)])
 title("Convergence history of the objective function")
 xlabel("Iteration")
 ylabel("Objective function")
+grid minor
 
 % Plots of the convergence history of each single constraint function
 figure(12)
 set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
 c1 = c_hist(:,1);
 c2 = c_hist(:,2);
-plot(c1, 'ro-', 'MarkerFaceColor', 'k', "LineWidth",2)
+plot(0:iterCount, c1, 'r.-', 'MarkerSize', 25, "LineWidth", 2)
 hold on
-plot(c2, 'bo-', 'MarkerFaceColor', 'k', "LineWidth",2)
+plot(0:iterCount, c2, 'b.-', 'MarkerSize', 25, "LineWidth", 2)
+axis tight
+ylim([1.1*min(c_hist, "all"), 0.9*max(c_hist, "all")])
 title("Convergence history of the constraints")
 xlabel("Iteration")
 ylabel("Constraint value")
-legend("Constraint on wing loading", "Constraint on fuel tank volume")
+L = legend("Constraint on wing loading", "Constraint on fuel tank volume");
+L.FontSize = 15;
+L.Location = "best";
 hold off
+grid minor
+
+
+% save results.
+cd Results\
+subDirName = 0;
+while exist(subDirName, "dir")
+    subDirName = subDirName+1;
+end
+
+cd(subDirName)
+save("output.mat", "OUTPUT", "-mat")            % fmincon output
+save("c_hist.mat", "c_hist", "-mat")            % constraint history
+save("f_hist.mat", "f_hist", "-mat")            % function value history
+save("iter_hist.mat", "iter_hist", "-mat")      % iteration info history: x, step size, optimality, function count, constraint violation
 
 % display all of the optimization results
 dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
-
-
 
 
