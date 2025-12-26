@@ -18,7 +18,8 @@ function stop = stopRelChange(~, optimValues, state)
             currentF = optimValues.fval;
 
             % tolerances for relative change
-            tolRel = 1e-6;
+            % tolRel = 1e-5 is under a kilometer
+            tolRel = 1e-5;
             tolStall = 5;
 
             changeRel = abs((currentF - previousF)/previousF);
