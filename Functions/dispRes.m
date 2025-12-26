@@ -126,7 +126,7 @@ fprintf('Aircraft lift coefficient in the design condition for the optimized des
 % CD,wing (wing drag coefficient) and its component CDi,wing (wing induced drag coefficient) @design point 
 CD_des_wing = D_des_wing/(q*S);
 fprintf('Wing drag coefficient in the design condition for the optimized design: %f \n', CD_des_wing)
-[~,~,~,CDi] = Loads(Aircraft, W_wing, x);
+[~,~,~,CDi] = Loads(Aircraft, W_wing, x, FixedValues);
 fprintf('Wing induced drag coefficient in the design condition for the optimized design: %f \n', CDi)
 
 % CL/CD (aircraft aerodynamic efficiency)  @design point 

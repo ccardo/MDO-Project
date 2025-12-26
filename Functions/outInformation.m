@@ -7,6 +7,11 @@ function stop = outInformation(x, optimValues, state)
         case 'init'
             % initialize the array
             iterHistory = struct();
+            iterHistory.firstOrderOptimality = [];
+            iterHistory.constraintViolation = [];
+            iterHistory.stepSize = [];
+            iterHistory.functionCount = [];
+            iterHistory.designVector = [];
 
         case 'iter'
             % save those values for every iteration

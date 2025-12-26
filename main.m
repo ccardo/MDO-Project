@@ -127,26 +127,29 @@ options.FunValCheck                 = 'on';
 options.MaxIter                     = 100;           % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.UseParallel                 = false;
-options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
+options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
-options.OutputFcn                   = {@outConst, @outFun, @outWWing, @stopRelChange}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation, @stopRelChange}; % calls functions at the end of each iteration. 
+% ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
-tic;
+
+optimStart = tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@Optimizer, v0, [], [], [], [], lb, ub, @constraints, options);
-toc;
+optimEnd = toc(optimStart);
+
 
 % Plot of the convergence history of the objective function 
 figure(11)
-iterCount = size(c1, 1)-1;
+iterCount = size(c_hist, 1)-1;
 set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
 plot(0:iterCount, f_hist, 'k.-', "MarkerSize", 25, "LineWidth",2)
 axis tight
-ylim([1.1*min(f_hist), 0.9*max(f_hist)])
+ylim([min(f_hist)-0.01, max(f_hist)+0.01])
 title("Convergence history of the objective function")
 xlabel("Iteration")
 ylabel("Objective function")
@@ -161,7 +164,7 @@ plot(0:iterCount, c1, 'r.-', 'MarkerSize', 25, "LineWidth", 2)
 hold on
 plot(0:iterCount, c2, 'b.-', 'MarkerSize', 25, "LineWidth", 2)
 axis tight
-ylim([1.1*min(c_hist, "all"), 0.9*max(c_hist, "all")])
+ylim([min(c_hist, [], "all")-0.02, max(c_hist, [], "all")+0.02])
 title("Convergence history of the constraints")
 xlabel("Iteration")
 ylabel("Constraint value")
@@ -172,20 +175,241 @@ hold off
 grid minor
 
 
-% save results.
+% create a non-existing folder
 cd Results\
 subDirName = 0;
 while exist(subDirName, "dir")
     subDirName = subDirName+1;
 end
+subDirName = num2str(subDirName);
+mkdir(subDirName)
 
+% put the results into a big struct:
+iterations = iter_hist;
+iterations.fval = f_hist(:)';
+iterations.constraints = c_hist';
+iterations.wingWeight = W_wing_hist(:)';
+
+% save run results
 cd(subDirName)
-save("output.mat", "OUTPUT", "-mat")            % fmincon output
-save("c_hist.mat", "c_hist", "-mat")            % constraint history
-save("f_hist.mat", "f_hist", "-mat")            % function value history
-save("iter_hist.mat", "iter_hist", "-mat")      % iteration info history: x, step size, optimality, function count, constraint violation
+save("final_output.mat", "OUTPUT", "-mat")                % fmincon output
+save("iteration_outputs.mat", "iterations", "-mat") % fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
+cd ..\..\
 
 % display all of the optimization results
 dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
 
+% denormalize X
+final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
+
+figNumbers = randi(1e9, 6, 1);
+
+% plot airfoil geometry
+Ti = final_V(5:11);
+Bi = final_V(12:18);
+chord = 1 - cos(linspace(0, pi/2));
+[~, yt] = CSTcurve(chord, Ti);
+[~, yb] = CSTcurve(chord, Bi);
+thickness = yt - yb;
+camber = 1/2 * (yt + yb);
+Ti_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 1:7);
+Bi_ref = FixedValues.Reference_Aircraft.Wing.Airfoils(1, 8:end);
+[~, yt_ref] = CSTcurve(chord, Ti_ref);
+[~, yb_ref] = CSTcurve(chord, Bi_ref);
+
+gcf = figure(figNumbers(1));
+gcf.Name = "Airfoils Equal Axes";
+line(chord, yt, "Color", "k", "LineWidth", 1)
+line(chord, yb, "Color", "k", "LineWidth", 1)
+line(chord, yt_ref, "Color", "r", "LineStyle", "--", "LineWidth", 1)
+line(chord, yb_ref, "Color", "r", "LineStyle", "--", "LineWidth", 1)
+L = legend("Current Airfoil", "", "Reference Airfoil");
+L.Location = "best";
+L.FontSize = 15;
+title("Final Airfoil", "FontSize", 15);
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+ylabel("y/c", FontSize=15)
+xlabel("x/c", FontSize=15)
+axis equal
+
+gcf = figure(figNumbers(2));
+gcf.Name = "Airfoils Scaled Axes";
+line(chord, yt, "Color", "k", "LineWidth", 1)
+line(chord, yb, "Color", "k", "LineWidth", 1)
+line(chord, yt_ref, "Color", "r", "LineStyle", "--", "LineWidth", 1)
+line(chord, yb_ref, "Color", "r", "LineStyle", "--", "LineWidth", 1)
+L = legend("Current Airfoil", "", "Reference Airfoil");
+L.Location = "best";
+L.FontSize = 15;
+title("Final Airfoil", "FontSize", 15);
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+ylabel("y/c", FontSize=15)
+xlabel("x/c", FontSize=15)
+axis normal
+
+
+% plot wing planforms with and without tanks
+
+gcf = figure(figNumbers(3));
+gcf.Name = "Wing Planforms";
+styleRef = {"r--", "LineWidth", 1};
+styleNew = {"Color", [0.4 0.4 0.7 1], "LineWidth", 1};
+plotWingGeometry(FixedValues.Reference_Aircraft.Wing.Geom, FixedValues.Reference_Aircraft.Wing.Airfoils, styleRef)
+hold on
+final_AC = createGeom(final_V);
+plotWingGeometry(final_AC.Wing.Geom, final_AC.Wing.Airfoils, styleNew);
+hold on
+% plot fuel tank in the same subfigure
+Boxes = loftWingBox(FixedValues.Reference_Aircraft, 20, 20, 0);
+for i = 1:length(Boxes)
+
+    surf(Boxes(i).X, Boxes(i).Y, Boxes(i).Z, ...
+         'FaceColor', [1 0.8 0.8], ...
+         'FaceAlpha', 0.5, ...
+         'EdgeColor', 'none', ...
+         "FaceLighting", "flat");
+end
+Boxes = loftWingBox(final_AC, 20, 20, 0);
+for i = 1:length(Boxes)
+
+    surf(Boxes(i).X, -Boxes(i).Y, Boxes(i).Z, ...
+         'FaceColor', [0.5 0.5 1], ...
+         'FaceAlpha', 0.3, ...
+         'EdgeColor', 'none', ...
+         "FaceLighting", "flat");
+end
+view(90, 90)
+L = legend("Reference Wing", "", "", "", "", "", "", "", "", "", "Final Wing");
+L.Position = [0.77 0.59 0.1 0.05];
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+xlabel X
+ylabel Y
+zlabel Z
+hold off
+axis padded
+
+
+% plotting 3D wings
+% little exploit, pretend that the tank is actually the whole wing to reuse
+% the old loftWingBox function
+FixedValues.Geometry.tank = [0 1];
+FixedValues.Geometry.spars = [0 1; 0 1; 0 1];
+
+gcf = figure(figNumbers(4));
+gcf.Name = "Reference Wing Isometric View";
+reference_wing3D = loftWingBox(FixedValues.Reference_Aircraft, 10, 20);
+for i = 1:length(Boxes)
+
+    surf(reference_wing3D(i).X, reference_wing3D(i).Y, reference_wing3D(i).Z, ...
+        'FaceColor', [1 0.7 0.7], ...
+        'FaceAlpha', 0.5, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.3, ...
+         "FaceLighting", "gouraud");
+    hold on
+    surf(reference_wing3D(i).X, -reference_wing3D(i).Y, reference_wing3D(i).Z, ...
+        'FaceColor', [1 0.7 0.7], ...
+        'FaceAlpha', 0.5, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.3, ...
+         "FaceLighting", "gouraud");
+end
+grid off
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+xlabel X
+ylabel Y
+zlabel Z
+light
+axis equal
+axis padded
+
+gcf = figure(figNumbers(5));
+gcf.Name = "Final Wing Isometric View";
+final_wing3D = loftWingBox(final_AC, 10, 20);
+for i = 1:length(Boxes)
+
+    surf(final_wing3D(i).X, final_wing3D(i).Y, final_wing3D(i).Z, ...
+        'FaceColor', [0.7 0.7 1], ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.3, ...
+         "FaceLighting", "gouraud");
+    hold on
+    surf(final_wing3D(i).X, -final_wing3D(i).Y, final_wing3D(i).Z, ...
+        'FaceColor', [0.7 0.7 1], ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.3, ...
+         "FaceLighting", "gouraud");
+end
+grid off
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+xlabel X
+ylabel Y
+zlabel Z
+light
+axis equal
+axis padded
+
+
+gcf = figure(figNumbers(6));
+gcf.Name = "Overlapped Wings Isometric View";
+for i = 1:length(Boxes)
+
+    % reference
+    surf(reference_wing3D(i).X, reference_wing3D(i).Y, reference_wing3D(i).Z, ...
+         'FaceColor', [1 0.7 0.7], ...
+         "FaceAlpha", 0.5, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.1, ...
+         "FaceLighting", "flat");
+    hold on
+    surf(reference_wing3D(i).X, -reference_wing3D(i).Y, reference_wing3D(i).Z, ...
+         'FaceColor', [1 0.7 0.7], ...
+         "FaceAlpha", 0.5, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.1, ...
+         "FaceLighting", "flat");
+    
+    % final
+    surf(final_wing3D(i).X, final_wing3D(i).Y, final_wing3D(i).Z, ...
+         'FaceColor', [0.7 0.7 1], ...
+         "FaceAlpha", 0.7, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.1, ...
+         "FaceLighting", "gouraud");
+    surf(final_wing3D(i).X, -final_wing3D(i).Y, final_wing3D(i).Z, ...
+         'FaceColor', [0.7 0.7 1], ...
+         "FaceAlpha", 0.7, ...
+         'EdgeColor', 'k', ...
+         "EdgeAlpha", 0.1, ...
+         "FaceLighting", "gouraud");
+end
+grid off
+L = legend("Reference Wing", "", "Final Wing");
+L.Position = [0.67 0.64 0.15 0.07];
+T = title(gcf.Name);
+T.FontSize = 20;
+T.FontName = "Times New Roman";
+xlabel X
+ylabel Y
+zlabel Z
+light
+axis equal
+axis padded
+
+
+cd Results\
+cd(subDirName)
+figList = [figNumbers, 11, 12];
+saveFigures(figList);
+cd ..\..\

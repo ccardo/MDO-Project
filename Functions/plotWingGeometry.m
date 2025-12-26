@@ -1,9 +1,9 @@
-function [] = plotWingGeometry(geom, airfoil, color)
+function [] = plotWingGeometry(geom, airfoil, style)
 
 arguments
     geom 
     airfoil 
-    color = "k"
+    style = {"Color", "k"}
 end
     
     % create airfoil geometry based on CST coefficients
@@ -48,13 +48,13 @@ end
         
     end
 
-    plot3(wingX, wingY, wingZ, "Color", color)
+    plot3(wingX, wingY, wingZ, style{:})
     hold on
-    plot3(wingX, -wingY, wingZ, "Color", color)
+    plot3(wingX, -wingY, wingZ, style{:})
 
     for i = 1:length(wingSectionL)
-        plot3(wingSectionR(i).x, wingSectionR(i).y, wingSectionR(i).z, "Color", color)
-        plot3(wingSectionL(i).x, wingSectionL(i).y, wingSectionL(i).z, "Color", color)
+        plot3(wingSectionR(i).x, wingSectionR(i).y, wingSectionR(i).z, style{:})
+        plot3(wingSectionL(i).x, wingSectionL(i).y, wingSectionL(i).z, style{:})
     end
 
     hold off
