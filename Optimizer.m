@@ -145,7 +145,8 @@ if different
 end
 
 
-% ------------------------------- RUN MDA ------------------------------- %;
+% --------------------------- RUN DISCIPLINES --------------------------- %;
+
 
 try
     % initial target for coupling variable W_wing, from previous iteration
