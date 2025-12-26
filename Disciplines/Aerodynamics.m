@@ -42,7 +42,29 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         lastwarn("")
         warning("off", "backtrace")
 
+        % set a 30-second timer for Aero to complete, else mark it as an 
+        % error. Do this using a parallel worker so it can kill the process
+        %  if the solver times out. Same as for the MDA.
+        
+        % create a new background pool (if there is none)
+        pool = gcp('nocreate');
+        if isempty(pool)
+            pool = parpool(1);
+        end
+        
         disp("[AER] Running Q3D...")
+
+        % run Q3D in parallel (2 expected outputs)
+        Aero = parfeval(pool, @AeroEval, 2, ...
+            Aircraft);
+
+        startingTime = tic;
+        while toc(startingTime) < 30
+            % if finishes early, continue without a problem
+            if Aero.State == "finished"
+                break
+            end
+        end
 
         % catch ALL warnings by q3d, catch error by outer block
         [msg, ~] = lastwarn();
