@@ -154,8 +154,11 @@ toc;
 
 % Plot of the convergence history of the objective function 
 figure(11)
+iterCount = size(c1, 1)-1;
 set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
-plot(f_hist, 'k.-', "MarkerSize", 25, "LineWidth",2)
+plot(0:iterCount, f_hist, 'k.-', "MarkerSize", 25, "LineWidth",2)
+axis tight
+ylim([1.1*min(f_hist), 0.9*max(f_hist)])
 title("Convergence history of the objective function")
 xlabel("Iteration")
 ylabel("Objective function")
@@ -166,18 +169,33 @@ figure(12)
 set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
 c1 = c_hist(:,1);
 c2 = c_hist(:,2);
-plot(c1, 'r.-', 'MarkerSize', 25, "LineWidth", 2)
+plot(0:iterCount, c1, 'r.-', 'MarkerSize', 25, "LineWidth", 2)
 hold on
-plot(c2, 'b.-', 'MarkerSize', 25, "LineWidth", 2)
+plot(0:iterCount, c2, 'b.-', 'MarkerSize', 25, "LineWidth", 2)
+axis tight
+ylim([1.1*min(c_hist, "all"), 0.9*max(c_hist, "all")])
 title("Convergence history of the constraints")
 xlabel("Iteration")
 ylabel("Constraint value")
-legend("Constraint on wing loading", "Constraint on fuel tank volume")
+L = legend("Constraint on wing loading", "Constraint on fuel tank volume");
+L.FontSize = 15;
+L.Location = "best";
 hold off
 grid minor
 
-iterCount = size(c1, 1);
-printResults("25-12", FixedValues, x0, x, f_hist, iterCount, options)
+
+% save results.
+cd Results\
+subDirName = 0;
+while exist(subDirName, "dir")
+    subDirName = subDirName+1;
+end
+
+cd(subDirName)
+save("output.mat", "OUTPUT", "-mat")            % fmincon output
+save("c_hist.mat", "c_hist", "-mat")            % constraint history
+save("f_hist.mat", "f_hist", "-mat")            % function value history
+save("iter_hist.mat", "iter_hist", "-mat")      % iteration info history: x, step size, optimality, function count, constraint violation
 
 % display all of the optimization results
 dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
