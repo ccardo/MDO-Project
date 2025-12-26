@@ -130,7 +130,7 @@ if different
 
     plot(chord, yt_ref, "r", chord, yb_ref, "r")
     hold on
-    plot(chord, yt, "k", chord, yb, "k")
+    plot(chord, yt, "k", chord, yb, "k", "LineWidth", 2)
     text(0.85, -0.05, sprintf("Thickness = %.1f%% \n Camber = %.1f%%", ...
                           thickness*100, camber*100))
     title("Current Airfoil", FontSize=20)

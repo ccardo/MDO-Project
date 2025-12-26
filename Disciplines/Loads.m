@@ -1,4 +1,4 @@
-function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v, FixedValues)
+function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v, FixedValues)
     
     % global FixedValues
 
@@ -71,6 +71,7 @@ function [L_max, M_max, y_max] = Loads(Aircraft, W_wing, v, FixedValues)
         Cm = [Cm(1); Cm(:)];
     end
     
+    CDi = Res.CDiwing;
     y_max = Yst;
     L_max = q * Cl .* c;
     M_max = q * Cm .* c * MAC;

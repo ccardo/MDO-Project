@@ -128,8 +128,8 @@ D_A_W_q = S * CD_A_W;
 % Normalize the bounds
 ub = ub./abs(x0);
 lb = lb./abs(x0);
-[x0, FixedValues.Key.designVector] = normalize(x0, 'norm');
-currentDesignVector = x0;
+[v0, FixedValues.Key.designVector] = normalize(x0, 'norm');
+currentDesignVector = v0;
 
 % Options for the optimization
 options = optimoptions('fmincon');
@@ -141,15 +141,15 @@ options.ScaleProblem                = true;         % Normalization of the desig
 options.UseParallel                 = false;
 options.PlotFcn                     = {@optimplotfval,@optimplotx,@optimplotfirstorderopt,@optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-2;
-options.StepTolerance               = 1e-6; % Convergence criteria: if the step taken in one iteration is lower than the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-6; % Convergence criteria: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
-options.OptimalityTolerance         = 1e-6; % Convergence criterion: first-order optimality near zero (null gradient)
-options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
+options.FiniteDifferenceStepSize    = 5e-3;
+options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
+options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @stopRelChange}; % calls the function at the end of each iteration. Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
 tic;
-[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@(x) Optimizer(x), x0, [], [], [], [], lb, ub, @(y) constraints(y), options);
+[x,FVAL,EXITFLAG,OUTPUT] = fmincon(@Optimizer, v0, [], [], [], [], lb, ub, @constraints, options);
 toc;
 
 % Plot of the convergence history of the objective function 
@@ -175,6 +175,9 @@ ylabel("Constraint value")
 legend("Constraint on wing loading", "Constraint on fuel tank volume")
 hold off
 grid minor
+
+iterCount = size(c1, 1);
+printResults("25-12", FixedValues, x0, x, f_hist, iterCount, options)
 
 % display all of the optimization results
 dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
