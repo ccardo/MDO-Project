@@ -130,7 +130,7 @@ if different
 
     plot(chord, yt_ref, "r", chord, yb_ref, "r")
     hold on
-    plot(chord, yt, "k", chord, yb, "k", "LineWidth", 2)
+    plot(chord, yt, "k", chord, yb, "k")
     text(0.85, -0.05, sprintf("Thickness = %.1f%% \n Camber = %.1f%%", ...
                           thickness*100, camber*100))
     title("Current Airfoil", FontSize=20)
@@ -176,8 +176,8 @@ catch ME
 end
 
 
-% Evaluate the output of the objective function
-f = -R / FixedValues.Performance.R_ref;
+% Evaluate the output of the objective function (normalized by 10 000 km)
+f = -R / 1e7;
 
 
 fprintf("Range = %d km\n", round(R/1000));

@@ -1,4 +1,4 @@
-function stop = stopRelChange(state)
+function stop = stopRelChange(~, optimValues, state)
 
     %{
     Return stop = true (and stop fmincon) if the relative change in
@@ -7,6 +7,7 @@ function stop = stopRelChange(state)
     %}
         
     persistent previousF iterStall
+    stop = false;
 
     switch state
         case "init"
@@ -21,6 +22,7 @@ function stop = stopRelChange(state)
             tolStall = 5;
 
             changeRel = abs((currentF - previousF)/previousF);
+            fprintf("Relative change in R: %.2e", changeRel)
             if changeRel < tolRel
                 iterStall = iterStall + 1;
             else
@@ -33,7 +35,6 @@ function stop = stopRelChange(state)
                 stop = true;
             end
 
-        case "done"
-            % do nothing in case solver is already done
+        case "done" % do nothing in case solver is already done
     end
 end

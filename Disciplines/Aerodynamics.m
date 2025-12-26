@@ -53,17 +53,15 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         end
         
         disp("[AER] Running Q3D...")
-        tic
 
-        % run Q3D in parallel (1 expected output)
-        Aero = parfeval(pool, @AeroEval, 1, ...
+        % run Q3D in parallel (2 expected outputs)
+        Aero = parfeval(pool, @AeroEval, 2, ...
             Aircraft);
 
         startingTime = tic;
         while toc(startingTime) < 30
             % if finishes early, continue without a problem
             if Aero.State == "finished"
-                finish = toc;
                 break
             end
         end
@@ -76,6 +74,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
 
         % get results from Q3D
         Res = Aero.OutputArguments{1};
+        finish = Aero.OutputArguments{2};
 
         disp("[AER] Time elapsed: " + finish)
         cd ..\
@@ -91,12 +90,17 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
        D_des = Inf;
     end
 
+    function [Res, finish] = AeroEval(Aircraft)
+        % Q3D wrapper for ParfEval
+
+        changeDirSafe("Q3D")
+
+        tic;
+        Res = Q3D_solver(Aircraft);
+        finish = toc;
+    
+    end
+
 end
 
 
-function [Res] = AeroEval(Aircraft)
-    % Q3D wrapper for ParfEval
-
-    Res = Q3D_solver(Aircraft);
-
-end
