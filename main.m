@@ -411,7 +411,10 @@ axis padded
 
 
 cd Results\
-cd(subDirName)
-figList = [figNumbers(:); 11; 12];
-saveFigures(figList);
+figuresDir = sprintf("%s\\figures", subDirName);
+mkdir(figuresDir)
+cd(figuresDir)
+figList = [figNumbers(:); 11; 12; 1];
+formats = ["pdf", "png", "fig", "svg"];
+saveFigures("all", formats);
 cd ..\..\
