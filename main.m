@@ -178,7 +178,7 @@ grid minor
 % create a non-existing folder
 cd Results\
 subDirName = 0;
-while exist(subDirName, "dir")
+while exist(num2str(subDirName), "dir")
     subDirName = subDirName+1;
 end
 subDirName = num2str(subDirName);
@@ -186,6 +186,8 @@ mkdir(subDirName)
 
 % put the results into a big struct:
 iterations = iter_hist;
+iterations.designVectorNorm = iter_hist.designVector;
+iterations.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
 iterations.fval = f_hist(:)';
 iterations.constraints = c_hist';
 iterations.wingWeight = W_wing_hist(:)';
@@ -309,14 +311,13 @@ for i = 1:length(Boxes)
 
     surf(reference_wing3D(i).X, reference_wing3D(i).Y, reference_wing3D(i).Z, ...
         'FaceColor', [1 0.7 0.7], ...
-        'FaceAlpha', 0.5, ...
+        "FaceAlpha", 0.9, ...
          'EdgeColor', 'k', ...
          "EdgeAlpha", 0.3, ...
          "FaceLighting", "gouraud");
     hold on
     surf(reference_wing3D(i).X, -reference_wing3D(i).Y, reference_wing3D(i).Z, ...
         'FaceColor', [1 0.7 0.7], ...
-        'FaceAlpha', 0.5, ...
          'EdgeColor', 'k', ...
          "EdgeAlpha", 0.3, ...
          "FaceLighting", "gouraud");
@@ -329,6 +330,7 @@ xlabel X
 ylabel Y
 zlabel Z
 light
+material shiny
 axis equal
 axis padded
 
@@ -410,6 +412,6 @@ axis padded
 
 cd Results\
 cd(subDirName)
-figList = [figNumbers, 11, 12];
+figList = [figNumbers(:); 11; 12];
 saveFigures(figList);
 cd ..\..\
