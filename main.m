@@ -114,6 +114,8 @@ x0 = [Ma_des
       A2];
 
 % Normalize the bounds
+BOUNDS = struct();
+BOUNDS.original = [lb ub];
 ub = ub./abs(x0);
 lb = lb./abs(x0);
 [v0, FixedValues.Key.designVector] = normalize(x0, 'norm');
@@ -185,17 +187,22 @@ subDirName = num2str(subDirName);
 mkdir(subDirName)
 
 % put the results into a big struct:
-iterations = iter_hist;
-iterations.designVectorNorm = iter_hist.designVector;
-iterations.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
-iterations.fval = f_hist(:)';
-iterations.constraints = c_hist';
-iterations.wingWeight = W_wing_hist(:)';
+ITERATIONS = iter_hist;
+ITERATIONS.designVectorNorm = iter_hist.designVector;
+ITERATIONS.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
+ITERATIONS.fval = f_hist(:)';
+ITERATIONS.constraints = c_hist';
+ITERATIONS.wingWeight = W_wing_hist(:)';
+
+% also stuff together all the bounds
+BOUNDS.normalized = [lb, ub];
+BOUNDS.original;
 
 % save run results
 cd(subDirName)
-save("final_output.mat", "OUTPUT", "-mat")                % fmincon output
-save("iteration_outputs.mat", "iterations", "-mat") % fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
+save("output.mat", "OUTPUT", "-mat")         % fmincon output
+save("iterations.mat", "ITERATIONS", "-mat") % fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
+save("bounds.mat", "BOUNDS", "-mat")         % [lb ub] original and normalized
 cd ..\..\
 
 % display all of the optimization results
