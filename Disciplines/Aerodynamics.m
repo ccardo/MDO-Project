@@ -66,6 +66,16 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
             end
         end
 
+        % if function is still running after 30 seconds, warning + error
+        if Aero.State == "running"
+            warning on
+            warning("off", "backtrace")
+            warning("off", "verbose")
+            warning("Either Loads or Structures has been running for more than 30 seconds.");
+            warning("on", "backtrace")
+            error("Either Loads or Structures has been running for more than 30 seconds.")
+        end
+
         % catch ALL warnings by q3d, catch error by outer block
         [msg, ~] = lastwarn();
         if contains(msg, "airfoil transonic analysis diverged")
