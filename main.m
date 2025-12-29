@@ -127,14 +127,14 @@ options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'off';        % When turned on displays an error when the objective function or constraints return a value that is complex, NaN, or Inf. By turning it off, fmincon can handle NaN values
 options.MaxIter                     = 100;          % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
-options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
+options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 5e-3;
+options.FiniteDifferenceStepSize    = 1e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
-options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation}; % calls functions at the end of each iteration. 
+options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls functions at the end of each iteration. 
 % ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
