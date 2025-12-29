@@ -143,7 +143,7 @@ end
 
 
 % Evaluate the output of the objective function (normalized by 10 000 km)
-f = -R / 1e7;
+f = -R / FixedValues.Performance.R_ref;
 
 
 fprintf("Range = %d km\n", round(R/1000));

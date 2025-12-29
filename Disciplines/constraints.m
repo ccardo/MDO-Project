@@ -22,10 +22,7 @@ function [c, ceq] = constraints(~)
     V_tank = Constraints.VTank;
     c2 = (W_f/(rho_fuel) - f_fuel * V_tank) / (f_fuel * V_tank);
 
-    % set a tolerance for the possible small deviations 
-    % due to inconsistent solver behavior
-    tolerance = 1e-3;
-    c = [c1; c2] - tolerance;
+    c = [c1; c2];
     ceq = [];
     
     % in case MTOW = NaN, violate constraints
