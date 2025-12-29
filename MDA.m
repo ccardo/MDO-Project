@@ -58,12 +58,13 @@ global Constraints
 
         % if mda outputs some errors for some reason then boom
         if ~isempty(LoadsStruct.Error)
+            exc = LoadsStruct.Error.remotecause{:};
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
             warning("MDA has produced an unexpected error");
             warning("on", "backtrace")
-            error("MDA has produced an unexpected error")
+            throw(exc)
         end
 
         if counter >= 20

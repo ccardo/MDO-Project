@@ -80,12 +80,13 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         
         % if q3d outputs some errors for some reason then boom
         if ~isempty(Aero.Error)
+            exc = Aero.Error.remotecause{:};
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
             warning("Q3D [AER] has produced an unexpected error");
             warning("on", "backtrace")
-            error("Q3D [AER] has produced an unexpected error")
+            throw(exc)
         end
 
         % catch ALL warnings by q3d, catch error by outer block
