@@ -67,13 +67,25 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         end
 
         % if function is still running after 30 seconds, warning + error
-        if Aero.State == "running"
+        if Aero.State ~= "finished"
+            cancelAll(pool.FevalQueue)
+            cancel(Aero)
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
             warning("Aerodynamics has been running for more than 30 seconds.");
             warning("on", "backtrace")
             error("Aerodynamics has been running for more than 30 seconds.")
+        end
+        
+        % if q3d outputs some errors for some reason then boom
+        if ~isempty(Aero.Error)
+            warning on
+            warning("off", "backtrace")
+            warning("off", "verbose")
+            warning("Q3D [AER] has produced an unexpected error");
+            warning("on", "backtrace")
+            error("Q3D [AER] has produced an unexpected error")
         end
 
         % catch ALL warnings by q3d, catch error by outer block

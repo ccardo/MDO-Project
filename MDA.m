@@ -45,13 +45,25 @@ global Constraints
         end
         
         % if function is still running after 30 seconds, warning + error
-        if LoadsStruct.State == "running"
+        if LoadsStruct.State ~= "finished"
+            cancelAll(pool.FevalQueue)
+            cancel(LoadsStruct)
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
             warning("Either Loads or Structures has been running for more than 30 seconds.");
             warning("on", "backtrace")
             error("Either Loads or Structures has been running for more than 30 seconds.")
+        end
+
+        % if mda outputs some errors for some reason then boom
+        if ~isempty(LoadsStruct.Error)
+            warning on
+            warning("off", "backtrace")
+            warning("off", "verbose")
+            warning("MDA has produced an unexpected error");
+            warning("on", "backtrace")
+            error("MDA has produced an unexpected error")
         end
 
         if counter >= 20
