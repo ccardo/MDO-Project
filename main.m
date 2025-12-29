@@ -131,10 +131,12 @@ options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotst
 options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 1e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
+% note: se vedi tra le optimoptions, sqp non usa function tolerance,
+% percio' ho rimesso stoprelchange
+% options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
-options.OutputFcn                   = {@outConst, @outFun, @outWWing}; % calls functions at the end of each iteration. 
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @stopRelChange}; % calls functions at the end of each iteration. 
 % ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
