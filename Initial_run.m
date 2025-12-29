@@ -128,13 +128,13 @@ FixedValues.Weight.A_W = W_A_W_new;
 
 % compute A-W drag / q_inf at reference design conditions
 rho = airDensity(h_des);
-V_des_ref = FixedValues.Performance.V_des_ref;
-q_des_ref = 1/2 * rho * V_des_ref^2;
+FixedValues.Performance.V_des_ref = airSoundSpeed(h_des) * Ma_des;
+q_des_ref = 1/2 * rho * FixedValues.Performance.V_des_ref^2;
 D_A_W_new = q_des_ref * S * FixedValues.Performance.CD_ref - D_ref_wing;
 FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 
 
-% run aero once again to find the actual D_res and L_re
+% run aero once again to find the actual D_res and L_res
 [L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
 
 % find range
@@ -148,7 +148,7 @@ fprintf("initial R = %d km\n", round(R/1000));
 if c(1) < 0
     fprintf("Wing loading constraint respected with c1 = %.2f \n", c(1))
 else
-    fprintf("Wing loading constraint violated with c1 = %.2f \n", c(2));
+    fprintf("Wing loading constraint violated with c1 = %.2f \n", c(1));
 end
 
 if c(2) < 0

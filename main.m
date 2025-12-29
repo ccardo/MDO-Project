@@ -30,7 +30,6 @@ Ma_des = 0.82;              % mach number
 h_des = 11800;              % altitude [m]
 c_kink = 7.514;             % chord at the kink [m]
 taper_outboard = 0.3077;    % taper ratio outboard
-c_tip = 2.312;              % chord at the tip [m]
 T1 = 0.14863;               % \
 T2 = 0.069323;              % |
 T3 = 0.22575;               % |
@@ -125,25 +124,23 @@ currentDesignVector = v0;
 options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
-options.FunValCheck                 = 'on';
-options.MaxIter                     = 100;           % Maximum iterations
+options.FunValCheck                 = 'off';        % When turned on displays an error when the objective function or constraints return a value that is complex, NaN, or Inf. By turning it off, fmincon can handle NaN values
+options.MaxIter                     = 100;          % Maximum iterations
 options.ScaleProblem                = true;         % Normalization of the design vector
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.FunctionTolerance           = 1e-9; % Convergence criterion: if the change in the objective function in one iteration is lower than the tolerance than the optimization stops
-options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
-options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation, @stopRelChange}; % calls functions at the end of each iteration. 
+options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation}; % calls functions at the end of each iteration. 
 % ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
-
 
 optimStart = tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@Optimizer, v0, [], [], [], [], lb, ub, @constraints, options);
 optimEnd = toc(optimStart);
-
 
 % Plot of the convergence history of the objective function 
 figure(11)
@@ -205,12 +202,12 @@ save("iterations.mat", "ITERATIONS", "-mat") % fval, constraints, wing weight, d
 save("bounds.mat", "BOUNDS", "-mat")         % [lb ub] original and normalized
 cd ..\..\
 
-% display all of the optimization results
-dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
-
-% denormalize X
+% denormalize X and f
+FVAL = FVAL * FixedValues.Performance.R_ref;
 final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
+% display all of the optimization results
+dispRes(x, FVAL, c1(end), c2(end), W_wing_hist(end))
 
 figNumbers = randi(1e9, 6, 1);
 
@@ -260,7 +257,6 @@ T.FontName = "Times New Roman";
 ylabel("y/c", FontSize=15)
 xlabel("x/c", FontSize=15)
 axis normal
-
 
 % plot wing planforms with and without tanks
 

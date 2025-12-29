@@ -11,7 +11,7 @@ function stop = stopRelChange(~, optimValues, state)
 
     switch state
         case "init"
-            previousF = [];
+            previousF = optimValues.fval;
             iterStall = 0;
 
         case "iter"
@@ -35,7 +35,8 @@ function stop = stopRelChange(~, optimValues, state)
                             tolRel, maxStall);
                 stop = true;
             end
-
+            previousF = optimValues.fval;
+            
         case "done" % do nothing in case solver is already done
     end
 end

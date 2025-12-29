@@ -3,10 +3,6 @@ function [] = dispRes(x, FVAL, c1, c2, W_wing)
 format short
 global FixedValues
 
-% denormalize the results
-
-x = normalize(x, 'denorm', FixedValues.Key.designVector);
-
 % optimized variables
 A2 = x(20);
 LE_sweep = x(19);

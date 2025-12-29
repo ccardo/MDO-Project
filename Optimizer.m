@@ -135,9 +135,11 @@ try
 
 catch ME
     warning("off", "backtrace")
-    warning("Iteration Failed: Setting the Range to 0.")
+    warning("Iteration Failed: Setting the Range to NaN.")
     warning("on", "backtrace")
-    R = 0;
+    R = NaN; % By setting the range to NaN the algorithm knows to not 
+    % explore this region of the design space without "breaking" the
+    % gradient evaluation (which occurs if R is set to zero)
     warning(ME.message)
 end
 
