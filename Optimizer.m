@@ -163,7 +163,7 @@ catch ME
 end
 
 
-% Evaluate the output of the objective function (normalized by 10 000 km)
+% Evaluate the objective function (normalized by initial range) 
 f = -R / FixedValues.Performance.R_ref;
 
 
