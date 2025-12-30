@@ -105,6 +105,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         error("ERROR: could not change directory to Q3D from Aerodynamics")
     end
     
+    % if D is NaN, sqp will handle it.
     alpha = Res.Alpha;
     L_des = q * S * Res.CLwing;
     D_des_wing = q * S * Res.CDwing;

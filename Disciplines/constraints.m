@@ -25,9 +25,10 @@ function [c, ceq] = constraints(~)
     c = [c1; c2];
     ceq = [];
     
-    % in case MTOW = NaN, violate constraints
+    % in case c = [], violate constraints
     if any(isnan(c)) || any(isinf(c)) || isempty(c)
-        warning("constraints returned NaN or Inf. Setting c = 1e9;")
+        warning("constraints returned NaN or Inf.")
+        c(:,:) = NaN;
     end
 
     % display available fuel tank volume with constant W_f

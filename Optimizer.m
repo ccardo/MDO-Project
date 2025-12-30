@@ -106,6 +106,7 @@ end
 
 % --------------------------- RUN DISCIPLINES --------------------------- %;
 
+unexpectedErrorCounter = 0;
 
 try
     % initial target for coupling variable W_wing, from previous iteration
@@ -117,7 +118,7 @@ try
     W_wing = MDA(Aircraft, W_wing_i, v);
 
     if isnan(W_wing) || isempty(W_wing)
-        error("Unfeasible design.")
+        error("Unfeasible design. Empty W_wing.")
     end
    
     % Outside of the MDA, run additional disciplines
@@ -125,7 +126,7 @@ try
     R = Performance(L_des, D_des, W_wing, v);
 
     if isnan(R)
-        error("R is NaN.")
+        error("Unfeasible design. R is NaN.")
     end
     
     % output the final optimized values and the iteration counter of the MDA
@@ -134,13 +135,31 @@ try
     
 
 catch ME
+    
+    % stop algorithm execution on unexpected errors for 5 consecutive
+    % iterations.
+    
+    if contains(ME.message, "has produced an unexpected error")
+        unexpectedErrorCounter = unexpectedErrorCounter + 1;
+    else
+        unexpectedErrorCounter = 0;
+    end
+
+    if unexpectedErrorCounter == 5 && ...
+       contains(ME.message, "has produced an unexpected error")
+        rethrow(ME)
+    end
+
     warning("off", "backtrace")
     warning("Iteration Failed: Setting the Range to NaN.")
     warning("on", "backtrace")
-    R = NaN; % By setting the range to NaN the algorithm knows to not 
+    warning(ME.message)
+
+    % By setting the range to NaN the algorithm knows to not 
     % explore this region of the design space without "breaking" the
     % gradient evaluation (which occurs if R is set to zero)
-    warning(ME.message)
+    R = NaN; 
+    
 end
 
 
