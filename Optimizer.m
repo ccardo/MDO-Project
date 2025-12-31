@@ -136,8 +136,7 @@ try
 
 catch ME
     
-    % stop algorithm execution on unexpected errors for 5 consecutive
-    % iterations.
+    % stop algorithm execution on unexpected error for 5 consecutive times.
     
     if contains(ME.message, "has produced an unexpected error")
         unexpectedErrorCounter = unexpectedErrorCounter + 1;
@@ -146,7 +145,7 @@ catch ME
     end
 
     if unexpectedErrorCounter == 5 && ...
-       contains(ME.message, "has produced an unexpected error")
+        contains(ME.message, "has produced an unexpected error")
         rethrow(ME)
     end
 

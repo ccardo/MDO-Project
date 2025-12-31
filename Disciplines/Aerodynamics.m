@@ -42,7 +42,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         lastwarn("")
         warning("off", "backtrace")
 
-        % set a 30-second timer for Aero to complete, else mark it as an 
+        % set a 120-second timer for Aero to complete, else mark it as an 
         % error. Do this using a parallel worker so it can kill the process
         %  if the solver times out. Same as for the MDA.
         
@@ -59,23 +59,23 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
             Aircraft);
 
         startingTime = tic;
-        while toc(startingTime) < 30
+        while toc(startingTime) < 120
             % if finishes early, continue without a problem
             if Aero.State == "finished"
                 break
             end
         end
 
-        % if function is still running after 30 seconds, warning + error
+        % if function is still running after 120 seconds, warning + error
         if Aero.State ~= "finished"
             cancelAll(pool.FevalQueue)
             cancel(Aero)
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
-            warning("Aerodynamics has been running for more than 30 seconds.");
+            warning("Q3D [AER] has been running for more than 30 seconds.");
             warning("on", "backtrace")
-            error("Aerodynamics has been running for more than 30 seconds.")
+            error("Q3D [AER] has been running for more than 30 seconds.")
         end
         
         % if q3d outputs some errors for some reason then boom

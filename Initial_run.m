@@ -1,9 +1,7 @@
 
-global projectDirectory
 global FixedValues
 global Constraints
 
-projectDirectory = cd;
 
 % Initial values
 

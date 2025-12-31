@@ -1,7 +1,5 @@
 function [result] = changeDirSafe(dirName)
     
-    projectDirectory = "MDO-Project";
-    
     if nargin == 0
         result = -1;
         return
@@ -30,15 +28,18 @@ function [result] = changeDirSafe(dirName)
         result = 1;
 
     % else, if the current working directory is projectDirectory then stay 
-    % in the same folder and change to dirName
+    % in the same folder and change to dirName (check: contains main, MDA,
+    % Optimizer) 
 
-    elseif contains(parentFolder, projectDirectory)
+    elseif any(strcmp(deblank(string(ls)), "main.m")) && ...
+            any(strcmp(deblank(string(ls)), "MDA.m")) && ...
+            any(strcmp(deblank(string(ls)), "Optimizer.m"))
         cd(dirName)
         result = 1;
 
     % in any other case: return an error
     else
+        result = -1;
         error("ERROR: current working directory outside of scope: "+parentFolder)
-        result = 1;
     end
 end
