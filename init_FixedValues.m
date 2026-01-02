@@ -29,8 +29,3 @@ FixedValues.Performance.Ma_des_ref = 0.82;      % [-]
 FixedValues.Performance.Ma_MO = 0.86;           % [-]
 FixedValues.Performance.V_MO = 168.3;           % [m/s] EAS
 FixedValues.Performance.h_MO = 10700;           % [m]
-
-% to get the reference aircraft geometry
-fprintf("Defining initial configuration.\n")
-run Initial_run.m
-fprintf("Reference aircraft configured.\n")

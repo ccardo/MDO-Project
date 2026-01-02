@@ -1,6 +1,5 @@
 format short
 close all
-% clear
 clc
 
 % make sure to start this script in the appropriate project directory
@@ -17,6 +16,10 @@ addpath(genpath("EMWET\"))
 addpath(genpath("Q3D\"))
 
 run init_FixedValues.m
+% to get the reference aircraft geometry
+fprintf("Defining initial configuration.\n")
+run Initial_run.m
+fprintf("Reference aircraft configured.\n")
 
 % Requires: Parallel Processing Toolbox
 % create a new background pool (if there is none)
@@ -155,23 +158,8 @@ ylabel("Objective function")
 grid minor
 
 % Plots of the convergence history of each single constraint function
-figure(12)
-set(gcf, 'Name', 'Constraints', 'NumberTitle', 'off')
-c1 = c_hist(:,1);
-c2 = c_hist(:,2);
-plot(0:iterCount, c1, 'r.-', 'MarkerSize', 25, "LineWidth", 2)
-hold on
-plot(0:iterCount, c2, 'b.-', 'MarkerSize', 25, "LineWidth", 2)
-axis tight
-ylim([min(c_hist, [], "all")-0.02, max(c_hist, [], "all")+0.02])
-title("Convergence history of the constraints")
-xlabel("Iteration")
-ylabel("Constraint value")
-L = legend("Constraint on wing loading", "Constraint on fuel tank volume");
-L.FontSize = 15;
-L.Location = "best";
-hold off
-grid minor
+
+plotConstraints(c_hist, iterCount)
 
 
 % create a non-existing folder
