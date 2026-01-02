@@ -15,8 +15,10 @@ addpath("Functions\")
 addpath(genpath("EMWET\"))
 addpath(genpath("Q3D\"))
 
+% define all the values that are fixed during the optimization process
 run init_FixedValues.m
-% to get the reference aircraft geometry
+
+% Initial run required to have a consistent intial design
 fprintf("Defining initial configuration.\n")
 run Initial_run.m
 fprintf("Reference aircraft configured.\n")
@@ -28,30 +30,30 @@ if isempty(pool)
     pool = parpool(1);
 end
 
-% Initial values
+% Initial values for the design vector
 
-Ma_des = 0.82;              % mach number 
+Ma_des = 0.82;              % mach number [-]
 h_des = 11800;              % altitude [m]
 c_kink = 7.514;             % chord at the kink [m]
-taper_outboard = 0.3077;    % taper ratio outboard
+taper_outboard = 0.3077;    % taper ratio outboard [-]
 T1 = 0.14863;               % \
 T2 = 0.069323;              % |
 T3 = 0.22575;               % |
-T4 = 0.040425;              % } top CST coefficients
+T4 = 0.040425;              % } top CST coefficients [-]
 T5 = 0.27305;               % |
 T6 = 0.17076;               % |
 T7 = 0.27171;               % /
 B1 = -0.15853;              % \
 B2 = -0.082473;             % |
 B3 = -0.16792;              % |
-B4 = -0.038631;             % } bottom CST coefficients
+B4 = -0.038631;             % } bottom CST coefficients [-]
 B5 = -0.26127;              % |
 B6 = 0.075531;              % |
 B7 = 0.077234;              % /
 LE_sweep = 31;              % leading edge sweep [deg]
 A2 = 20.81;                 % outer span [m]
 
-% bounds
+% lower bounds
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       11700                                             % h_des
       3                                                 % c_kink
@@ -73,6 +75,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10                                                % LE_sweep
       12];                                              % b2 
 
+% upper bounds
 ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
@@ -94,7 +97,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       50                                                % LE_sweep
       25];                                              % b2
 
-% initial values for design vector
+% Define the design vector
 x0 = [Ma_des
       h_des
       c_kink 
@@ -129,8 +132,8 @@ options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'off';        % When turned on displays an error when the objective function or constraints return a value that is complex, NaN, or Inf. By turning it off, fmincon can handle NaN values
-options.MaxIter                     = 100;          % Maximum iterations
-options.ScaleProblem                = true;         % Normalization of the design vector
+options.MaxIter                     = 100;          % Maximum number of iterations
+options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 5e-3;
@@ -157,12 +160,11 @@ xlabel("Iteration")
 ylabel("Objective function")
 grid minor
 
-% Plots of the convergence history of each single constraint function
+% Plots of the convergence history of the constraint functions
 
 plotConstraints(c_hist, iterCount)
 
-
-% create a non-existing folder
+% create a non-existing folder to store the optimization's results
 cd Results\
 subDirName = 0;
 while exist(num2str(subDirName), "dir")
@@ -175,7 +177,7 @@ mkdir(subDirName)
 OUTPUT.totalTime = optimEnd;
 OUTPUT;
 
-% put the results into a big struct:
+% put the results into a  struct:
 % ITERATIONS = iter_hist;
 % ITERATIONS.designVectorNorm = iter_hist.designVector;
 % ITERATIONS.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
@@ -183,11 +185,11 @@ ITERATIONS.fval = f_hist(:)';
 ITERATIONS.constraints = c_hist';
 ITERATIONS.wingWeight = W_wing_hist(:)';
 
-% also stuff together all the bounds
+% store the bounds
 BOUNDS.normalized = [lb, ub];
 BOUNDS.original;
 
-% save run results
+% save optimization run results
 cd(subDirName)
 save("output.mat", "OUTPUT", "-mat")         % fmincon output
 save("iterations.mat", "ITERATIONS", "-mat") % fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
@@ -404,7 +406,7 @@ light
 axis equal
 axis padded
 
-
+% save the plots in the same results folder
 cd Results\
 figuresDir = sprintf("%s\\figures", subDirName);
 mkdir(figuresDir)

@@ -14,11 +14,12 @@ if ~isempty(currentDesignVector)
         different = true;
     end
 end
-currentDesignVector = v;
+currentDesignVector = v; % update the current design vector so the plot of the wing geometry changes only when the design vector changes
 
+% denormalize the design vector
 v = normalize(v, 'denorm', FixedValues.Key.designVector);
 
-% get airfoil parameters (t, c)
+% get airfoil parameters (t, c) required for the plots
 Ti = v(5:11);
 Bi = v(12:18);
 chord = 1 - cos(linspace(0, pi/2));
@@ -27,22 +28,23 @@ chord = 1 - cos(linspace(0, pi/2));
 thickness = max(yt - yb);
 camber = max(1/2 * (yt + yb));
 
-% geometry creation in this function
+% Generate the geometry needed for the disciplines
 Aircraft = createGeom(v);
 
-% generate wing boxes and compute their volume
+% Compute the fuel tank volume
 Boxes = loftWingBox(Aircraft);
 volumes = zeros(1, length(Boxes));
 for i = 1:length(Boxes)
      volumes(i) = boxVolume(Boxes(i).X, Boxes(i).Y, Boxes(i).Z);
 end
 
-V = sum(volumes) * 1000; % [dm^3 = Liters]
+V = sum(volumes) * 1000; % the result is in m^3, however the fuel density is a value stored in kg/l [dm^3 = Liters]
 totalFuelVolume = 2*V;
 
-Constraints.VTank = totalFuelVolume;
+Constraints.VTank = totalFuelVolume; % required to evaluate the constraint on fuel tank volume
 
-% plot the current geometry if the thing is different
+% plot the current geometry if the design vector has changed from one
+% fucntion evaluation to another
 if different
 
     figure(10);
@@ -110,26 +112,26 @@ unexpectedErrorCounter = 0;
 
 try
     % initial target for coupling variable W_wing, from previous iteration
+    % of from the initial run
     W_wing_i = Constraints.W_wing;
     if isnan(W_wing_i)
-        W_wing_i = 60000;
+        W_wing_i = 60000; % if EMWET crashes, the initial guess is set to the reference value
     end
 
     W_wing = MDA(Aircraft, W_wing_i, v);
 
     if isnan(W_wing) || isempty(W_wing)
-        error("Unfeasible design. Empty W_wing.")
+        error("Unfeasible design. Empty W_wing.") % if Loads or Structure fails return an error that is caught by the try-catch
     end
    
-    % Outside of the MDA, run additional disciplines
+    % Outside of the MDA, run teh remaining disciplines
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
     R = Performance(L_des, D_des, W_wing, v);
 
     if isnan(R)
-        error("Unfeasible design. R is NaN.")
+        error("Unfeasible design. R is NaN.") % if Aerodynamics fails return an error that is caught by the try-catch
     end
     
-    % output the final optimized values and the iteration counter of the MDA
     vararg = [W_wing, L_des, D_des];
     fprintf("W_wing = %.1f kg\n", W_wing);
     
@@ -156,7 +158,7 @@ catch ME
 
     % By setting the range to NaN the algorithm knows to not 
     % explore this region of the design space without "breaking" the
-    % gradient evaluation (which occurs if R is set to zero)
+    % gradient evaluation 
     R = NaN; 
     
 end

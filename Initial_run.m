@@ -3,30 +3,30 @@ global FixedValues
 global Constraints
 
 
-% Initial values
+% Initial values for the design variables
 
-Ma_des = 0.82;              % mach number 
+Ma_des = 0.82;              % mach number [-]
 h_des = 11800;              % altitude [m]
 c_kink = 7.514;             % chord at the kink [m]
-taper_outboard = 0.3077;    % taper ratio outboard
+taper_outboard = 0.3077;    % taper ratio outboard [-]
 T1 = 0.14863;               % \
 T2 = 0.069323;              % |
 T3 = 0.22575;               % |
-T4 = 0.040425;              % } top CST coefficients
+T4 = 0.040425;              % } top CST coefficients [-]
 T5 = 0.27305;               % |
 T6 = 0.17076;               % |
 T7 = 0.27171;               % /
 B1 = -0.15853;              % \
 B2 = -0.082473;             % |
 B3 = -0.16792;              % |
-B4 = -0.038631;             % } bottom CST coefficients
+B4 = -0.038631;             % } bottom CST coefficients [-]
 B5 = -0.26127;              % |
 B6 = 0.075531;              % |
 B7 = 0.077234;              % /
 LE_sweep = 31;              % leading edge sweep [deg]
 A2 = 20.81;                 % outer span [m]
 
-% initial values for design vector
+% Define the design vector
 v = [Ma_des
       h_des
       c_kink 
@@ -49,13 +49,13 @@ v = [Ma_des
       A2];
 
 
-% geometric fixed parameters
+% Inport the geometric fixed parameters
 twist = FixedValues.Geometry.twist;
 fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
 dihedral = FixedValues.Geometry.dihedral;
 A1 = FixedValues.Geometry.A1;
 
-% geometric derived variables
+% Compute the geometric derived variables
 c_tip = taper_outboard * c_kink;
 x1 = 0;
 x2 = (A1)*tand(LE_sweep);
@@ -90,10 +90,8 @@ Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 % Spanwise location of the airfoil sections
 Aircraft.Wing.eta = [0; A1/(A1+A2); 1];  
 
-% SET REFERENCE AIRCRAFT IN FIXED VALUES
+% Set the reference aircraft in FixedValues
 FixedValues.Reference_Aircraft = Aircraft;
-% SET REFERENCE AIRCRAFT IN FIXED VALUES
-
 
 % compute fuel tank volume
 Boxes = loftWingBox(Aircraft, 20, 20);
@@ -135,7 +133,7 @@ FixedValues.Performance.D_A_W_q = D_A_W_new / q_des_ref;
 % run aero once again to find the actual D_res and L_res
 [L_des, D_des, ~] = Aerodynamics(Aircraft, W_wing, v);
 
-% find range
+% compute the range
 R = Performance(L_des, D_des, W_wing, v);
 FixedValues.Performance.R_ref = R;
 fprintf("initial R = %d km\n", round(R/1000));
@@ -154,6 +152,3 @@ if c(2) < 0
 else
     fprintf("Fuel tank volume constraint violated with c2 = %.2f \n", c(2));
 end
-
-% pause for a sec to be able to visualize it
-pause(1)

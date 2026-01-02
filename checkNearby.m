@@ -45,7 +45,7 @@ for i = 1:N
     V = sum(volumes) * 1000; % [dm^3 = Liters]
     totalFuelVolume = 2*V; % take into account the tanks in the two wings
     
-    Constraints.VTank = totalFuelVolume; % reuired to evaluate the constraint on fuel tank volume
+    Constraints.VTank = totalFuelVolume; % required to evaluate the constraint on fuel tank volume
 
     W_wing_i = 37317.2; % initial guess for the wing weight based on the optimized design
     W_wing = MDA(Aircraft, W_wing_i, v); % run both the Loads and Structures disciplines

@@ -9,10 +9,12 @@ global Constraints
     % start the iteration counter
     counter = 0;
 
-    % initialize W_wing
+    % initialize W_wing to evaluate the relative error in the first
+    % iteration
     W_wing = 1;
     
-    % run the loops for the disciplines that evaluate the W_wing
+    % run the loops for the disciplines that evaluate the coupling
+    % variable W_wing
     disp("[MDA] Running Q3D & EMWET...")
     tic
     while abs(W_wing-W_wing_i)/W_wing > error
@@ -31,14 +33,14 @@ global Constraints
             pool = parpool(1);
         end
         
-        % this creates the actual parallel thing (4 is the number of
+        % this creates the actual parallel worker (4 is the number of
         % expected outputs)
         LoadsStruct = parfeval(pool, @LoadStructEval, 4, ...
             Aircraft, W_wing_i, v, FixedValues);
 
         startingTime = tic;
         while toc(startingTime) < 30
-            % if finishes early, continue without a problem
+            % if it finishes early, continue without a problem
             if LoadsStruct.State == "finished"
                 break
             end
@@ -56,7 +58,8 @@ global Constraints
             error("Either Loads or Structures has been running for more than 30 seconds.")
         end
 
-        % if mda outputs some errors for some reason then boom
+        % if the mda outputs any errors then the process stops and the
+        % range is set to NaN
         if ~isempty(LoadsStruct.Error)
             exc = LoadsStruct.Error.remotecause{:};
             warning on
@@ -76,7 +79,7 @@ global Constraints
             error("Convergence took too many iterations in MDA.")
         end
 
-        % get actual output from function
+        % retrive the output from the Loads and Structures disciplines
         [W_wing, L_max, M_max, y_max] = LoadsStruct.OutputArguments{:};
 
         % if any resulting quantity is NaN or Inf, warning + error
@@ -92,7 +95,7 @@ global Constraints
 
         % add to counter & update constraints
         counter = counter +1;
-        Constraints.W_wing = W_wing;
+        Constraints.W_wing = W_wing; % required to evaluate the wing loading constraint
     end
     
     finish = toc;
