@@ -15,18 +15,18 @@ addpath(genpath("EMWET\"))
 addpath(genpath("Q3D\"))
 
 run init_FixedValues.m
-
+run Initial_run.m
 % Load the optimized design vector
 load("C:\Users\ronch\Documents\MATLAB\MDO-Project\Results\3\optDesignVector.mat")
 load("C:\Users\ronch\Documents\MATLAB\MDO-Project\Results\3\objHistory.mat")
 
-N = 10; % number of different optimized designs checked
+N = 1000; % number of different optimized designs checked
 
 % Perturb slightly the design vector and check if any better solutions are
 % found
 for i = 1:N
     for k = 1:length(final_V)
-        r = 0.98 + (1.02 - 0.98 ) * rand;
+        r = 0.99 + (1.01 - 0.99 ) * rand;
         new_V(k) = final_V(k) *r;
     end
     
@@ -60,19 +60,19 @@ for i = 1:N
     W_wing = MDA(Aircraft, W_wing_i, v);
 
     if isnan(W_wing) || isempty(W_wing)
-        error("Unfeasible design. Empty W_wing.")
+        continue
     end
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
     R = Performance(L_des, D_des, W_wing, v);
 
     if isnan(R)
-        error("Unfeasible design. R is NaN.")
+        continue
     end
 
     f_new = -R;
     [c,~] = constraints();
     if c(1) < 0 && c(2) < 0
-        if f_new < f_hist(end) && isreal(f_new)
+        if f_new < f_hist(end) && isreal(f_new) && isreal(W_wing)
             fprintf('Improved objective function of %f for the following design vector:\n', f_new)
             improved_V = new_V;
             disp(improved_V)
