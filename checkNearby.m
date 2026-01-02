@@ -2,7 +2,6 @@ format short
 close all
 clc
 
-
 global projectDirectory
 global Constraints
 projectDirectory = cd;
@@ -24,27 +23,19 @@ N = 1000; % number of different optimized designs checked
 
 % Perturb slightly the design vector and check if any better solutions are
 % found
+
 for i = 1:N
     for k = 1:length(final_V)
-        r = 0.99 + (1.01 - 0.99 ) * rand;
-        new_V(k) = final_V(k) *r;
+        r = 0.99 + (1.01 - 0.99 ) * rand; % generate a random perturbation ranging from -1% to +1%
+        new_V(k) = final_V(k) *r; % define the test design vector
     end
     
     v = new_V';
     
-    % get airfoil parameters (t, c)
-    Ti = v(5:11);
-    Bi = v(12:18);
-    chord = 1 - cos(linspace(0, pi/2));
-    [~, yt] = CSTcurve(chord, Ti);
-    [~, yb] = CSTcurve(chord, Bi);
-    thickness = max(yt - yb);
-    camber = max(1/2 * (yt + yb));
-    
-    % geometry creation in this function
+    % Generate the geometry needed for the disciplines
     Aircraft = createGeom(v);
     
-    % generate wing boxes and compute their volume
+    % Compute the fuel tank volume
     Boxes = loftWingBox(Aircraft);
     volumes = zeros(1, length(Boxes));
     for l = 1:length(Boxes)
@@ -52,25 +43,25 @@ for i = 1:N
     end
     
     V = sum(volumes) * 1000; % [dm^3 = Liters]
-    totalFuelVolume = 2*V;
+    totalFuelVolume = 2*V; % take into account the tanks in the two wings
     
-    Constraints.VTank = totalFuelVolume;
+    Constraints.VTank = totalFuelVolume; % reuired to evaluate the constraint on fuel tank volume
 
-    W_wing_i = 37317.2;
-    W_wing = MDA(Aircraft, W_wing_i, v);
+    W_wing_i = 37317.2; % initial guess for the wing weight based on the optimized design
+    W_wing = MDA(Aircraft, W_wing_i, v); % run both the Loads and Structures disciplines
 
     if isnan(W_wing) || isempty(W_wing)
-        continue
+        continue % if either Loads or Structure fails, skip the iteration
     end
     [L_des, D_des] = Aerodynamics(Aircraft, W_wing, v);
     R = Performance(L_des, D_des, W_wing, v);
 
     if isnan(R)
-        continue
+        continue % if aerodynbamics fails skip the iteration
     end
 
     f_new = -R;
-    [c,~] = constraints();
+    [c,~] = constraints(); % evaluate the constraint functions
     if c(1) < 0 && c(2) < 0
         if f_new < f_hist(end) && isreal(f_new) && isreal(W_wing)
             fprintf('Improved objective function of %f for the following design vector:\n', f_new)
