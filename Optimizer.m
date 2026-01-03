@@ -159,7 +159,7 @@ catch ME
     % By setting the range to NaN the algorithm knows to not 
     % explore this region of the design space without "breaking" the
     % gradient evaluation 
-    R = 0; 
+    R = NaN; 
     
 end
 
