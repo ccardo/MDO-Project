@@ -51,7 +51,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     
     disp("[AER] Running Q3D...")
    
-    run Q3D in parallel (2 expected outputs)
+    % run Q3D in parallel (2 expected outputs)
     Aero = parfeval(pool, @AeroEval, 2, ...
         Aircraft);
 
