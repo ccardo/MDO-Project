@@ -136,7 +136,7 @@ options.MaxIter                     = 100;          % Maximum number of iteratio
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 5e-3;
+options.FiniteDifferenceStepSize    = 1e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
@@ -201,7 +201,7 @@ FVAL = FVAL * FixedValues.Performance.R_ref;
 final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
 % display all of the optimization results
-dispRes(final_V, FVAL, c1(end), c2(end), W_wing_hist(end))
+% dispRes(final_V, FVAL, c1(end), c2(end), W_wing_hist(end))
 
 figNumbers = randi(1e9, 6, 1);
 
