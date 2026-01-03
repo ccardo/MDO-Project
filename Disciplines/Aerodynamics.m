@@ -1,6 +1,7 @@
 function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
 
     global FixedValues
+    global projectDirectory
 
     h_des = v(2);
     Ma_des = v(1);
@@ -35,7 +36,8 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     Aircraft.Visc = 1;
 
     % check current directory and change to Q3D
-    result = changeDirSafe("Q3D");
+    % result = changeDirSafe("Q3D");
+    result = 1;
 
     if result
         
@@ -73,9 +75,12 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
-            warning("Q3D [AER] has been running for more than 30 seconds.");
+            warning("Q3D [AER] has been running for more than 120 seconds.");
             warning("on", "backtrace")
-            error("Q3D [AER] has been running for more than 30 seconds.")
+            
+            parfeval(pool, @changeWorkerDir, 0, projectDirectory);
+
+            error("Q3D [AER] has been running for more than 120 seconds.")
         end
         
         % if q3d outputs some errors for some reason then boom
@@ -100,7 +105,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         finish = Aero.OutputArguments{2};
 
         disp("[AER] Time elapsed: " + finish)
-        cd ..\
+        % cd ..\
     else
         error("ERROR: could not change directory to Q3D from Aerodynamics")
     end
@@ -119,7 +124,13 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         tic;
         Res = Q3D_solver(Aircraft);
         finish = toc;
+
+        cd ..\
     
+    end
+
+    function changeWorkerDir(projectDirectory)
+        cd(projectDirectory)
     end
 
 end

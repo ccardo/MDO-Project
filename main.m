@@ -164,6 +164,9 @@ grid minor
 
 plotConstraints(c_hist, iterCount)
 
+disp(cd)
+disp(projectDirectory)
+
 % create a non-existing folder to store the optimization's results
 cd Results\
 subDirName = 0;
