@@ -201,7 +201,7 @@ FVAL = FVAL * FixedValues.Performance.R_ref;
 final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
 % display all of the optimization results
-dispRes(final_V, FVAL, c1(end), c2(end), W_wing_hist(end))
+% dispRes(final_V, FVAL, c1(end), c2(end), W_wing_hist(end))
 
 figNumbers = randi(1e9, 6, 1);
 
