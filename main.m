@@ -55,9 +55,9 @@ A2 = 20.81;                 % outer span [m]
 
 % lower bounds
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
-      11700                                             % h_des
-      3                                                 % c_kink
-      0.1                                               % taper_outboard
+      10700                                             % h_des
+      5                                                 % c_kink
+      0.2                                               % taper_outboard
     0.0500                                              % T1
     0.0100                                              % T2
     0.0100                                              % T3
@@ -136,7 +136,7 @@ options.MaxIter                     = 100;          % Maximum number of iteratio
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 1e-2;
+options.FiniteDifferenceStepSize    = 1e-3;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
@@ -178,9 +178,9 @@ OUTPUT.totalTime = optimEnd;
 OUTPUT;
 
 % put the results into a  struct:
-% ITERATIONS = iter_hist;
-% ITERATIONS.designVectorNorm = iter_hist.designVector;
-% ITERATIONS.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
+ITERATIONS = iter_hist;
+ITERATIONS.designVectorNorm = iter_hist.designVector;
+ITERATIONS.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
 ITERATIONS.fval = f_hist(:)';
 ITERATIONS.constraints = c_hist';
 ITERATIONS.wingWeight = W_wing_hist(:)';

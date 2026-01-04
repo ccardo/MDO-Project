@@ -73,9 +73,9 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
-            warning("Q3D [AER] has been running for more than 30 seconds.");
+            warning("Q3D [AER] has been running for more than 120 seconds.");
             warning("on", "backtrace")
-            error("Q3D [AER] has been running for more than 30 seconds.")
+            error("Q3D [AER] has been running for more than 120 seconds.")
         end
         
         % if q3d outputs some errors for some reason then boom
