@@ -136,7 +136,7 @@ options.MaxIter                     = 100;          % Maximum number of iteratio
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 1e-3;
+options.FiniteDifferenceStepSize    = 5e-3;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
@@ -163,6 +163,9 @@ grid minor
 % Plots of the convergence history of the constraint functions
 
 plotConstraints(c_hist, iterCount)
+
+disp(cd)
+disp(projectDirectory)
 
 % create a non-existing folder to store the optimization's results
 cd Results\

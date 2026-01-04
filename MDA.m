@@ -22,54 +22,10 @@ global Constraints
         if (counter > 0)
             W_wing_i = W_wing; 
         end
-        
-        % set a 30-second timer for Loads and Structures to complete,
-        % else mark it as an error. Do this using a parallel worker so it
-        % can kill the process if the solver times out.
-        
-        % create a new background pool (if there is none)
-        pool = gcp('nocreate');
-        if isempty(pool)
-            pool = parpool(1);
-        end
-        
-        % this creates the actual parallel worker (4 is the number of
-        % expected outputs)
-        LoadsStruct = parfeval(pool, @LoadStructEval, 4, ...
-            Aircraft, W_wing_i, v, FixedValues);
 
-        startingTime = tic;
-        while toc(startingTime) < 30
-            % if it finishes early, continue without a problem
-            if LoadsStruct.State == "finished"
-                break
-            end
-        end
-        
-        % if function is still running after 30 seconds, warning + error
-        if LoadsStruct.State ~= "finished"
-            cancelAll(pool.FevalQueue)
-            cancel(LoadsStruct)
-            warning on
-            warning("off", "backtrace")
-            warning("off", "verbose")
-            warning("Either Loads or Structures has been running for more than 30 seconds.");
-            warning("on", "backtrace")
-            error("Either Loads or Structures has been running for more than 30 seconds.")
-        end
-
-        % if the mda outputs any errors then the process stops and the
-        % range is set to NaN
-        if ~isempty(LoadsStruct.Error)
-            exc = LoadsStruct.Error.remotecause{:};
-            warning on
-            warning("off", "backtrace")
-            warning("off", "verbose")
-            warning("MDA has produced an unexpected error");
-            warning("on", "backtrace")
-            throw(exc)
-        end
-
+        [W_wing, L_max, M_max, y_max] = LoadStructEval(Aircraft, W_wing_i, v, FixedValues);
+    
+        % if too many MDA iterations, means it's stuck => error
         if counter >= 20
             warning on
             warning("off", "backtrace")
@@ -78,9 +34,6 @@ global Constraints
             warning("on", "backtrace")
             error("Convergence took too many iterations in MDA.")
         end
-
-        % retrive the output from the Loads and Structures disciplines
-        [W_wing, L_max, M_max, y_max] = LoadsStruct.OutputArguments{:};
 
         % if any resulting quantity is NaN or Inf, warning + error
         if any(isnan([W_wing, norm(L_max), norm(M_max), norm(y_max)])) || ...
