@@ -132,14 +132,16 @@ options = optimoptions('fmincon');
 options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'off';        % When turned on displays an error when the objective function or constraints return a value that is complex, NaN, or Inf. By turning it off, fmincon can handle NaN values
-options.MaxIter                     = 100;          % Maximum number of iterations
+options.MaxIter                     = 1000;          % Maximum number of iterations
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 5e-3;
+options.FiniteDifferenceStepSize    = 1e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower than the tolerance than the optimization stops
+options.FunctionTolerance           = 1e-6;
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
+options.MaxFunEvals                 = 10000;
 options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation, @stopRelChange}; % calls functions at the end of each iteration. 
 % ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
@@ -149,9 +151,8 @@ optimStart = tic;
 optimEnd = toc(optimStart);
 
 % Plot of the convergence history of the objective function 
-figure(11)
+figure('Name', 'Obj function', 'NumberTitle', 'off')
 iterCount = size(c_hist, 1)-1;
-set(gcf, 'Name', 'Obj function', 'NumberTitle', 'off')
 plot(0:iterCount, f_hist, 'k.-', "MarkerSize", 25, "LineWidth",2)
 axis tight
 ylim([min(f_hist)-0.01, max(f_hist)+0.01])
