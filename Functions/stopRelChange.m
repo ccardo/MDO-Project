@@ -19,8 +19,8 @@ function stop = stopRelChange(~, optimValues, state)
 
             % tolerances for relative change
             % tolRel = 1e-5 is under a kilometer
-            tolRel = 1e-5;
-            tolStall = 5;
+            tolRel = 1e-6;
+            tolStall = 4;
 
             changeRel = abs((currentF - previousF)/previousF);
             fprintf("Relative change in R: %.2e", changeRel)
@@ -32,7 +32,7 @@ function stop = stopRelChange(~, optimValues, state)
 
             if iterStall > tolStall
                 fprintf('Stopping: relative ΔR/R < %.2e for %d iterations\n', ...
-                            tolRel, maxStall);
+                            tolRel, tolStall);
                 stop = true;
             end
             previousF = optimValues.fval;
