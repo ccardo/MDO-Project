@@ -2,33 +2,33 @@ function [] = inputStructures(Aircraft, MTOW, v, FixedValues)
 
     % global FixedValues
 
-    MZF         =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
-    n_max      =   FixedValues.Performance.nMax;  
-    span        =   FixedValues.Geometry.A1 + v(20);            %[m]
-    c_root =    Aircraft.Wing.Geom(1,4); 
-    c_kink =    Aircraft.Wing.Geom(2,4);
-    c_tip  =    Aircraft.Wing.Geom(3,4);          
+    MZF           =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
+    n_max         =   FixedValues.Performance.nMax;  
+    span          =   FixedValues.Geometry.A1 + v(20);            %[m]
+    c_root        =    Aircraft.Wing.Geom(1,4); 
+    c_kink        =    Aircraft.Wing.Geom(2,4);
+    c_tip         =    Aircraft.Wing.Geom(3,4);          
     spar_front_1  =    FixedValues.Geometry.spars(1,1);
     spar_front_2  =    FixedValues.Geometry.spars(2,1);
     spar_front_3  =    FixedValues.Geometry.spars(3,1);
     spar_rear_1   =    FixedValues.Geometry.spars(1,2);
     spar_rear_2   =    FixedValues.Geometry.spars(2,2);
     spar_rear_3   =    FixedValues.Geometry.spars(3,2);
-    ftank_start =    FixedValues.Geometry.tank(1);
-    ftank_end   =    FixedValues.Geometry.tank(2);
-    eng_num     =    1; % for now we assume no engines, therefore almost no mass
-    eng_ypos    =    0.1;
-    eng_mass    =    0.1;         %kg
-    E_al        =    70.1E9;       %N/m2 
-    rho_al      =    2800;         %kg/m3
-    Ft_al       =    5.3E8;        %N/m2
-    Fc_al       =    5.3E8;        %N/m2
-    pitch_rib   =    0.5;          %[m]
-    eff_factor  =    0.96;             
-    Airfoil     =    'current_airfoil';
-    section_num =    3;
-    airfoil_num =    3;
-    A = wingArea(Aircraft.Wing.Geom);
+    ftank_start   =    FixedValues.Geometry.tank(1);
+    ftank_end     =    FixedValues.Geometry.tank(2);
+    eng_num       =    1; 
+    eng_ypos      =    0.3;          % [%]
+    eng_mass      =    5851;         % P&W 4170 [kg]
+    E_al          =    70.1E9;       % [N/m2] 
+    rho_al        =    2800;         % [kg/m3]
+    Ft_al         =    5.3E8;        % [N/m2]
+    Fc_al         =    5.3E8;        % [N/m2] 
+    pitch_rib     =    0.5;          % [m]
+    eff_factor    =    0.96;             
+    Airfoil       =    'current_airfoil';
+    section_num   =    3;
+    airfoil_num   =    3;
+    A             = wingArea(Aircraft.Wing.Geom);
     
     % define the leading edge postions of the airfoils that generate the
     % planform
