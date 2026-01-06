@@ -1,7 +1,5 @@
 function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v, FixedValues)
     
-    % global FixedValues
-
     h_des = v(2);
     a = airSoundSpeed(h_des);
 
@@ -72,7 +70,7 @@ function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v, FixedValues)
         Cm = [Cm(1); Cm(:)];
     end
     
-    y_max = Yst;
+    y_max = Yst./(FixedValues.Geometry.A1+v(end));
     L_max = q * Cl .* c;
     M_max = q * Cm .* c * MAC;
 
