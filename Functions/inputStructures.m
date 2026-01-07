@@ -4,7 +4,7 @@ function [] = inputStructures(Aircraft, MTOW, v, FixedValues)
 
     MZF           =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
     n_max         =    FixedValues.Performance.nMax;  
-    span          =   2* (FixedValues.Geometry.A1 + v(20));            %[m]
+    span          =    2* (FixedValues.Geometry.A1 + v(20));            %[m]
     c_root        =    Aircraft.Wing.Geom(1,4); 
     c_kink        =    Aircraft.Wing.Geom(2,4);
     c_tip         =    Aircraft.Wing.Geom(3,4);          
