@@ -15,11 +15,20 @@ function stop = outInformation(x, optimValues, state)
 
         case 'iter'
             % save those values for every iteration
-            iterHistory.firstOrderOptimality(:,end+1) = optimValues.firstorderopt;
-            iterHistory.constraintViolation(:,end+1) = optimValues.constrviolation;
-            iterHistory.stepSize(:,end+1) = optimValues.stepsize;
-            iterHistory.functionCount(:,end+1) = optimValues.funccount;
-            iterHistory.designVector(:,end+1) = x;
+            try 
+                iterHistory.firstOrderOptimality(:,end+1) = optimValues.firstorderopt;
+                iterHistory.constraintViolation(:,end+1) = optimValues.constrviolation;
+                iterHistory.stepSize(:,end+1) = optimValues.stepsize;
+                iterHistory.functionCount(:,end+1) = optimValues.funccount;
+                iterHistory.designVector(:,end+1) = x;
+            catch
+                disp(optimValues)
+                iterHistory.firstOrderOptimality(:,end+1) = NaN;
+                iterHistory.constraintViolation(:,end+1) = NaN;
+                iterHistory.stepSize(:,end+1) = NaN;
+                iterHistory.functionCount(:,end+1) = NaN;
+                iterHistory.designVector(:,end+1) = x;
+            end
 
         case 'done'
             % return the result to the main.m workspace

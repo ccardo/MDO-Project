@@ -9,6 +9,12 @@ function stop = stopRelChange(~, optimValues, state)
     persistent previousF iterStall
     stop = false;
 
+    try
+        currentF = optimValues.fval;
+    catch
+        optimValues.fval = 1e9;
+    end
+
     switch state
         case "init"
             previousF = optimValues.fval;
