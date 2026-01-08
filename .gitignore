@@ -68,3 +68,5 @@
 *.asv
 
 /results_1.mat
+
+/a330.weight
