@@ -139,7 +139,6 @@ options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfi
 options.FiniteDifferenceType        = 'central';
 options.FiniteDifferenceStepSize    = 5e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
-options.FunctionTolerance           = 1e-6; % Convergence criterion: if the relative variation of the objective function from one iteration to the next is lower than the tolerance then the optimization stops. NOTE: this convergence criterion does not work for the SQP algorithm 
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
 options.MaxFunEvals                 = 10000;

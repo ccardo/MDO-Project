@@ -111,7 +111,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     function [Res, finish] = AeroEval(Aircraft)
         % Q3D wrapper for ParfEval
 
-        changeDirSafe("Q3D")
+        changeDirSafe("Q3D");
 
         tic;
         Res = Q3D_solver(Aircraft);
