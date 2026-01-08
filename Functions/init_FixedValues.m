@@ -16,7 +16,7 @@ FixedValues.Geometry.spars = [0.10     0.70
 
 FixedValues.Weight.rho_f = 0.81;                % [-]
 FixedValues.Weight.W_f = 85765;                 % [kg]
-FixedValues.Weight.A_W = 87478;                 % [kg]
+FixedValues.Weight.A_W = 116235;                % [kg] (this is just the intial guess)
 FixedValues.Weight.deltaPayload = 12365;        % [kg]
 
 FixedValues.Performance.nMax = 2.5;             % [-]

@@ -51,7 +51,6 @@ v = [Ma_des
 
 % Inport the geometric fixed parameters
 twist = FixedValues.Geometry.twist;
-fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
 dihedral = FixedValues.Geometry.dihedral;
 A1 = FixedValues.Geometry.A1;
 
@@ -63,9 +62,9 @@ x3 = (A1 + A2)*tand(LE_sweep);
 y1 = 0;
 y2 = A1;
 y3 = A1 + A2;
-z1 = -(fuselage_radius)*tand(dihedral);
-z2 = (A1 - fuselage_radius) * tand(dihedral);
-z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
+z1 = tand(dihedral);
+z2 = A1 * tand(dihedral);
+z3 = (A1 + A2) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
 
 

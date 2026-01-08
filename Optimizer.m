@@ -115,7 +115,7 @@ try
     % of from the initial run
     W_wing_i = Constraints.W_wing;
     if isnan(W_wing_i)
-        W_wing_i = 60000; % if EMWET crashes, the initial guess is set to the reference value
+        W_wing_i = 30000; % if EMWET crashes, the initial guess is set close to the initial value
     end
 
     W_wing = MDA(Aircraft, W_wing_i, v);
@@ -156,10 +156,12 @@ catch ME
     warning("on", "backtrace")
     warning(ME.message)
 
-    % By setting the range to NaN the algorithm knows to not 
-    % explore this region of the design space without "breaking" the
-    % gradient evaluation 
-    R = NaN; 
+    % By setting the range to NaN the algorithm backtracks, however in some
+    % cases it also cannot evaluate the gradient of the function in too
+    % many directions and it automatically terminates the optimization. By
+    % artificially putting the range to zero, the gradient can still be
+    % evaluated but the algorithm will know not to go in that direction
+    R = 0; 
     
 end
 
