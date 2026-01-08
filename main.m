@@ -9,6 +9,10 @@ global FixedValues
 global currentDesignVector
 projectDirectory = cd;
 
+if ~contains(projectDirectory, "Project")
+    warning("Current project directory is: %s\nMake sure this is intentional.", projectDirectory)
+end
+
 % add paths
 addpath(projectDirectory)
 addpath("Disciplines\")
@@ -137,13 +141,13 @@ options.MaxIter                     = 1000;          % Maximum number of iterati
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 5e-2;
+options.FiniteDifferenceStepSize    = 1e-1;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
 options.MaxFunEvals                 = 10000;
 options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation, @stopRelChange}; % calls functions at the end of each iteration. 
-% ^^^ Needs to have the following structure: stop = outFun(x, otimValues, state)
+% ^^^ Needs to have the following structure: stop = outFun(x, optimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
 optimStart = tic;
@@ -165,8 +169,9 @@ grid minor
 
 plotConstraints(c_hist, iterCount)
 
-disp(cd)
-disp(projectDirectory)
+fprintf("Current directory: %s", cd)
+fprintf("Current project directory: %s", projectDirectory)
+disp(newline)
 
 % create a non-existing folder to store the optimization's results
 cd Results\
