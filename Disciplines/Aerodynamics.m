@@ -35,10 +35,6 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
 
     Aircraft.Visc = 1;
 
-        
-    lastwarn("")
-    warning("off", "backtrace")
-
     % set a 120-second timer for Aero to complete, else mark it as an 
     % error. Do this using a parallel worker so it can kill the process
     %  if the solver times out. Same as for the MDA.
@@ -52,7 +48,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     disp("[AER] Running Q3D...")
    
     % run Q3D in parallel (2 expected outputs)
-    Aero = parfeval(pool, @AeroEval, 2, ...
+    Aero = parfeval(pool, @AeroEval, 3, ...
         Aircraft);
 
     startingTime = tic;
@@ -89,18 +85,16 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
         throw(exc)
     end
 
-    % catch ALL warnings by q3d, catch error by outer block
-    [msg, ~] = lastwarn();
-    if contains(msg, "airfoil transonic analysis diverged")
-        error("Q3D did not converge.")
-    end
-
     % get results from Q3D
     Res = Aero.OutputArguments{1};
     finish = Aero.OutputArguments{2};
+    q3dwarning = Aero.OutputArguments{3};
+
+    if q3dwarning == 1
+        error("Q3D did not converge.")
+    end
 
     disp("[AER] Time elapsed: " + finish)
-    % cd ..\
     
     % if D is NaN, sqp will handle it.
     alpha = Res.Alpha;
@@ -108,15 +102,25 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     D_des_wing = q * S * Res.CDwing;
     D_des = D_des_wing + q * D_A_W_q;
 
-    function [Res, finish] = AeroEval(Aircraft)
+    function [Res, finish, q3dwarning] = AeroEval(Aircraft)
         % Q3D wrapper for ParfEval
 
         changeDirSafe("Q3D");
+        lastwarn("")
+        warning("off", "backtrace")
 
         tic;
         Res = Q3D_solver(Aircraft);
         finish = toc;
 
+        [msg, ~] = lastwarn();
+        if contains(msg, "airfoil transonic analysis diverged")
+            q3dwarning = 1;
+            cd ..\
+            return
+        end
+        
+        q3dwarning = 0;
         cd ..\
     
     end
