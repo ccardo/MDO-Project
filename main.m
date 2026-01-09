@@ -100,7 +100,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.1500                                              % B6
     0.1500                                              % B7
       50                                                % LE_sweep
-      25];                                              % b2
+      30];                                              % b2
 
 % Define the design vector
 x0 = [Ma_des
