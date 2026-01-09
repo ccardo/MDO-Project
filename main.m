@@ -141,12 +141,12 @@ options.MaxIter                     = 1000;          % Maximum number of iterati
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'central';
-options.FiniteDifferenceStepSize    = 1e-1;
-options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
+options.FiniteDifferenceStepSize    = 5e-2;
+options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
 options.MaxFunEvals                 = 10000;
-options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation, @stopRelChange}; % calls functions at the end of each iteration. 
+options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation}; % calls functions at the end of each iteration. 
 % ^^^ Needs to have the following structure: stop = outFun(x, optimValues, state)
 % where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
