@@ -21,6 +21,7 @@ function stop = stopRelChange(~, optimValues, state)
             iterStall = 0;
 
         case "iter"
+            disp(optimValues)
             currentF = optimValues.fval;
 
             % tolerances for relative change
