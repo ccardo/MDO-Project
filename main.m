@@ -122,7 +122,7 @@ x0 = [Ma_des
       B6 
       B7 
       LE_sweep 
-      A2];
+      A2] * 0.99;
 
 % Normalize the bounds
 BOUNDS = struct();
@@ -141,7 +141,7 @@ options.MaxIter                     = 1000;          % Maximum number of iterati
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 1e-1;
+options.FiniteDifferenceStepSize    = 5e-2;
 options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
