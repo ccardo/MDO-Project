@@ -122,7 +122,7 @@ x0 = [Ma_des
       B6 
       B7 
       LE_sweep 
-      A2] * 0.99;
+      A2];
 
 % Normalize the bounds
 BOUNDS = struct();
