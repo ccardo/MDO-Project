@@ -4,7 +4,7 @@ global FixedValues
 global Constraints
 
     % define the wanted tolerance
-    error = 10^-3;
+    error = 10^-5;
     
     % start the iteration counter
     counter = 0;
