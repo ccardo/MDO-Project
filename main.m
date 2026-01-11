@@ -103,7 +103,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       25];                                              % b2
 
 % Define the design vector
-x0 = [Ma_des
+x0 = 0.99.* [Ma_des
       h_des
       c_kink 
       taper_outboard
@@ -142,7 +142,7 @@ options.ScaleProblem                = true;         % Normalization of the varia
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
 options.FiniteDifferenceStepSize    = 5e-2;
-options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
+options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
 options.MaxFunEvals                 = 10000;
