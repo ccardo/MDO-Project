@@ -55,10 +55,7 @@ global Constraints
 
         % add to counter & update constraints
         counter = counter +1;
-
-        % Required to calculate the constaints for the current design
-        % vector
-        Constraints.W_wing = W_wing; 
+        Constraints.W_wing = W_wing; % Required to calculate the constaints for the current design vector
     end
     
     finish = toc;

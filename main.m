@@ -8,6 +8,7 @@ global FixedValues
 global currentDesignVector
 projectDirectory = cd;
 
+% make sure that the script is run while on the correct directory
 if ~contains(projectDirectory, "Project")
     warning("Current project directory is: %s\nMake sure this is intentional.", projectDirectory)
 end
@@ -27,7 +28,7 @@ fprintf("Defining initial configuration.\n")
 run Initial_run.m
 fprintf("Reference aircraft configured.\n")
 
-% Requires: Parallel Processing Toolbox
+% Required: Parallel Processing Toolbox
 % create a new background pool (if there is none)
 pool = gcp('nocreate');
 if isempty(pool)
@@ -123,7 +124,7 @@ x0 = [Ma_des
       LE_sweep 
       A2];
 
-% Normalize the bounds
+% Normalize the bounds and the design vector
 BOUNDS = struct();
 BOUNDS.original = [lb ub];
 ub = ub./abs(x0);
@@ -137,25 +138,20 @@ options.Display                     = 'iter-detailed';
 options.Algorithm                   = 'sqp';
 options.FunValCheck                 = 'off';        % When turned on displays an error when the objective function or constraints return a value that is complex, NaN, or Inf. By turning it off, fmincon can handle NaN values
 options.MaxIter                     = 1000;         % Maximum number of iterations
-options.ScaleProblem                = true;         % Normalization of the variables
+options.ScaleProblem                = true;         % Normalization of the the constraints and objective functions by their initial values
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
-options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-2;
-options.StepTolerance               = 1e-9; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
+options.FiniteDifferenceType        = 'central'; % Finite difference method used
+options.FiniteDifferenceStepSize    = 5e-2; % Scalar step size factor for finite differences
+options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
-options.MaxFunEvals                 = 10000;
+options.MaxFunEvals                 = 10000; % Maximum number of function evalutations
 options.OutputFcn                   = {@outConst, @outFun, @outWWing, @outInformation}; % calls functions at the end of each iteration. 
-% ^^^ Needs to have the following structure: stop = outFun(x, optimValues, state)
-% where x is the current design vector, optimValues contains information on the optimization and state can be 'init', 'iter', 'done'. Optimization stops is stop returns true. 
 
+% run the optimization
 optimStart = tic;
 [x,FVAL,EXITFLAG,OUTPUT] = fmincon(@Optimizer, v0, [], [], [], [], lb, ub, @constraints, options);
 optimEnd = toc(optimStart);
-
-fprintf("Current directory: %s", cd)
-fprintf("Current project directory: %s", projectDirectory)
-disp(newline)
 
 % create a non-existing folder to store the optimization's results
 cd Results\
@@ -170,7 +166,7 @@ mkdir(subDirName)
 OUTPUT.totalTime = optimEnd;
 OUTPUT;
 
-% put the results into a  struct:
+% put the results into a struct:
 ITERATIONS = iter_hist;
 ITERATIONS.designVectorNorm = iter_hist.designVector;
 ITERATIONS.designVector = normalize(iter_hist.designVector, "denorm", FixedValues.Key.designVector);
@@ -184,10 +180,10 @@ BOUNDS.original;
 
 % save optimization run results
 cd(subDirName)
-save("output.mat", "OUTPUT", "-mat")         % fmincon output
-save("iterations.mat", "ITERATIONS", "-mat") % fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
-save("bounds.mat", "BOUNDS", "-mat")         % [lb ub] original and normalized
-save("Aircraft.mat", "Aircraft", "-mat") 
+save("output.mat", "OUTPUT", "-mat")         % store fmincon output
+save("iterations.mat", "ITERATIONS", "-mat") % store fval, constraints, wing weight, design vector, step size, optimality, function count, constraint violation
+save("bounds.mat", "BOUNDS", "-mat")         % store [lb ub] original and normalized
+save("Aircraft.mat", "Aircraft", "-mat")     % store Aircraft struct
 cd ..\..\
 
 % denormalize X and f
@@ -197,9 +193,8 @@ final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 % display all of the optimization results
 dispRes(final_V, FVAL, c1(end), c2(end), W_wing_hist(end))
 
-% plot 
+% plot the results
 plotRes(c_hist, f_hist, Final_V)
-
 
 % save the plots in the same results folder
 cd Results\
