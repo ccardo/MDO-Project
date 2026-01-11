@@ -7,7 +7,7 @@ function [MAC] = meanAeroChord(geom)
     yR = geom(1, 2);
     yK = geom(2, 2);
     yT = geom(3, 2);
-
+    
     y1 = linspace(yR, yK);
     y2 = linspace(yK, yT);
 
@@ -18,6 +18,7 @@ function [MAC] = meanAeroChord(geom)
     c = [c1(:); c2(:)];
     A = wingArea(geom);
 
+    % 2/A because we only consider half the wing (positive Y part)
     MAC = 2/A * trapz(y, c.^2);
 
 end

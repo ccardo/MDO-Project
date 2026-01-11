@@ -5,8 +5,6 @@ function [result] = changeDirSafe(dirName)
         return
     end
     
-    % The project directory has to be changed to MDO-Project (as is the
-    % name of the GitHub repository) for this to work!
     check.EMWET = "Q3D";
     check.Q3D = "EMWET";
 

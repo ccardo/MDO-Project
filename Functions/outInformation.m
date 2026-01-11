@@ -22,6 +22,8 @@ function stop = outInformation(x, optimValues, state)
                 iterHistory.functionCount(:,end+1) = optimValues.funccount;
                 iterHistory.designVector(:,end+1) = x;
             catch
+                % if somehow optimValues is empty, an error is raised.
+                % Catch it and set everything to NaN.
                 disp(optimValues)
                 iterHistory.firstOrderOptimality(:,end+1) = NaN;
                 iterHistory.constraintViolation(:,end+1) = NaN;

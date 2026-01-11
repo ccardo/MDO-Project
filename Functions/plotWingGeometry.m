@@ -38,7 +38,8 @@ end
         % twist & scale by chord length
         theta = geom(i, 5);
         rotated = (R(-theta) * [x(:)'; z(:)'])' * geom(i, 4);
-
+    
+        % update left and right wing sections
         wingSectionR(i).x = rotated(:, 1) + wingX(i);
         wingSectionR(i).y = 0*rotated(:, 2) + wingY(i);
         wingSectionR(i).z = rotated(:, 2) + wingZ(i);
@@ -47,7 +48,8 @@ end
         wingSectionL(i).z = rotated(:, 2) + wingZ(i);
         
     end
-
+    
+    % plot left and right wing sections.
     plot3(wingX, wingY, wingZ, style{:})
     hold on
     plot3(wingX, -wingY, wingZ, style{:})

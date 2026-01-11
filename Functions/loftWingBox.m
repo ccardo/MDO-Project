@@ -23,16 +23,18 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
     fuelTankEnd = (lastSectionSpan - span * (1 - fuelTankEnd)) / lastSectionSpan;
     fuelTankStart = (firstSectionSpan - span * fuelTankStart) / firstSectionSpan;
     
-    % create airfoil curves
+    % create airfoil curves from CST coefficients
     CSTU = airfoil(1, 1:end/2);
     CSTL = airfoil(1, (end/2+1):end);
     x = linspace(0, 1, 10000)';
     [~, zU] = CSTcurve(x, CSTU);
     [~, zL] = CSTcurve(x, CSTL);
 
-    % set n. of points for the front spar and rear spar sides
+    % set n. of points for the front spar and rear spar sides (in this
+    % case, N=2 because those sides are straight anyway)
     Nspar = 2;
-
+    
+    % initialize wingbox structure array: 
     Boxes = struct();
     
     for i = 1:size(geom, 1)-1
@@ -67,11 +69,12 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
         % compute intersections with spars (ATTENTION: I overwrite the indices
         % of section 1 with  the ones of section 2 (iFront, iRear) both for the
         % upper and lower surfaces.
-        %
+
         % NOTE: remove extremum elements of Front and RearSide because they
         % will be duplicates with the extremum elements of Upper and LowerSide.
         % The last element of FrontSide stays because this will close the
         % lofted surface (try to run the code without that last element)
+
         [~, iF] = min(abs(x - frontSpar1));
         [~, iR] = min(abs(x - rearSpar1));
         UpperSide1 = [x(iF:iR), zeros(length(x(iF:iR)), 1), zU(iF:iR)] * c1; % x y z
@@ -85,9 +88,10 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
         RearSide1(1, :) = [];
         RearSide1(end, :) = [];
     
-        % NOW the other section is: shifted and twisted (relative to Sect. 1)
-        % first you scale and compute the intersections, then you shift and
-        % twist the section to match the next airfoil of the wing.
+        % Now the other section is: shifted and twisted (relative to Sect. 1)
+        % First you scale and compute the intersections with its spars,
+        % then you shift and twist the section to match the next airfoil 
+        % of your wing.
         [~, iF] = min(abs(x - frontSpar2));
         [~, iR] = min(abs(x - rearSpar2));
         UpperSide2 = [x(iF:iR), zeros(length(x(iF:iR)), 1), zU(iF:iR)] * c2; % x y z
@@ -119,7 +123,8 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
         LowerSide2 = [xInterp2, zeros(nPoints, 1), intL2(xInterp2)];
 
         % Order the points so that they form a single curve (clockwise) for
-        % both Section 1 and 2 ==> Starting point: top left.
+        % both Section 1 and 2 ==> Starting point: top left. This is
+        % necessary for later interpolation between the sections.
         RearSide1 = RearSide1(end:-1:1, :);
         LowerSide1 = LowerSide1(end:-1:1, :);
         Section1 = [UpperSide1; RearSide1; LowerSide1; FrontSide1];
@@ -186,8 +191,9 @@ function [Boxes] = loftWingBox(Aircraft, nLayers, nPoints, makePlot)
 end
 
 function rotatedCurve = twistSection(curve, theta)
+    % rotate any curve about the Y axis (so on the XZ plane) 
+    % by multiplying by a rotation matrix.
 
-    % rotation matrix about the Y axis (so on the XZ plane)
     Ry = [ cos(theta)  0  sin(theta)
                0       1       0    
           -sin(theta)  0  cos(theta)];
@@ -201,6 +207,7 @@ function rotatedCurve = twistSection(curve, theta)
 end
 
 function shiftedCurve = shiftSection(curve, vec)
+    % move any curve by any vector in three dimensions.
 
     vec = vec(:);
     if length(vec) ~= 3
