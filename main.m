@@ -74,7 +74,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
    -0.3000                                              % B2
    -0.3000                                              % B3
    -0.3000                                              % B4
-   -0.3000                                              % B5
+   -0.5000                                              % B5 RELAXED
    -0.3000                                              % B6
    -0.3000                                              % B7
       10                                                % LE_sweep
@@ -89,9 +89,9 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.3000                                              % T2
     0.3000                                              % T3
     0.3000                                              % T4
-    0.3000                                              % T5
+    0.5000                                              % T5 RELAXED
     0.3000                                              % T6
-    0.3000                                              % T7
+    0.5000                                              % T7 RELAXED
    -0.0500                                              % B1
    -0.0500                                              % B2
     0.0100                                              % B3
@@ -141,7 +141,7 @@ options.MaxIter                     = 1000;          % Maximum number of iterati
 options.ScaleProblem                = true;         % Normalization of the variables
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
 options.FiniteDifferenceType        = 'forward';
-options.FiniteDifferenceStepSize    = 5e-3;
+options.FiniteDifferenceStepSize    = 5e-2;
 options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
 options.ConstraintTolerance         = 1e-3; % Determines the contraint tolerance
