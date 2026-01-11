@@ -121,11 +121,11 @@ unexpectedErrorCounter = 0;
 % other disciplines. Only the intended errors will be handled (e.g. the 
 % ones that are outputted on purpose in case some quantity is NaN); if some 
 % unexpected exception is raised for 5 consecutive iterations, the
-% algorithm stops.
+% optimization stops so that the error can be fixed.
 
 try
-    % initial target for coupling variable W_wing, from previous iteration
-    % of from the initial run
+    % initial target for coupling variable W_wing, taken from the previous
+    % iteration or from the initial run
     W_wing_i = Constraints.W_wing;
     if isnan(W_wing_i)
         W_wing_i = 30000; % if EMWET crashes, the initial guess is set close to the initial value
