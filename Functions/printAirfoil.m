@@ -1,5 +1,6 @@
 function [] = printAirfoil(T, B)
     
+    % x = cosine-spaced points (not linspace to have higher LE resolution)
     x = (1 - cos(linspace(0, pi)))/2;
     [~, yT] = CSTcurve(x, T);
     [~, yB] = CSTcurve(x, B);

@@ -5,14 +5,17 @@ arguments
     format {mustBeText} = "png"
 end
     
+    % if unspecified, save all figures
     if isempty(figureNumbers)
         figureNumbers = "all";
     end
-
+    
+    % if "all", save all active figures
     if num2str(figureNumbers) == "all"
         figureNumbers = findobj("Type", "figure");
     end
-
+    
+    % loop through figures and save.
     for i = 1:length(figureNumbers)
         n = figureNumbers(i).Number;
         fig = figure(n);
