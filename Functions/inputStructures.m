@@ -1,34 +1,33 @@
 function [] = inputStructures(Aircraft, MTOW, v, FixedValues)
 
-    % global FixedValues
-
-    MZF           =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   %[kg]
-    n_max         =    FixedValues.Performance.nMax;  
-    span          =    2* (FixedValues.Geometry.A1 + v(20));            %[m]
-    c_root        =    Aircraft.Wing.Geom(1,4); 
-    c_kink        =    Aircraft.Wing.Geom(2,4);
-    c_tip         =    Aircraft.Wing.Geom(3,4);          
-    spar_front_1  =    FixedValues.Geometry.spars(1,1);
-    spar_front_2  =    FixedValues.Geometry.spars(2,1);
-    spar_front_3  =    FixedValues.Geometry.spars(3,1);
-    spar_rear_1   =    FixedValues.Geometry.spars(1,2);
-    spar_rear_2   =    FixedValues.Geometry.spars(2,2);
-    spar_rear_3   =    FixedValues.Geometry.spars(3,2);
-    ftank_start   =    FixedValues.Geometry.tank(1);
-    ftank_end     =    FixedValues.Geometry.tank(2);
-    eng_num       =    1; 
-    eng_ypos      =    0.3;          % [%]
-    eng_mass      =    5851;         % P&W 4170 [kg]
-    E_al          =    70.1E9;       % [N/m2] 
-    rho_al        =    2800;         % [kg/m3]
-    Ft_al         =    5.3E8;        % [N/m2]
-    Fc_al         =    5.3E8;        % [N/m2] 
-    pitch_rib     =    0.5;          % [m]
-    eff_factor    =    0.96;             
-    Airfoil       =    'current_airfoil';
-    section_num   =    3;
-    airfoil_num   =    3;
-    A             = wingArea(Aircraft.Wing.Geom);
+    % write the a330.init file in the required format
+    MZF           =    MTOW - FixedValues.Weight.W_f + FixedValues.Weight.deltaPayload ;   % [kg] Mass of the aircraft with zero fuel
+    n_max         =    FixedValues.Performance.nMax;                                       % [-] Maximum loading factor
+    span          =    2* (FixedValues.Geometry.A1 + v(20));                               % [m] Span of the whole wing
+    c_root        =    Aircraft.Wing.Geom(1,4);                                            % [m] Root chord length
+    c_kink        =    Aircraft.Wing.Geom(2,4);                                            % [m] Kink chord length
+    c_tip         =    Aircraft.Wing.Geom(3,4);                                            % [m] Tip chord length
+    spar_front_1  =    FixedValues.Geometry.spars(1,1);                                    % Expressed as a percentage of the chord of the correspodning section
+    spar_front_2  =    FixedValues.Geometry.spars(2,1);                                    % Expressed as a percentage of the chord of the correspodning section
+    spar_front_3  =    FixedValues.Geometry.spars(3,1);                                    % Expressed as a percentage of the chord of the correspodning section
+    spar_rear_1   =    FixedValues.Geometry.spars(1,2);                                    % Expressed as a percentage of the chord of the correspodning section
+    spar_rear_2   =    FixedValues.Geometry.spars(2,2);                                    % Expressed as a percentage of the chord of the correspodning section
+    spar_rear_3   =    FixedValues.Geometry.spars(3,2);                                    % Expressed as a percentage of the chord of the correspodning section
+    ftank_start   =    FixedValues.Geometry.tank(1);                                       % Expressed as a percentage of the half span
+    ftank_end     =    FixedValues.Geometry.tank(2);                                       % Expressed as a percentage of the half span
+    eng_num       =    1;                                                                  % Number of engines per half-wing
+    eng_ypos      =    0.3;                                                                % [%] Position of the engine as a percentage of the half-span
+    eng_mass      =    5851;                                                               % [kg] Mass of the reference engine P&W 4170 
+    E_al          =    70.1E9;                                                             % [N/m2] Aluminum elasticity modulus for the reference aircraft
+    rho_al        =    2800;                                                               % [kg/m3] Aluminum density for the reference aircraft
+    Ft_al         =    5.3E8;                                                              % [N/m2] Aluminum tension yield stress for the reference aircraft
+    Fc_al         =    5.3E8;                                                              % [N/m2] Aluminum compression yield stress for the reference aircraft
+    pitch_rib     =    0.5;                                                                % [m] 
+    eff_factor    =    0.96;                                                               % Stiffened panel efficiency factor for the upper panel. This is the value for the top hat stringer type
+    Airfoil       =    'current_airfoil';                                                  % Name of the file where the defined airfoil coordinates are 
+    section_num   =    3;                                                                  % Number of section that define the wing geometry
+    airfoil_num   =    3;                                                                  % Number of sections where the airfoil is defined
+    A             =    wingArea(Aircraft.Wing.Geom);                                       % [m^2] Area of the half-wing
     
     % define the leading edge postions of the airfoils that generate the
     % planform
@@ -42,7 +41,7 @@ function [] = inputStructures(Aircraft, MTOW, v, FixedValues)
     y3 = Aircraft.Wing.Geom(3,2);
     z3 = Aircraft.Wing.Geom(3,3);
 
-    % print the file inside the current directory (should be \EMWET\)
+    % print the file inside the current directory 
     fid = fopen( 'a330.init','wt');
     fprintf(fid, '%g %g \n',MTOW,MZF);
     fprintf(fid, '%g \n',n_max);
