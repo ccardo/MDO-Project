@@ -3,7 +3,9 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
 global FixedValues
 global Constraints
 
-    % define the target relative tolerance
+    % define the target relative tolerance. Set to 1e-5 since this
+    % corresponds to an error on the order of 0.1 kg which is acceptable
+    % for a wing weight in the order of 1e4 kg
     error = 10^-5;
     
     % start the iteration counter
@@ -20,13 +22,16 @@ global Constraints
     while abs(W_wing-W_wing_i)/W_wing > error
 
         if (counter > 0)
-            W_wing_i = W_wing; 
+            W_wing_i = W_wing; % update the current guess for the initial weight with the result EMWET gave in the previous MDA iteration
         end
-
+        
+        % Run the Loads and Structures disciplines to get the sizing loads
         [W_wing, L_max, M_max, y_max] = LoadStructEval(Aircraft, W_wing_i, v, FixedValues);
     
-        % if too many MDA iterations, means it's stuck => error
-        if counter >= 20
+        % if the MDA takes too many iterations to converge to a valid
+        % structural weight of the wing give an error that is caught in the
+        % optimizer and invalidates the current function evaluation
+        if counter >= 50
             warning on
             warning("off", "backtrace")
             warning("off", "verbose")
@@ -35,7 +40,9 @@ global Constraints
             error("Convergence took too many iterations in MDA.")
         end
 
-        % if any resulting quantity is NaN or Inf => error
+        % Give an error that is caught in the optimizer and invalidates 
+        % the current function evaluation if any value that is an output of
+        % a discipline returns NaN 
         if any(isnan([W_wing, norm(L_max), norm(M_max), norm(y_max)])) || ...
            any(isinf([W_wing, norm(L_max), norm(M_max), norm(y_max)]))
             warning on
@@ -47,8 +54,10 @@ global Constraints
         end
 
         % add to counter & update constraints
-        % (required to evaluate the wing loading constraint)
         counter = counter +1;
+
+        % Required to calculate the constaints for the current design
+        % vector
         Constraints.W_wing = W_wing; 
     end
     
@@ -56,10 +65,9 @@ global Constraints
     disp("[MDA] Time elapsed: " + finish + ", iterations: " + counter)
 end
 
-
+% MDA disciplines wrapper
 function [W_wing, L_max, M_max, y_max] = LoadStructEval(Aircraft, W_wing_i, v, FixedValues)
 
-    % MDA disciplines wrapper.
     [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v, FixedValues); 
     W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v, FixedValues);
 

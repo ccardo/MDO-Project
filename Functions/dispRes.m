@@ -3,19 +3,19 @@ function [] = dispRes(x, FVAL, c1, c2, W_wing)
 format short
 global FixedValues
 
-% optimized variables
+% retrieve the optimized  geometric variables
 A2 = x(20);
 LE_sweep = x(19);
 c_kink = x(3);
 taper_outboard = x(4);
 
-% geometric fixed parameters
+% obtain the geometric fixed parameters
 twist = FixedValues.Geometry.twist;
 fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
 dihedral = FixedValues.Geometry.dihedral;
 A1 = FixedValues.Geometry.A1;
 
-% geometric derived variables
+% compute the geometric derived variables
 c_tip = taper_outboard * c_kink;
 x1 = 0;
 x2 = (A1)*tand(LE_sweep);
@@ -28,7 +28,7 @@ z2 = (A1 - fuselage_radius) * tand(dihedral);
 z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
 
-% Wing planform geometry 
+% Define the wing planform geometry for Q3D 
 %                     x      y      z      chord     twist
 Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
                       x2     y2     z2     c_kink    twist(2);
@@ -39,7 +39,7 @@ S = wingArea(Aircraft.Wing.Geom);
 % incidence angle is already considered in the first twist angle
 Aircraft.Wing.inc = 0;  
 
-% Airfoil coefficients input matrix
+% Airfoil coefficients input matrix for Q3D
 Ti = x(5:11);
 Bi = x(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
@@ -47,12 +47,12 @@ Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];
 % Spanwise location of the airfoil sections
 Aircraft.Wing.eta = [0; A1/(A1+A2); 1];
 
-% Display the results for the optimized design
+% Display the required results for the optimized design
 
 % Objective function value
 fprintf('Objective function value for the optimized result: %f \n', FVAL)
 
-% All design variables 
+% All design variables of the optimized design
 fprintf(['Design variables of the optimized design \n Ma_des = %f \n h_des = %f [m] \n c_kink = %f [m] \n' ...
     ' taper_outboard = %f \n T1 = %f \n T2 = %f \n T3 = %f \n T4 = %f \n T5 = %f \n T6 = %f \n T7 = %f \n' ...
     ' B1 = %f \n B2 = %f \n B3 = %f \n B4 = %f \n B5 = %f \n B6 = %f \n B7 = %f \n LE_sweep = %f \n A2 = %f\n'], x)
@@ -114,6 +114,8 @@ CT = CT_ref / eta;
 fprintf('Specific fuel consumption in the design condition for the optimized design: %f [N/Ns] \n', CT)
 
 % CL (aircraft lift coefficient) and α (aircraft angle of attack) @design point 
+% Run the viscous aerodynamic solver once to obtain the relevant forces
+% acting on the otimized design
 [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, x);
 fprintf('Angle of attack in the design condition for the optimized design: %.4f [deg] \n', alpha)
 CL_des = L_des/(q*S);
