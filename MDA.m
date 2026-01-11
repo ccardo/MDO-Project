@@ -3,7 +3,7 @@ function [W_wing] = MDA(Aircraft, W_wing_i, v)
 global FixedValues
 global Constraints
 
-    % define the wanted tolerance
+    % define the target relative tolerance
     error = 10^-5;
     
     % start the iteration counter
@@ -18,7 +18,7 @@ global Constraints
     disp("[MDA] Running Q3D & EMWET...")
     tic
     while abs(W_wing-W_wing_i)/W_wing > error
-        % loop counter
+
         if (counter > 0)
             W_wing_i = W_wing; 
         end
@@ -35,7 +35,7 @@ global Constraints
             error("Convergence took too many iterations in MDA.")
         end
 
-        % if any resulting quantity is NaN or Inf, warning + error
+        % if any resulting quantity is NaN or Inf => error
         if any(isnan([W_wing, norm(L_max), norm(M_max), norm(y_max)])) || ...
            any(isinf([W_wing, norm(L_max), norm(M_max), norm(y_max)]))
             warning on
@@ -47,8 +47,9 @@ global Constraints
         end
 
         % add to counter & update constraints
+        % (required to evaluate the wing loading constraint)
         counter = counter +1;
-        Constraints.W_wing = W_wing; % required to evaluate the wing loading constraint
+        Constraints.W_wing = W_wing; 
     end
     
     finish = toc;
@@ -58,7 +59,7 @@ end
 
 function [W_wing, L_max, M_max, y_max] = LoadStructEval(Aircraft, W_wing_i, v, FixedValues)
 
-    % function wrapper necessary for parallel evaluation.
+    % MDA disciplines wrapper.
     [L_max, M_max, y_max] = Loads(Aircraft, W_wing_i, v, FixedValues); 
     W_wing = Structures(Aircraft, L_max, M_max, y_max, W_wing_i, v, FixedValues);
 

@@ -1,7 +1,8 @@
 function [R] = Performance(L_des, D_des, W_wing, v)
     
     global FixedValues;
-
+    
+    % get necessary quantities to evaluate performance
     M_des = v(1);
     h_des = v(2);
     W_f = FixedValues.Weight.W_f;
@@ -12,7 +13,7 @@ function [R] = Performance(L_des, D_des, W_wing, v)
 
     V_des = M_des * airSoundSpeed(h_des);
     
-    % Compute performance through given functions
+    % Compute intermediate quantities through given functions
     eta = exp( -(V_des - V_des_ref)^2/(2*70^2) + ...
                -(h_des - h_des_ref)^2/(2*2500^2) );
     CT = CT_ref / eta;
