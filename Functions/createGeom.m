@@ -2,18 +2,19 @@ function [Aircraft] = createGeom(v)
 
 global FixedValues Constraints
 
+% Define the geometry of the wing in the Aircraft struct required for Q3D
 % design variables
 A2 = v(20);
 LE_sweep = v(19);
 c_kink = v(3);
 taper_outboard = v(4);
 
-% geometric fixed parameters
+% obtain the geometric fixed parameters
 twist = FixedValues.Geometry.twist;
 dihedral = FixedValues.Geometry.dihedral;
 A1 = FixedValues.Geometry.A1;
 
-% geometric derived variables
+% compute the geometric derived variables
 c_tip = taper_outboard * c_kink;
 x1 = 0;
 x2 = (A1)*tand(LE_sweep);
@@ -26,7 +27,7 @@ z2 = A1 * tand(dihedral);
 z3 = (A1 + A2) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
 
-% Wing planform geometry 
+% Define the wing planform geometry for Q3D 
 %                     x      y      z      chord     twist
 Aircraft.Wing.Geom = [x1     y1     z1     c_root    twist(1);
                       x2     y2     z2     c_kink    twist(2);
@@ -38,7 +39,7 @@ Constraints.area = S;
 % incidence angle is already considered in the first twist angle
 Aircraft.Wing.inc = 0;  
 
-% Airfoil coefficients input matrix
+% Airfoil coefficients input matrix for Q3D
 Ti = v(5:11);
 Bi = v(12:18);
 Aircraft.Wing.Airfoils = [1;1;1] * [Ti(:)', Bi(:)'];

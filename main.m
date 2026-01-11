@@ -3,7 +3,6 @@ close all
 clear all
 clc
 
-% make sure to start this script in the appropriate project directory
 global projectDirectory
 global FixedValues
 global currentDesignVector
@@ -58,7 +57,7 @@ B7 = 0.077234;              % /
 LE_sweep = 31;              % leading edge sweep [deg]
 A2 = 20.81;                 % outer span [m]
 
-% lower bounds
+% Define the lower bounds for the design variables
 lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10700                                             % h_des
       5                                                 % c_kink
@@ -80,7 +79,7 @@ lb = [0.9 * FixedValues.Performance.Ma_des_ref          % Ma_des
       10                                                % LE_sweep
       12];                                              % b2 
 
-% upper bounds
+% Define the upper bounds for the design variables
 ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       1.1 * FixedValues.Performance.h_des_ref           % h_des
       15                                                % c_kink
@@ -103,7 +102,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
       25];                                              % b2
 
 % Define the design vector
-x0 = 0.99.* [Ma_des
+x0 = [Ma_des
       h_des
       c_kink 
       taper_outboard
@@ -122,7 +121,7 @@ x0 = 0.99.* [Ma_des
       B6 
       B7 
       LE_sweep 
-      A2] * 1.01;
+      A2];
 
 % Normalize the bounds
 BOUNDS = struct();

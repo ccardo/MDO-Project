@@ -13,12 +13,12 @@ function [R] = Performance(L_des, D_des, W_wing, v)
 
     V_des = M_des * airSoundSpeed(h_des);
     
-    % Compute intermediate quantities through given functions
+    % Compute necessary quantities through given functions
     eta = exp( -(V_des - V_des_ref)^2/(2*70^2) + ...
-               -(h_des - h_des_ref)^2/(2*2500^2) );
+               -(h_des - h_des_ref)^2/(2*2500^2) ); % [-] propulsive efficiency
     CT = CT_ref / eta;
-    Wend_Wstart = 1/0.938 * (1 - W_f/MTOW);
-    Wstart_Wend = 1 / Wend_Wstart;
+    Wend_Wstart = 1/0.938 * (1 - W_f/MTOW); % Ratio between the aircraft weight between the end of the cruise and the start
+    Wstart_Wend = 1 / Wend_Wstart; % invert the previous ratio since that is what is needed to compute the range
     
     % Compute the range.
     R = V_des * L_des / (CT * D_des) * log(Wstart_Wend);
