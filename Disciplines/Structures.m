@@ -1,32 +1,26 @@
 function [W_wing] = Structures(Aircraft, L_max, M_max, y_max, W_wing, v, FixedValues)
     
-    % global FixedValues
-    % global Constraints
-
-    % check current directory and change to Q3D
+    % check current directory and change to EMWET
     result = changeDirSafe("EMWET");
     
+    % Compute the maximum take-off weight from the coupling variable W_wing
     MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
 
     % SOLVE and return back to parent directory
-    if result
+    if result % If the directory change was successful run EMWET, otherwise give an error
         
         % create EMWET input files:  
-        % current_airfoil.dat, a330.init, a330.load
-        printAirfoil(v(5:11), v(12:18))
-        inputStructures(Aircraft, MTOW, v, FixedValues)
-        inputStructuresLoads(y_max, L_max, M_max)
+        printAirfoil(v(5:11), v(12:18)) % writes current_airfoil.dat
+        inputStructures(Aircraft, MTOW, v, FixedValues) % writes a330.init
+        inputStructuresLoads(y_max, L_max, M_max) % writes a330.load
         
-        % run EMWET and display [global.MDA] iteration count.
+        % run EMWET 
         EMWET a330
         
-        % read a330.weight
+        % read a330.weight and obtain the wing weight
         W_wing = readEMWET();
         cd ..\
     else
         error("ERROR: could not change directory to EMWET from Structures")
     end
-    
-    % Constraints.W_wing = W_wing;
-
 end
