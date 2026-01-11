@@ -11,7 +11,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
     W_f = FixedValues.Weight.W_f;
     W_des = sqrt(MTOW * (MTOW-W_f));
-    load = W_des * 9.81;
+    Force = W_des * 9.81;
 
     a = airSoundSpeed(h_des);
     rho = airDensity(h_des);
@@ -23,7 +23,7 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     S = wingArea(Aircraft.Wing.Geom);
     MAC = meanAeroChord(Aircraft.Wing.Geom);
     
-    CL = load / (q * S);
+    CL = Force / (q * S);
 
     % Wing geometry defined inside Aircraft.Wing
     Aircraft.Aero.CL = CL;

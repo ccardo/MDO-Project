@@ -12,7 +12,7 @@ function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v, FixedValues)
     
     nMax = 2.5;
     MTOW = W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
-    load = nMax * MTOW * 9.81;
+    Force = nMax * MTOW * 9.81;
 
     rho = airDensity(h_des);
     T = airTemperature(h_des);
@@ -22,7 +22,7 @@ function [L_max, M_max, y_max, CDi] = Loads(Aircraft, W_wing, v, FixedValues)
     S = wingArea(Aircraft.Wing.Geom);
     MAC = meanAeroChord(Aircraft.Wing.Geom);
     
-    CL = load / (q * S);
+    CL = Force / (q * S);
     
     % At this point, the wing geometry should be already said and done.
     % So the only thing that we shall change is the Aero part.
