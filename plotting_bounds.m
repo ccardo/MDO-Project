@@ -25,7 +25,7 @@ variable_names = ["M_{des}", "h_{des}", "c_k", "\lambda_{outboard}", ...
 
 figure(1); hold on
 figure(2); hold on
-colormap("sky")
+colormap(sky)
 cmap = sky(size(x,2));
 for i = 1:n
     dash_b = [i-0.3 i+0.3];
