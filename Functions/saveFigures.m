@@ -14,11 +14,16 @@ end
     end
 
     for i = 1:length(figureNumbers)
-        n = figureNumbers(i);
-        gcf = figure(n);
-        filename = gcf.Name;
+        n = figureNumbers(i).Number;
+        fig = figure(n);
+        filename = fig.Name;
+
+        if isempty(filename)
+            filename = sprintf("Figure %d", n);
+        end
+
         for F = 1:length(format)
-            saveas(gcf, filename, format(F))
+            saveas(fig, filename, format(F))
         end
     end
 end
