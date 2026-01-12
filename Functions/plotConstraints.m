@@ -1,7 +1,7 @@
-function [] = plotConstraints(c_hist, iterCount)
+function [] = plotConstraints(c_hist)
 
 figure('Name', 'Constraints', 'NumberTitle', 'off')
-
+iterCount = size(c_hist, 1)-1;
 c1 = c_hist(:,1);
 c2 = c_hist(:,2);
 

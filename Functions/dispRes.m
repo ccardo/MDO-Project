@@ -11,7 +11,6 @@ taper_outboard = x(4);
 
 % obtain the geometric fixed parameters
 twist = FixedValues.Geometry.twist;
-fuselage_radius = 1/2 * FixedValues.Geometry.fuselageDiameter;
 dihedral = FixedValues.Geometry.dihedral;
 A1 = FixedValues.Geometry.A1;
 
@@ -23,9 +22,9 @@ x3 = (A1 + A2)*tand(LE_sweep);
 y1 = 0;
 y2 = A1;
 y3 = A1 + A2;
-z1 = -(fuselage_radius)*tand(dihedral); 
-z2 = (A1 - fuselage_radius) * tand(dihedral);
-z3 = (A1 + A2 - fuselage_radius) * tand(dihedral);
+z1 = 0; 
+z2 = (A1 ) * tand(dihedral);
+z3 = (A1 + A2) * tand(dihedral);
 c_root = A1 * tand(LE_sweep) + c_kink - A1 * tand(FixedValues.Geometry.TE_sweep); 
 
 % Define the wing planform geometry for Q3D 
@@ -152,9 +151,6 @@ fprintf('Wing loading for the optimized design: %.3f [Pa] \n', MTOW_opt/S)
 AR = ((2 * (A1 + A2))^2)/S;
 fprintf('Aspect ratio for the optimized design: %.3f \n', AR)
 
-TE_sweep_2 = atand((c_tip + A2 * tand(LE_sweep)-c_kink)/A2);
-fprintf('Trailing edge of the inboard trapezoid for the optimized design: %.3f [deg] \n', FixedValues.Geometry.TE_sweep)
-fprintf('Trailing edge of the outboard trapezoid for the optimized design: %.3f [deg] \n', TE_sweep_2)
 fprintf('Root chord for the optimized design: %.3f [m] \n', c_root)
 fprintf('Kink chord for the optimized design: %.3f [m] \n', c_kink)
 fprintf('Tip chord for the optimized design: %.3f [m] \n', c_tip)
