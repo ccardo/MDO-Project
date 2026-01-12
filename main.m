@@ -184,7 +184,7 @@ FVAL = FVAL * FixedValues.Performance.R_ref;
 final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
 % display all of the optimization results
-dispRes(final_V, FVAL, c_hist(end, 1), c2(end, 2), W_wing_hist(end))
+dispRes(final_V, FVAL, c_hist(end, 1), c_hist(end, 2), W_wing_hist(end))
 
 % plot the results
 plotRes(c_hist, f_hist, final_V)
