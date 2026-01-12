@@ -87,7 +87,7 @@ end
 
 V = sum(volumes);
 V_tank = 2*V;
-fprintf('Wing tank capacity for the optimized design: %.2f [m^3] \n', V_tank)
+fprintf('Wing tank capacity for the optimized design: %.2f [m^3] \n', 0.93 * V_tank)
 
 % V, h, Mach, dynamic pressure and Reynolds number @design point 
 rho = airDensity(x(2));

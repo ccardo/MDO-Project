@@ -23,7 +23,7 @@ FixedValues.Geometry.spars = [0.10     0.70
 % Variables related to mass, obtained from the reference aircraft
 FixedValues.Weight.rho_f = 0.81;                % [l/m^3] Fuel density 
 FixedValues.Weight.W_f = 85765;                 % [kg] Fuel weight
-FixedValues.Weight.A_W = 116235;                % [kg] Aircraft-less-Wing weight (this is just the intial guess)
+FixedValues.Weight.A_W = 115940;                % [kg] Aircraft-less-Wing weight (this is just the intial guess)
 FixedValues.Weight.deltaPayload = 12365;        % [kg] Maximum payload minus the design payload, used to compute the MZF in structures
 FixedValues.Weight.MTOW_ref = 230000;           % [kg] Maximum Take-off weight
 
