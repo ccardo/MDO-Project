@@ -100,7 +100,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.1500                                              % B6
     0.1500                                              % B7
       50                                                % LE_sweep
-      25];                                              % b2
+      30];                                              % b2
 
 % Define the design vector
 x0 = [Ma_des
@@ -124,7 +124,7 @@ x0 = [Ma_des
       LE_sweep 
       A2];
 
-% Normalize the bounds and the design vector
+% Normalize the bounds
 BOUNDS = struct();
 BOUNDS.original = [lb ub];
 ub = ub./abs(x0);
@@ -140,7 +140,7 @@ options.FunValCheck                 = 'off';        % When turned on displays an
 options.MaxIter                     = 1000;         % Maximum number of iterations
 options.ScaleProblem                = true;         % Normalization of the the constraints and objective functions by their initial values
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
-options.FiniteDifferenceType        = 'central'; % Finite difference method used
+options.FiniteDifferenceType        = 'forward'; % Finite difference method used
 options.FiniteDifferenceStepSize    = 5e-2; % Scalar step size factor for finite differences
 options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)
@@ -194,7 +194,8 @@ final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 dispRes(final_V, FVAL, c_hist(1, end), c2(2, end), W_wing_hist(end))
 
 % plot the results
-plotRes(c_hist, f_hist, Final_V)
+plotRes(c_hist, f_hist, final_V)
+
 
 % save the plots in the same results folder
 cd Results\
