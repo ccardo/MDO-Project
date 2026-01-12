@@ -28,13 +28,6 @@ fprintf("Defining initial configuration.\n")
 run Initial_run.m
 fprintf("Reference aircraft configured.\n")
 
-% % Required: Parallel Processing Toolbox
-% % create a new background pool (if there is none)
-% pool = gcp('nocreate');
-% if isempty(pool)
-%     pool = parpool(1);
-% end
-
 % Initial values for the design vector
 
 Ma_des = 0.82;              % mach number [-]
@@ -191,11 +184,10 @@ FVAL = FVAL * FixedValues.Performance.R_ref;
 final_V = normalize(x, "denorm", FixedValues.Key.designVector);
 
 % display all of the optimization results
-dispRes(final_V, FVAL, c_hist(1, end), c2(2, end), W_wing_hist(end))
+dispRes(final_V, FVAL, c_hist(end, 1), c2(end, 2), W_wing_hist(end))
 
 % plot the results
 plotRes(c_hist, f_hist, final_V)
-
 
 % save the plots in the same results folder
 cd Results\

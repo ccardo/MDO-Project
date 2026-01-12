@@ -7,7 +7,7 @@ function [c, ceq] = constraints(~)
     % constraint #1 limits the wing loading of the optimized wing to the
     % wing loading of the reference aircraft. It is normalized w.r.t. the
     % reference wing loading.
-    MTOW_ref = 230000;
+    MTOW_ref = FixedValues.Weight.MTOW_ref;
     MTOW = Constraints.W_wing + FixedValues.Weight.A_W + FixedValues.Weight.W_f;
     A = Constraints.area;
     A_ref = FixedValues.Geometry.area; 

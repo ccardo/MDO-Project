@@ -57,8 +57,9 @@ fprintf(['Design variables of the optimized design \n Ma_des = %f \n h_des = %f 
     ' B1 = %f \n B2 = %f \n B3 = %f \n B4 = %f \n B5 = %f \n B6 = %f \n B7 = %f \n LE_sweep = %f \n A2 = %f\n'], x)
 
 % All constraints
-fprintf('Wing loading constraint value for the optimized design: %.3f \n',c1)
-fprintf('Fuel tank volume constraint value for the optimized design: %.3f \n',c2)
+
+fprintf('Wing loading constraint value for the optimized design: %.3f \n',c1 * (FixedValues.Weight.MTOW_ref/FixedValues.Geom.area)
+fprintf('Fuel tank volume constraint value for the optimized design: %.3f \n',c2 *((FixedValues.Weight.W_f/rho_fuel)/1e3))
 
 % Wfuel (fuel weight) 
 fprintf('Fuel weight of the optimized design: %.1f [kg] \n', FixedValues.Weight.W_f)

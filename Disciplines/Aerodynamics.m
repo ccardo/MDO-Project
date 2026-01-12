@@ -1,8 +1,7 @@
 function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
 
     global FixedValues
-    global projectDirectory
-    
+      
     % Define the design condition for the current design to evaluate the
     % aerodynamic quantities
     h_des = v(2);
