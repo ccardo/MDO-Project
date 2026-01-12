@@ -28,12 +28,12 @@ fprintf("Defining initial configuration.\n")
 run Initial_run.m
 fprintf("Reference aircraft configured.\n")
 
-% Required: Parallel Processing Toolbox
-% create a new background pool (if there is none)
-pool = gcp('nocreate');
-if isempty(pool)
-    pool = parpool(1);
-end
+% % Required: Parallel Processing Toolbox
+% % create a new background pool (if there is none)
+% pool = gcp('nocreate');
+% if isempty(pool)
+%     pool = parpool(1);
+% end
 
 % Initial values for the design vector
 
@@ -100,7 +100,7 @@ ub = [FixedValues.Performance.Ma_MO                     % Ma_des
     0.1500                                              % B6
     0.1500                                              % B7
       50                                                % LE_sweep
-      30];                                              % b2
+      25];                                              % b2
 
 % Define the design vector
 x0 = [Ma_des
@@ -140,7 +140,7 @@ options.FunValCheck                 = 'off';        % When turned on displays an
 options.MaxIter                     = 1000;         % Maximum number of iterations
 options.ScaleProblem                = true;         % Normalization of the the constraints and objective functions by their initial values
 options.PlotFcn                     = {@optimplotfval, @optimplotx, @optimplotfirstorderopt, @optimplotstepsize, @optimplotconstrviolation, @optimplotfunccount};
-options.FiniteDifferenceType        = 'forward'; % Finite difference method used
+options.FiniteDifferenceType        = 'central'; % Finite difference method used
 options.FiniteDifferenceStepSize    = 5e-2; % Scalar step size factor for finite differences
 options.StepTolerance               = 1e-8; % Convergence criterion: if the step taken in one iteration is lower then the tolerance than the optimization stops
 options.OptimalityTolerance         = 1e-3; % Convergence criterion: first-order optimality near zero (null gradient)

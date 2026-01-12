@@ -37,66 +37,10 @@ function [L_des, D_des, D_des_wing, alpha] = Aerodynamics(Aircraft, W_wing, v)
     
     % Since we want to evaluate the viscous drag
     Aircraft.Visc = 1;
-
-    % set a 300-second timer for Aero to complete, else mark it as an 
-    % error. This is done to prevent the solver fromt getting stuck and 
-    % never converging. This is done using a parallel worker so the process
-    % can be killed if it times out.
-    
-    % create a new background pool (if there is none)
-    pool = gcp('nocreate');
-    if isempty(pool)
-        pool = parpool(1);
-    end
     
     disp("[AER] Running Q3D...")
-   
-    % run Q3D in parallel 
-    Aero = parfeval(pool, @AeroEval, 3, ...
-        Aircraft);
-    
-    % start the timer
-    startingTime = tic;
-    while toc(startingTime) < 300
 
-        % if the solver finishes in a reasonable amount of time, continue 
-        if Aero.State == "finished"
-            break
-        end
-    end
-
-    % if the function is still running after 5 minutes give a warning + error,
-    % which are caught in the optimizer
-    if Aero.State ~= "finished"
-        cancelAll(pool.FevalQueue)
-        cancel(Aero)
-        warning on
-        warning("off", "backtrace")
-        warning("off", "verbose")
-        warning("Q3D [AER] has been running for more than 120 seconds.");
-        warning("on", "backtrace")
-        
-        % if the worker is killed prematurely, reset its location.
-        parfeval(pool, @changeWorkerDir, 0, projectDirectory);
-
-        error("Q3D [AER] has been running for more than 120 seconds.")
-    end
-
-    % if q3d outputs an empty array give an error
-    if ~isempty(Aero.Error)
-        exc = Aero.Error.remotecause{:};
-        warning on
-        warning("off", "backtrace")
-        warning("off", "verbose")
-        warning("Q3D [AER] has produced an unexpected error");
-        warning("on", "backtrace")
-        throw(exc)
-    end
-
-    % retrieve results from the parallel worker.
-    Res = Aero.OutputArguments{1};
-    finish = Aero.OutputArguments{2};
-    q3dwarning = Aero.OutputArguments{3};
+    [Res, finish, q3dwarning] = AeroEval(Aircraft);
 
     if q3dwarning == 1
         % catches Q3D failures and throws an error (to be caught by outer
